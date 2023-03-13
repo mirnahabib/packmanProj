@@ -1,0 +1,26 @@
+1-amazon 100%
+2-carrefour 100%
+3-jumia 100%
+4-olx 100%
+    need to work on search query " " change to "-"
+5-spinney 100% 
+    (a5er kam product sowaro btb2a png loading) 
+    #update1 fixed
+6-noon 100% 
+    limted (only first 4-5 products that can get images) 
+    #update1 fixed
+7-zara 100%
+    need to work on genders
+8-h&m 90% 
+    doesn't detect discounts
+9-max 100% (u need to scroll in order to load all images) 
+    #update1 found a solution to scroll 
+    #update2 turns out max generate different classes names for every search query
+    #update3 solved by scraping using xpath instead of classes     
+
+
+
+-----------------------------------
+freshfood 80% 
+    no links
+

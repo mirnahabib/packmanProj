@@ -1,0 +1,36 @@
+		Database Documentation
+		Mongodb – NoSQL
+{
+“User” :{
+  "_id": ObjectId("user_id"),
+  "first_name": "string",
+  "last_name": "string",
+  "email": "string",
+  "password": "string",
+  "created_at": "date",
+  "status ": "string",
+  "roles": ["string"]
+	}
+
+“savedItem” : {
+"_id": ObjectId("item_id"),
+“title”: “string”,
+“price”: “string”,
+“link”: “string”,
+“img”: “string”,
+“created_at”: “date”,
+“available”: “boolean”
+	}
+
+“favourites” : {
+	“_idI” : ObjectId("item_id"),
+  "_idU": ObjectId("user_id"),
+	}
+
+“searchHistory”: {
+“_id”: ObjectId("search_id"),
+“query”: “string”,
+“date” : “date”,
+userId : ObjectId("user_id"),
+	}	
+}
