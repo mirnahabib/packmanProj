@@ -9,3 +9,10 @@ Download NodeJs : https://nodejs.org/en/
 
 Use the following commands in terminal to install libraries:
 npm install #this should install all the libraires listed in package.Json
+
+
+Install MongoDB :
+https://www.mongodb.com/try/download/community
+Install Mongo Shell:
+https://www.mongodb.com/try/download/shell
+Make sure to add environment variables to be able to use commands in terminal
