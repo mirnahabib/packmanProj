@@ -6,38 +6,42 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+import sys
 
-tit , pri , imgref , prodlink= [] , [] , [] , []
+def main(searchitem):
 
-
-ProductsArr = None
-s=Service(ChromeDriverManager().install())
-options = Options()
-options.headless = False
-driver = webdriver.Chrome(service=s , options=options)
-searchedProduct = "chocolate"
-url = "https://www.carrefouregypt.com/mafegy/en/v4/search?keyword=" + searchedProduct
-driver.get(url)
+    tit , pri , imgref , prodlink= [] , [] , [] , []
 
 
-products = driver.find_elements(By.CLASS_NAME , "css-b9nx4o")
-
-for product in products: 
-    title = product.find_element(By.CLASS_NAME , "css-1nhiovu")
-    price = product.find_element(By.CLASS_NAME , "css-17fvam3").text
-    link = title.find_element(By.XPATH , "./a").get_attribute("href")
-    img = product.find_element(By.CLASS_NAME , "css-1itwyrf")
-    pic = img.find_element(By.XPATH , "./a/img").get_attribute("src")
-    
-    tit.append(title.text)
-    pri.append(price)
-    imgref.append(pic)
-    prodlink.append(link)
-
-ProductsArr = [{"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
-print(ProductsArr)
+    ProductsArr = None
+    s=Service(ChromeDriverManager().install())
+    options = Options()
+    options.headless = False
+    driver = webdriver.Chrome(service=s , options=options)
+    searchedProduct = searchitem
+    url = "https://www.carrefouregypt.com/mafegy/en/v4/search?keyword=" + searchedProduct
+    driver.get(url)
 
 
+    products = driver.find_elements(By.CLASS_NAME , "css-b9nx4o")
+
+    for product in products: 
+        title = product.find_element(By.CLASS_NAME , "css-1nhiovu")
+        price = product.find_element(By.CLASS_NAME , "css-17fvam3").text
+        link = title.find_element(By.XPATH , "./a").get_attribute("href")
+        img = product.find_element(By.CLASS_NAME , "css-1itwyrf")
+        pic = img.find_element(By.XPATH , "./a/img").get_attribute("src")
+        
+        tit.append(title.text)
+        pri.append(price)
+        imgref.append(pic)
+        prodlink.append(link)
+
+    ProductsArr = [{ "Shop":"Carrefour" ,"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
+    print(ProductsArr)
+
+if __name__ == "__main__":
+    main(sys.argv[1])
 
 
 

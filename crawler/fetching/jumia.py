@@ -6,43 +6,47 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-import json
+import json , sys
+
+def main(searchitem):
 
 
-tit , pri , imgref , prodlink= [] , [] , [] , []
+        tit , pri , imgref , prodlink= [] , [] , [] , []
 
-ProductsArr = None
-s=Service(ChromeDriverManager().install())
-options = Options()
-options.headless = True
-driver = webdriver.Chrome(service=s , options=options)
+        ProductsArr = None
+        s=Service(ChromeDriverManager().install())
+        options = Options()
+        options.headless = True
+        driver = webdriver.Chrome(service=s , options=options)
 
-searchedProduct = "playstation"
-url = "https://www.jumia.com.eg/catalog/?q=" + searchedProduct
-driver.get(url)
+        searchedProduct = searchitem
+        url = "https://www.jumia.com.eg/catalog/?q=" + searchedProduct
+        driver.get(url)
 
-popup = driver.find_element(By.CLASS_NAME,"cw")
-close = popup.find_element(By.XPATH,"./button").click()
+        popup = driver.find_element(By.CLASS_NAME,"cw")
+        popup.find_element(By.XPATH,"./button").click()
 
 
-products = driver.find_elements(By.CLASS_NAME,"c-prd")
+        products = driver.find_elements(By.CLASS_NAME,"c-prd")
 
-for product in products:
-        title = product.find_element(By.CLASS_NAME,"name")
-        price = product.find_element(By.CLASS_NAME,"prc")
-        link = product.find_element(By.CLASS_NAME,"core").get_attribute("href")
-        img = product.find_element(By.XPATH,"./a/div[1]/img").get_attribute("data-src")
+        for product in products:
+                title = product.find_element(By.CLASS_NAME,"name")
+                price = product.find_element(By.CLASS_NAME,"prc")
+                link = product.find_element(By.CLASS_NAME,"core").get_attribute("href")
+                img = product.find_element(By.XPATH,"./a/div[1]/img").get_attribute("data-src")
         
-        tit.append(title.text)
-        pri.append(price.text)
-        imgref.append(img)
-        prodlink.append(link)
+                tit.append(title.text)
+                pri.append(price.text)
+                imgref.append(img)
+                prodlink.append(link)
 
-ProductsArr = [{"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
-print(ProductsArr)
+        ProductsArr = [{ "Shop":"Jumia" ,"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
+        
+        print (ProductsArr)
         
 
-
+if __name__ == "__main__":
+        main(sys.argv[1])
 
 
 
