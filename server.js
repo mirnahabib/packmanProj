@@ -45,8 +45,7 @@ app.all('*', (req, res) => {
 
 const start = async () => {
   try {
-    app.listen(3000, () => console.log('Server is listening port 5000...'));
-    console.log("ay 7aga");
+    app.listen(3000, () => console.log('Server is listening port 3000...'));
     // connectDB
     await connectDB("mongodb://127.0.0.1:27017/packmandb");
   } catch (error) {
