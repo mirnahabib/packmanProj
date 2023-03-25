@@ -1,4 +1,4 @@
-1-general and electronoics:
+1-general and electronics:
     1-amazon
     2-jumia 
     3-noon 
