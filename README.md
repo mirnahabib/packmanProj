@@ -18,6 +18,10 @@ https://www.mongodb.com/try/download/shell
 Make sure to add environment variables to be able to use commands in terminal
 
 
+To run crawler :
+pip install selenium flask webdriver-manager #make sure to run these commands with adminsitrator permission
+and install chrome webdriver : https://sites.google.com/a/chromium.org/chromedriver/downloads
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
