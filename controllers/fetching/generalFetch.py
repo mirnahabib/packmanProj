@@ -184,6 +184,7 @@ def olx(query):
     x = json.dumps(ProductsArr)
     print(x)
 
+#Optmize code, join all results, test multiple word parameters
 
 
 def main(query):
