@@ -14,29 +14,13 @@ app.use(express.json());
 app.use(express.static('public'));
 
 
-/*app.get('/', (req, res) => {
-  console.log('client request received')
-  res.status(200).send('Home Page')
-})
-*/
-/*app.get('/api/query', (req, res) => {
-  console.log(req.query)
-  const { search, category } = req.query
-  //const result = await crawler.crawl(category, search);
-  //console.log(result);
-  crawler.crawl(category, search)
-    .then(result => res.send(result))
-    .catch(error => console.error(error))
-  }
-)*/
-
-
-//search example on url 'http://localhost:5000/api/search/amazon/playstation'
+//search example on url 'http://localhost:5000/api/search/general/playstation'
 app.use('/api/search', crawlerRouter);
 
 app.use('/', (req, res) =>{
   res.status(200).send('Home Page')
 })
+
 app.use(notFoundMiddleware);
 
 const start = async () => {

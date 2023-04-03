@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const {crawl} = require('../controllers/crawlController')
+const {crawlbyCategory} = require('../controllers/crawlController')
 
 router
     .route('/:cat/:search')
-    .get(crawl);
+    .get(crawlbyCategory);
 
-router.route('/').get(crawl);
+//this line is for test and should be removed
+router.route('/').get(crawlbyCategory);
 
 module.exports = router;
