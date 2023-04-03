@@ -5,23 +5,24 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from flask import Flask , jsonify , request
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from concurrent.futures import ThreadPoolExecutor
-import json,sys
+import json,sys , time
+
+s=Service(ChromeDriverManager().install())
+prefs = {"profile.managed_default_content_settings.images": 2}
+ProductsArr = []
 
 def bershka(query):
-    tit , pri , imgref , prodlink= [] , [] , [] , []
-
-    ProductsArr = None
-    s=Service(ChromeDriverManager().install())
+    i=1
     options = Options()
-    options.headless = False
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    # options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
-    searchedProduct = query
-    url = "https://www.bershka.com/eg/en/q/" + searchedProduct
+    url = "https://www.bershka.com/eg/en/q/" + query
     driver.get(url)
     driver.implicitly_wait(15)
 
@@ -32,132 +33,128 @@ def bershka(query):
     products = driver.find_elements(By.CLASS_NAME , "search-product-card")
 
 
-    for product in products[1:]:
+    for product in products[1:21]:
         ActionChains(driver).scroll_to_element(product).perform()
         title = product.find_element(By.CLASS_NAME , "product-text").text
         price = product.find_element(By.CLASS_NAME, "current-price-elem").text
         img = product.find_element(By.CLASS_NAME , "image-item").get_attribute("src")
         link = product.find_element(By.CLASS_NAME , "grid-card-link").get_attribute("href")
 
-        tit.append(title)
-        pri.append(price)
-        imgref.append(img)
-        prodlink.append(link)
-
-    ProductsArr = [{ "Shop":"Bershka" ,"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
-
-    print(ProductsArr)
+        ProductsArr.append([{
+            "Count" : i,
+            "Shop"  : "Bershka",
+            "Title" : title,
+            "Price" : price,
+            "Link"  : link,
+            "Img"   : img
+        }])
+        i += 1
+    driver.close()
 
 def zara(query):
-    tit , pri , imgref , prodlink= [] , [] , [] , []
-
-    ProductsArr = None
-    s=Service(ChromeDriverManager().install())
+    i=1
     options = Options()
-    options.headless = False
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    # options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
-    searchedProduct = query
-    url = "https://www.zara.com/eg/en/search?searchTerm=" + searchedProduct
+    url = "https://www.zara.com/eg/en/search?searchTerm=" + query
     driver.get(url)
     driver.implicitly_wait(3)
 
     products = driver.find_elements(By.CLASS_NAME , "product-grid-product")
 
-    for product in products:
+    for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
         title = product.find_element(By.CLASS_NAME , "product-grid-product-info__name")
-        price = product.find_element(By.CLASS_NAME, "money-amount__main")
+        price = product.find_element(By.CLASS_NAME, "money-amount__main").text
         link = title.get_attribute("href")
         img = product.find_element(By.CLASS_NAME, "media-image__image").get_attribute("src")
 
-        tit.append(title.text)
-        pri.append(price.text)
-        imgref.append(img)
-        prodlink.append(link)
-
-
-    ProductsArr = [{ "Shop":"Zara" ,"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
-    print(ProductsArr)
+        ProductsArr.append([{
+            "Count" : i,
+            "Shop"  : "Zara",
+            "Title" : title.text,
+            "Price" : price,
+            "Link"  : link,
+            "Img"   : img
+        }])
+        i += 1
+    driver.close()
 
 def max(query):
-    tit , pri , imgref , prodlink= [] , [] , [] , []
-
-    ProductsArr = None
-    s=Service(ChromeDriverManager().install())
+    i=1
     options = Options()
-    options.headless = False
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    # options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
-    searchedProduct = query
-    url = "https://www.maxfashion.com/eg/en/search?q=" + searchedProduct
+    url = "https://www.maxfashion.com/eg/en/search?q=" + query
     driver.get(url)
-
-    # body = driver.find_element(By.TAG_NAME , "body")
-    # body.click
-    # ActionChains(driver).send_keys(Keys.PAGE_DOWN).perform()
-    # time.sleep(1)
-    # ActionChains(driver).send_keys(Keys.PAGE_DOWN).perform()
-
-
 
     products = driver.find_elements(By.CLASS_NAME , "product")
 
-
-    for product in products:
+    for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.XPATH , './div[3]')
-        price = product.find_element(By.XPATH , './div[2]')
+        title = product.find_element(By.XPATH , './div[3]').text
+        price = product.find_element(By.XPATH , './div[2]').text
         img_link = product.find_element(By.XPATH , "./div[1]")
         link = img_link.find_element(By.TAG_NAME , "a").get_attribute("href")
         imgs = img_link.find_elements(By.TAG_NAME , "img")
         img= imgs[1].get_attribute("src")
     
-        
-        tit.append(title.text)
-        pri.append(price.text)
-        imgref.append(img)
-        prodlink.append(link)
-
-    ProductsArr = [{ "Shop":"Max" ,"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
-    print(ProductsArr)
+        ProductsArr.append([{
+            "Count" : i,
+            "Shop"  : "Max",
+            "Title" : title,
+            "Price" : price,
+            "Link"  : link,
+            "Img"   : img
+        }])
+        i += 1
+    driver.close()
 
 def handm(query):
-    tit , pri , imgref , prodlink= [] , [] , [] , []
-
-    ProductsArr = None
-    s=Service(ChromeDriverManager().install())
+    i=1
     options = Options()
-    options.headless = True
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
-    searchedProduct = query
-    url = "https://eg.hm.com/en/#query=" + searchedProduct
+    url = "https://eg.hm.com/en/#query=" + query
     driver.get(url)
 
     products = driver.find_elements(By.CLASS_NAME , "c-products__item") 
 
-    for product in products: 
+    for product in products[:20]: 
         title = product.find_element(By.CLASS_NAME, "field--name-name").text
         price = product.find_element(By.CLASS_NAME, "price").text
         img = product.find_element(By.TAG_NAME , "img").get_attribute('src')
         link = product.find_element(By.TAG_NAME , "a").get_attribute("href")
 
-        tit.append(title)
-        pri.append(price)
-        imgref.append(img)
-        prodlink.append(link)   
+        ProductsArr.append([{
+            "Count" : i,
+            "Shop"  : "H&M",
+            "Title" : title,
+            "Price" : price,
+            "Link"  : link,
+            "Img"   : img
+        }])
+        i += 1
+    driver.close() 
 
-    ProductsArr = [{ "Shop":"H&M" ,"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
-    print(ProductsArr)  
-
-#TODO: Optmize code, join all results, test multiple word parameters
 
 def main(query):
+    start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(zara, query)  
         future2 = executor.submit(handm, query)  
         future3 = executor.submit(max, query)  
-        future4 = executor.submit(bershka, query)  
-
+        future4 = executor.submit(bershka, query) 
+    end = time.time()
+    print(ProductsArr)
+    print(f'time : {end - start : .2f}')     #avg 10 secs
 
 if __name__ == "__main__":
     main(sys.argv[1])

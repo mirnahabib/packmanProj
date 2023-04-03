@@ -5,23 +5,22 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from flask import Flask , jsonify , request
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from concurrent.futures import ThreadPoolExecutor
-import json,sys
-import time
+import json,sys ,time
+
+
+s = Service(ChromeDriverManager().install())
+prefs = {"profile.managed_default_content_settings.images": 2}
+ProductsArr = []
 
 def amazon(query):
-    tit , pri , imgref , prodlink= [] , [] , [] , []
-    ProductsArr = None
-    s=Service(ChromeDriverManager().install())
-
-    prefs = {"profile.managed_default_content_settings.images": 2}
+    i = 1    
     options = Options()
     options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
-
     driver = webdriver.Chrome(service=s , options=options)
     searchedProduct = query
     url = "https://www.amazon.eg/-/en/s?k=" + searchedProduct
@@ -35,25 +34,25 @@ def amazon(query):
         except:
             price = None
         link = product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "a").get_attribute("href")
-        img =  product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "img").get_attribute("src")       
-    
-        tit.append(title)
-        pri.append(price)
-        imgref.append(img)
-        prodlink.append(link)
+        img =  product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "img").get_attribute("src")  
 
-    ProductsArr = [{ "Shop":"Amazon" ,"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
-
-    print(ProductsArr) 
+        ProductsArr.append([{
+            "Count" : i,
+            "Shop"  : "Amazon",
+            "Title" : title,
+            "Price" : price,
+            "Link"  : link,
+            "Img"   : img
+        }])
+        i += 1
+    driver.close() 
 
 def jumia(query):
-    tit , pri , imgref , prodlink= [] , [] , [] , []
-    ProductsArr = None
-    s=Service(ChromeDriverManager().install())
+    i = 1
     options = Options()
-    prefs = {"profile.managed_default_content_settings.images": 2}
     options.add_experimental_option("prefs", prefs)
     options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
 
     url = "https://www.jumia.com.eg/catalog/?q=" + query
@@ -62,32 +61,30 @@ def jumia(query):
     popup = driver.find_element(By.CLASS_NAME,"cw")
     popup.find_element(By.XPATH,"./button").click()
 
-
     products = driver.find_elements(By.CLASS_NAME,"c-prd")
 
     for product in products[:20]:
-            title = product.find_element(By.CLASS_NAME,"name")
-            price = product.find_element(By.CLASS_NAME,"prc")
-            link = product.find_element(By.CLASS_NAME,"core").get_attribute("href")
-            img = product.find_element(By.XPATH,"./a/div[1]/img").get_attribute("data-src")
+        title = product.find_element(By.CLASS_NAME,"name").text
+        price = product.find_element(By.CLASS_NAME,"prc").text
+        link = product.find_element(By.CLASS_NAME,"core").get_attribute("href")
+        img = product.find_element(By.XPATH,"./a/div[1]/img").get_attribute("data-src")
     
-            tit.append(title.text)
-            pri.append(price.text)
-            imgref.append(img)
-            prodlink.append(link)
-
-    ProductsArr = [{ "Shop":"Jumia" ,"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
-    
-    print (ProductsArr)
-
+        ProductsArr.append([{
+        "Count" : i,
+        "Shop"  : "Jumia",
+        "Title" : title,
+        "Price" : price,
+        "Link"  : link,
+        "Img"   : img
+        }])
+        i += 1
+    driver.close() 
 def noon(query):
-    tit , pri , imgref , productURL= [] , [] , [] , []
-    ProductsArr = None
-    s=Service(ChromeDriverManager().install())
+    i=1
     options = Options()
-    options.add_argument('--headless')
-    prefs = {"profile.managed_default_content_settings.images": 2}
+    # options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
     url = "https://www.noon.com/egypt-en/search/?q=" + query
@@ -96,10 +93,10 @@ def noon(query):
     products = driver.find_elements(By.CLASS_NAME, "productContainer")
 
     for product in products[:20]:
-        #ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.CLASS_NAME , "sc-5e50ccb9-20").get_attribute("title")
-        price = product.find_element(By.CLASS_NAME , "sc-6073040e-1").text
+        ActionChains(driver).scroll_to_element(product).perform()
         link = product.find_element(By.XPATH , "./a")
+        title = link.find_element(By.XPATH , "./div/div/div[2]/div[1]").get_attribute("title")
+        price = link.find_element(By.XPATH , "./div/div/div[2]/div[2]/div/div[1]").text
         linkURL= link.get_attribute("href")
         try:
             img = link.find_element(By.CLASS_NAME,"lazyload-wrapper").find_element(By.TAG_NAME, "img").get_attribute("src")
@@ -107,23 +104,22 @@ def noon(query):
         except:
             img = None
                
-        tit.append(title)
-        pri.append(price)
-        imgref.append(img)
-        productURL.append(linkURL) 
-
-    ProductsArr = [{"Shop":"Noon", "Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,productURL)]
-    print(ProductsArr)
+        ProductsArr.append([{
+            "Count" : i,
+            "Shop"  : "Noon",
+            "Title" : title,
+            "Price" : price,
+            "Link"  : linkURL,
+            "Img"   : img
+        }])
+        i += 1
+    driver.close()    
 
 def select(query):
-    tit , pri , imgref , prodlink= [] , [] , [] , []
-
-
-    ProductsArr = None
-    s=Service(ChromeDriverManager().install())
+    i=1
     options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_argument('--headless')
-    prefs = {"profile.managed_default_content_settings.images": 2}
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
     url = "https://select.eg/en/pages/search-results-page?q=" + query
@@ -139,25 +135,23 @@ def select(query):
         link = product.find_element(By.CLASS_NAME, "snize-view-link").get_attribute("href")
         img = product.find_element(By.CLASS_NAME , "snize-item-image").get_attribute("src")
 
-        tit.append(title)
-        pri.append(price)
-        imgref.append(img)
-        prodlink.append(link) 
-
-    ProductsArr = [{ "Shop":"Select" ,"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
-    print(ProductsArr)
-
+        ProductsArr.append([{
+            "Count" : i,
+            "Shop"  : "Select",
+            "Title" : title,
+            "Price" : price,
+            "Link"  : link,
+            "Img"   : img
+        }])
+        i += 1
+    driver.close() 
 def olx(query):
     query = query.replace(" " , "-")
-
-    tit , pri , imgref , prodlink= [] , [] , [] , []
-
-    ProductsArr = None
-    s=Service(ChromeDriverManager().install())
+    i=1
     options = Options()
     options.add_argument('--headless')
-    prefs = {"profile.managed_default_content_settings.images": 2}
     options.add_experimental_option("prefs", prefs)
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
     url = "https://www.olx.com.eg/en/ads/q-" + query
@@ -166,7 +160,7 @@ def olx(query):
     products = driver.find_elements(By.CLASS_NAME , "_7e3920c1")
 
     for product in products[:20]:
-        #ActionChains(driver).scroll_to_element(product).perform()
+        ActionChains(driver).scroll_to_element(product).perform()
         title = product.find_element(By.CLASS_NAME , "a5112ca8").text
         try:
             price = product.find_element(By.CLASS_NAME , "_95eae7db").text
@@ -175,17 +169,16 @@ def olx(query):
         img = product.find_element(By.CLASS_NAME , "_76b7f29a").get_attribute("src")
         link = product.find_element(By.CLASS_NAME, "ee2b0479").find_element(By.TAG_NAME, "a").get_attribute("href")
         
-        tit.append(title)
-        pri.append(price)
-        imgref.append(img)
-        prodlink.append(link) 
-
-    ProductsArr = [{ "Shop":"OLX" ,"Title": t, "Price": p, "Img": img , "link": pLink} for t, p, img ,pLink in zip(tit,pri,imgref,prodlink)]
-    x = json.dumps(ProductsArr)
-    print(x)
-
-#Optmize code, join all results, test multiple word parameters
-
+        ProductsArr.append([{
+            "Count" : i,
+            "Shop"  : "OLX",
+            "Title" : title,
+            "Price" : price,
+            "Link"  : link,
+            "Img"   : img
+        }])
+        i += 1
+    driver.close() 
 
 def main(query):
     start = time.time()
@@ -193,9 +186,14 @@ def main(query):
         future = executor.submit(amazon, query)  
         future2 = executor.submit(jumia, query)  
         future3 = executor.submit(select, query)  
-        future4 = executor.submit(olx, query)  
+        future4 = executor.submit(olx, query) 
+        future5 = executor.submit(noon, query) #noon sometimes runs into problems
     end = time.time()
-    print(end - start)
+    print(ProductsArr)
+    print(f'time : {end - start : .2f}') #avg 5 secs
+
+    # with open('mydata.json', 'w') as f:
+    #     json.dump(ProductsArr, f)
 
 if __name__ == "__main__":
     main(sys.argv[1])
