@@ -189,7 +189,7 @@ def main(query):
         future4 = executor.submit(olx, query) 
         future5 = executor.submit(noon, query) #noon sometimes runs into problems
     end = time.time()
-    print(ProductsArr)
+    print(json.dumps(ProductsArr, ensure_ascii = False ).encode('utf-8').decode())
     print(f'time : {end - start : .2f}') #avg 5 secs
 
     # with open('mydata.json', 'w') as f:
