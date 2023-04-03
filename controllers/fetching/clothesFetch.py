@@ -153,7 +153,7 @@ def main(query):
         future3 = executor.submit(max, query)  
         future4 = executor.submit(bershka, query) 
     end = time.time()
-    print(ProductsArr)
+    print(json.dumps(ProductsArr, ensure_ascii = False ).encode('utf-8').decode())
     print(f'time : {end - start : .2f}')     #avg 10 secs
 
 if __name__ == "__main__":
