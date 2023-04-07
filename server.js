@@ -1,5 +1,5 @@
 const express = require('express')
-const {items} = require('./data')
+const crawlerRouter = require('./routes/crawlerRoutes')
 require('express-async-errors');
 
 const app = express();
@@ -8,46 +8,26 @@ const connectDB = require('./db/connect');
 const notFoundMiddleware = require('./middleware/not-found');
 const errorMiddleware = require('./middleware/error-handler');
 
+app.use(express.json());
 
 //this line allows all files in public folder to be accesible to users
 app.use(express.static('public'));
 
 
-app.get('/', (req, res) => {
-  console.log('client request received')
+//search example on url 'http://localhost:5000/api/search/general/playstation'
+app.use('/api/search', crawlerRouter);
+
+app.use('/', (req, res) =>{
   res.status(200).send('Home Page')
 })
 
-app.get('/api/query', (req, res) => {
-  console.log(req.query)
-  const { search } = req.query
-  let sortedItems = [...items]
-
-  if (search) {
-    sortedItems = sortedItems.filter((item) => {
-      return item.name.includes(search)
-    })
-    if (sortedItems.length < 1) {
-      return res.status(200).send('no products matched your search');
-    }
-  }
-  res.status(200).json(sortedItems)
-})
-
-app.get('/about', (req, res) => {
-  res.status(200).send('About Page')
-})
-
-app.all('*', (req, res) => {
-  res.status(404).send('<h1>404 Not Found!</h1>')
-})
-
+app.use(notFoundMiddleware);
 
 const start = async () => {
   try {
-    app.listen(3000, () => console.log('Server is listening port 3000...'));
+    app.listen(5000, () => console.log('Server is listening port 5000...'));
     // connectDB
-    await connectDB("mongodb://127.0.0.1:27017/packmandb");
+    //await connectDB("mongodb://127.0.0.1:27017/packmandb");
   } catch (error) {
     console.log(error);
   }
