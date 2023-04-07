@@ -6,7 +6,7 @@ const {spawnSync} = require("child_process");
 const categorizedWebsites = new Map([
     ["general" ,  "./fetching/generalFetch.py"],
     ["grocery" , "./fetching/groceryFetch.py"],
-    ["cothes" , "./fetching/clothesFetch.py"]
+    ["clothes" , "./fetching/clothesFetch.py"]
 ])
 
 
