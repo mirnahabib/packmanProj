@@ -49,12 +49,13 @@ function App() {
             <li key={post.id}>{post.name}</li>
           ))}
         </ul>
-      </div>
+        
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/Login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
       </Routes>
+      </div>
    </Router>
   ); 
 }
