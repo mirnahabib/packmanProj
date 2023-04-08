@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import {BrowserRouter as Router, Routes , Route} from 'react-router-dom'
 import Home from "./pages/Home";
@@ -27,6 +27,14 @@ const filterPosts = (posts, query) => {
 };
 
 function App() {
+  const[backenedData, setBackendData] = useState([{}])
+  useEffect (() =>
+    {
+      fetch ("/api/search"). then ( response => response.json ()). then ( data =>
+        { setBackendData(data) }
+      )
+    }, [])
+
   const { search } = window.location;
   const query = new URLSearchParams(search).get('s');
   const [searchQuery, setSearchQuery] = useState(query || '');
@@ -34,7 +42,7 @@ function App() {
    return (
    <Router>
       <div className="App">
-        <Announcer message={`${filteredPosts.length} posts`}/>   
+        <Announcer message={`${filteredPosts.length} posts`} />   
         <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
         <ul>
           {filteredPosts.map((post) => (
