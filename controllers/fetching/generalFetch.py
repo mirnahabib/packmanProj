@@ -84,7 +84,7 @@ def jumia(query):
 def noon(query):
     i=1
     options = Options()
-    # options.add_argument('--headless')
+    options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
@@ -121,7 +121,7 @@ def select(query):
     i=1
     options = Options()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    #options.add_argument('--headless')
+    options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
     url = "https://select.eg/en/pages/search-results-page?q=" + query
@@ -152,7 +152,7 @@ def olx(query):
     query = query.replace(" " , "-")
     i=1
     options = Options()
-    #options.add_argument('--headless')
+    options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
@@ -187,16 +187,13 @@ def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(amazon, query)  
-        future2 = executor.submit(jumia, query)  
-        #future3 = executor.submit(select, query)  
-        #future4 = executor.submit(olx, query) 
-        future5 = executor.submit(noon, query) #noon sometimes runs into problems
+        future = executor.submit(jumia, query)  
+        future = executor.submit(select, query)  
+        future = executor.submit(olx, query) 
+        future = executor.submit(noon, query) #noon sometimes runs into problems
     end = time.time()
-    print(json.dumps(ProductsArr, ensure_ascii = False ))
+    print(json.dumps(ProductsArr, ensure_ascii = True ))
     #print(f'time : {end - start : .2f}') #avg 5 secs
-
-    # with open('mydata.json', 'w') as f:
-    #     json.dump(ProductsArr, f)
 
 if __name__ == "__main__":
     main(sys.argv[1])
