@@ -21,7 +21,9 @@ function Test() {
         );
 
       const jsonData = await response.json();
-      setData(jsonData);
+      console.log(jsonData);
+      console.log(jsonData[0]);
+      setData(jsonData[0]);
       console.log(data)
     } catch (error) {
       console.error(error);
