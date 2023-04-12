@@ -19,7 +19,7 @@ ProductsArr = []
 def amazon(query):
     i = 1    
     options = Options()
-    options.add_argument('--headless')
+    #options.add_argument('--headless')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
     driver = webdriver.Chrome(service=s , options=options)

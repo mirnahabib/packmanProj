@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import Signup from "./component/signup";
 import Search from "./component/Search";
 import Announcer from './component/announcer';
+import Test from "./component/test";
 
 const posts = [
   { id: '1', name: 'This first post is about React' },
@@ -54,7 +55,9 @@ function App() {
         <Route path='/' element={<Home/>}/>
         <Route path='/Login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
+        <Route path='/test' element= {<Test/>}/>
       </Routes>
+
       </div>
    </Router>
   ); 

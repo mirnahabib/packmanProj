@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import "./signup.css"
 function Login() {
   return (
-<div style={{ backgroundColor: "#212529", height: "100vh" }}>
+<div style={{ height: "100vh" }}>
 
 <div className="form-container pt-5" id="">
         </div>

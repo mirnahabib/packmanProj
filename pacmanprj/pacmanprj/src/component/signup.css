@@ -2,6 +2,8 @@
     display:  flex;
     justify-content: center;
     align-items: center;
+    background-image: linear-gradient(90deg, #1c4966, #296d98);
+    width: 1000px;
     
 }
 
