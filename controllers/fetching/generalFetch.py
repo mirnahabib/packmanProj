@@ -187,10 +187,10 @@ def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(amazon, query)  
-        future = executor.submit(jumia, query)  
-        future = executor.submit(select, query)  
-        future = executor.submit(olx, query) 
-        future = executor.submit(noon, query) #noon sometimes runs into problems
+        #future = executor.submit(jumia, query)  
+        #future = executor.submit(select, query)  
+        #future = executor.submit(olx, query) 
+        #future = executor.submit(noon, query) #noon sometimes runs into problems
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = True ))
     #print(f'time : {end - start : .2f}') #avg 5 secs
