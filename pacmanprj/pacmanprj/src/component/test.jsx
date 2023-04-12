@@ -7,21 +7,15 @@ function Test() {
 
   const fetchData = async () => {
     try {
-      //"https://api.escuelajs.co/api/v1/products"
-      //http://localhost:5000/api/search/general/playstation
+      
 
-      /* //fake api Cat: v1 ,Query: products
-      const response = await fetch(
-        `https://api.escuelajs.co/api/${Cat}/${Query}`
-      ); */
-
-      //our api
+      
         const response = await fetch(
           `/api/search/${Cat}/${Query}`
         );
 
       const jsonData = await response.json();
-      setData(jsonData);
+      setData(jsonData.jsonresult);
       console.log(data)
     } catch (error) {
       console.error(error);
@@ -52,9 +46,9 @@ function Test() {
       </form>
       <button onClick={fetchData}>Fetch Data</button>
 
-      {/* our api */}
+     
       
-      {/* {data && (
+      {data && (
         <div className="container pt-5">
         <div className="row">
           {data.map((item) => {
@@ -80,33 +74,10 @@ function Test() {
         })}
         </div>
       </div>
-      )} */}
+      )}
 
 
-      {/* the fake api
-      {data && (
-        <ul>
-          {data.map((item) => (
-            <div
-              className="card d-flex flex-column justify-content-between col-lg-3 col-12 gx-2 shadow"
-              style={{ border: "solid 5px", borderRadius: "15px" }}
-            >
-              <img
-                src={item.category.image}
-                className="card-img-top w-50 mx-auto mt-3"
-                alt={item.title}
-              />
-              <div className="card-body d-flex flex-column justify-content-end">
-                <a href={item.description} className="card-title">
-                  {item.Title}
-                </a>
-                <h2 className="fw-bolder fs-3 text-center">{item.price}</h2>
-                <small>{item.title}</small>
-              </div>
-            </div>
-          ))}
-        </ul>
-      )} */}
+      
     </section>
   );
 }
