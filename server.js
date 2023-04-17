@@ -24,6 +24,7 @@ app.use(express.static('public'));
 
 //search example on url 'http://localhost:5000/api/search/general/playstation'
 app.use('/api/search', crawlerRouter);
+app.use('/api/auth', authRouter);
 
 app.use('/', (req, res) =>{
   res.status(200).send('Home Page')
