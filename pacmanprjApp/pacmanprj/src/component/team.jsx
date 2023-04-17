@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
-import omar from "./imgs/me.jpg";
+import omar from "./imgs/omar.jpg";
 import "./css/style.css";
 import IconGithub from "./imgs/icongithub";
 

@@ -17,13 +17,13 @@ export default function Product() {
   };
   const fetchData = async () => {
     try {
-      const response = await fetch(`https://api.escuelajs.co/api/v1/products`);
+      const response = await fetch(`/api/search/${category}/${query}`);
       const jsonData = await response.json();
-      setProducts(jsonData);
+      setProducts(jsonData.jsonresult);
     } catch (error) {
       console.error(error);
     }
-
+    console.log(products);
     console.log(`${query} and the ${category}`);
   };
 
@@ -58,9 +58,9 @@ export default function Product() {
                 onSelect={handleCat}
                 align="end"
               >
-                <Dropdown.Item eventKey="General">General</Dropdown.Item>
-                <Dropdown.Item eventKey="Grocery">Grocery</Dropdown.Item>
-                <Dropdown.Item eventKey="Clothes">Clothes</Dropdown.Item>
+                <Dropdown.Item eventKey="general">General</Dropdown.Item>
+                <Dropdown.Item eventKey="grocery">Grocery</Dropdown.Item>
+                <Dropdown.Item eventKey="clothes">Clothes</Dropdown.Item>
               </DropdownButton>
             </div>
           </div>
@@ -130,17 +130,17 @@ export default function Product() {
               <div className="col-lg-4 mb-3 d-flex align-items-stretch">
                 <div className="card bg-dark Font">
                   <img
-                    src={item.category.image}
+                    src={item.Img}
                     className="card-img-top"
-                    alt={item.title}
+                    alt={item.Title}
                   />
                   <div className="card-body d-flex flex-column">
-                    <h5 className="card-title  product-title-font">{item.title}</h5>
+                    <h5 className="card-title  product-title-font">{item.Title}</h5>
                     <p className="card-text mb-4 product-price-font">
-                      {item.price} EGP
+                      {item.Price} 
                     </p>
                     <a
-                      href="https://www.mypokecard.com/en/Gallery/my/galery/fuRJP260XPzE.jpg"
+                      href={item.Link}
                       target="_blank"
                       className="btn btn-primary mt-auto align-self-center"
                       rel="noreferrer"
