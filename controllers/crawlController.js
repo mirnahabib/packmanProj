@@ -23,6 +23,7 @@ const crawlbyCategory = async (req, res) => {
     const { search: search = 'playstation 5', cat: category = 'general' } = req.params;
     fetchWebsite(category, search)
     .then((result) => {
+        console.log(result);
         result = result.slice(1,-1);
         jsonresult = JSON.parse(result);
         res.status(StatusCodes.OK).json({ jsonresult});

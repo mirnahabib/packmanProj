@@ -1,12 +1,20 @@
 const express = require('express')
-const crawlerRouter = require('./routes/crawlerRoutes')
 require('express-async-errors');
 
-const app = express();
+
+//Routes
+const authRouter = require('./routes/authRoutes');
+const crawlerRouter = require('./routes/crawlerRoutes')
+
+
+//Database.
 const connectDB = require('./db/connect');
 
 const notFoundMiddleware = require('./middleware/not-found');
 const errorMiddleware = require('./middleware/error-handler');
+
+
+const app = express();
 
 app.use(express.json());
 
@@ -26,8 +34,8 @@ app.use(notFoundMiddleware);
 const start = async () => {
   try {
     app.listen(5000, () => console.log('Server is listening port 5000...'));
-    // connectDB
-    //await connectDB("mongodb://127.0.0.1:27017/packmandb");
+    //connectDB
+    await connectDB("mongodb://127.0.0.1:27017/packmandb");
   } catch (error) {
     console.log(error);
   }
