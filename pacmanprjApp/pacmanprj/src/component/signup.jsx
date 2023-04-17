@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import "./signup.css";
+import "./css/signup.css";
 function Signup() {
   const {
     register,

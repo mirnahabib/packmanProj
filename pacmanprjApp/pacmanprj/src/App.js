@@ -7,55 +7,55 @@ import Login from "./component/login";
 import "bootstrap/dist/css/bootstrap.min.css"
 import Signup from "./component/signup";
 import Search from "./component/Search";
+import "@fontsource/press-start-2p";
+import "./component/css/style.css";
 import Announcer from './component/announcer';
 import Test from "./component/test";
+import Product from "./component/product";
+import Team from "./component/team";
 
-const posts = [
-  { id: '1', name: 'This first post is about React' },
-  { id: '2', name: 'This next post is about Preact' },
-  { id: '3', name: 'We have yet another React post!' },
-  { id: '4', name: 'This is the fourth and final post' },
-];
-const filterPosts = (posts, query) => {
-  if (!query) {
-      return posts;
-  }
+// const posts = [
+//   { id: '1', name: 'This first post is about React' },
+//   { id: '2', name: 'This next post is about Preact' },
+//   { id: '3', name: 'We have yet another React post!' },
+//   { id: '4', name: 'This is the fourth and final post' },
+// ];
+// const filterPosts = (posts, query) => {
+//   if (!query) {
+//       return posts;
+//   }
 
-  return posts.filter((post) => {
-      const postName = post.name.toLowerCase();
-      return postName.includes(query);
-  });
-};
+//   return posts.filter((post) => {
+//       const postName = post.name.toLowerCase();
+//       return postName.includes(query);
+//   });
+// };
 
 function App() {
-  const[backenedData, setBackendData] = useState([{}])
-  useEffect (() =>
-    {
-      fetch ("/api/search"). then ( response => response.json ()). then ( data =>
-        { setBackendData(data) }
-      )
-    }, [])
+  
 
   const { search } = window.location;
   const query = new URLSearchParams(search).get('s');
   const [searchQuery, setSearchQuery] = useState(query || '');
-  const filteredPosts = filterPosts(posts, searchQuery);
+  // const filteredPosts = filterPosts(posts, searchQuery);
    return (
    <Router>
       <div className="App">
-        <Announcer message={`${filteredPosts.length} posts`} />   
+        {/* <Announcer message={`${filteredPosts.length} posts`} />   
         <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
         <ul>
           {filteredPosts.map((post) => (
             <li key={post.id}>{post.name}</li>
           ))}
-        </ul>
-        
+        </ul> */}
+        {/* <Home/> */}
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/Login' element={<Login/>}/>
+        <Route path='/' element={<Product/>}/>
+        <Route path='/Team' element={<Team/>}/>
+        
+        {/* <Route path='/Login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
-        <Route path='/test' element= {<Test/>}/>
+        <Route path='/test' element= {<Test/>}/> */}
       </Routes>
 
       </div>

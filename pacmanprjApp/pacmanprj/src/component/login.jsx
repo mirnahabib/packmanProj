@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./signup.css"
+import "./css/signup.css";
 function Login() {
   return (
 <div style={{ height: "100vh" }}>

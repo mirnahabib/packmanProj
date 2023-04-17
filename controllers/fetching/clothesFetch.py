@@ -36,7 +36,8 @@ def bershka(query):
     for product in products[1:21]:
         ActionChains(driver).scroll_to_element(product).perform()
         title = product.find_element(By.CLASS_NAME , "product-text").text
-        price = product.find_element(By.CLASS_NAME, "current-price-elem").text
+        priceEGP = product.find_element(By.CLASS_NAME, "current-price-elem").text
+        price = priceEGP.rsplit(' ', 1)[0]
         img = product.find_element(By.CLASS_NAME , "image-item").get_attribute("src")
         link = product.find_element(By.CLASS_NAME , "grid-card-link").get_attribute("href")
 
@@ -67,7 +68,8 @@ def zara(query):
     for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
         title = product.find_element(By.CLASS_NAME , "product-grid-product-info__name")
-        price = product.find_element(By.CLASS_NAME, "money-amount__main").text
+        priceEGP = product.find_element(By.CLASS_NAME, "money-amount__main").text
+        price = priceEGP.rsplit(' ', 1)[0]
         link = title.get_attribute("href")
         img = product.find_element(By.CLASS_NAME, "media-image__image").get_attribute("src")
 
