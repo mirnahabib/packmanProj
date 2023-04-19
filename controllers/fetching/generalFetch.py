@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from concurrent.futures import ThreadPoolExecutor
-import json,sys ,time
+import json,sys ,time , re
 
 
 s = Service(ChromeDriverManager().install())
@@ -19,7 +19,7 @@ ProductsArr = []
 def amazon(query):
     i = 1    
     options = Options()
-    #options.add_argument('--headless')
+    options.add_argument('--headless')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
     driver = webdriver.Chrome(service=s , options=options)
@@ -32,6 +32,7 @@ def amazon(query):
         title = product.find_element(By.CLASS_NAME, "a-size-mini").text
         try:
             price = product.find_element(By.CLASS_NAME , "a-price-whole").text
+            price = re.sub(r"[^0-9\.]+" , '' , price)
         except:
             price = None
         link = product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "a").get_attribute("href")
@@ -41,7 +42,7 @@ def amazon(query):
             "Count" : i,
             "Shop"  : "Amazon",
             "Title" : title,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
         })
@@ -58,7 +59,6 @@ def jumia(query):
 
     url = "https://www.jumia.com.eg/catalog/?q=" + query
     driver.get(url)
-
     popup = driver.find_element(By.CLASS_NAME,"cw")
     popup.find_element(By.XPATH,"./button").click()
 
@@ -67,6 +67,7 @@ def jumia(query):
     for product in products[:20]:
         title = product.find_element(By.CLASS_NAME,"name").text
         price = product.find_element(By.CLASS_NAME,"prc").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
         link = product.find_element(By.CLASS_NAME,"core").get_attribute("href")
         img = product.find_element(By.XPATH,"./a/div[1]/img").get_attribute("data-src")
     
@@ -74,7 +75,7 @@ def jumia(query):
         "Count" : i,
         "Shop"  : "Jumia",
         "Title" : title,
-        "Price" : price,
+        "Price" : float(price),
         "Link"  : link,
         "Img"   : img
         })
@@ -99,6 +100,7 @@ def noon(query):
         link = product.find_element(By.XPATH , "./a")
         title = link.find_element(By.XPATH , "./div/div/div[2]/div[1]").get_attribute("title")
         price = link.find_element(By.XPATH , "./div/div/div[2]/div[2]/div/div[1]").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
         linkURL= link.get_attribute("href")
         try:
             img = link.find_element(By.CLASS_NAME,"lazyload-wrapper").find_element(By.TAG_NAME, "img").get_attribute("src")
@@ -110,7 +112,7 @@ def noon(query):
             "Count" : i,
             "Shop"  : "Noon",
             "Title" : title,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : linkURL,
             "Img"   : img
         })
@@ -134,6 +136,7 @@ def select(query):
     for product in products[:20]:
         title = product.find_element(By.CLASS_NAME , "snize-title").text
         price = product.find_element(By.CLASS_NAME , "snize-price").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
         link = product.find_element(By.CLASS_NAME, "snize-view-link").get_attribute("href")
         img = product.find_element(By.CLASS_NAME , "snize-item-image").get_attribute("src")
 
@@ -141,7 +144,7 @@ def select(query):
             "Count" : i,
             "Shop"  : "Select",
             "Title" : title,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
         })
@@ -167,6 +170,7 @@ def olx(query):
         title = product.find_element(By.CLASS_NAME , "a5112ca8").text
         try:
             price = product.find_element(By.CLASS_NAME , "_95eae7db").text
+            price = re.sub(r"[^0-9\.]+" , '' , price)
         except:
             price = "Seller didn't add the price"    
         img = product.find_element(By.CLASS_NAME , "_76b7f29a").get_attribute("src")
@@ -176,7 +180,7 @@ def olx(query):
             "Count" : i,
             "Shop"  : "OLX",
             "Title" : title,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
         } )
@@ -188,12 +192,12 @@ def main(query):
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(amazon, query)  
         future = executor.submit(jumia, query)  
-        future = executor.submit(select, query)  
+        # future = executor.submit(select, query)  
         future = executor.submit(olx, query) 
         #future = executor.submit(noon, query) #noon sometimes runs into problems
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = True ))
-    #print(f'time : {end - start : .2f}') #avg 5 secs
+    # print(f'time : {end - start : .2f}') #avg 5 secs
 
 if __name__ == "__main__":
     main(sys.argv[1])

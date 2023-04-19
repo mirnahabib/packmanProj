@@ -11,6 +11,10 @@
 .info {
   font-size: 80%;
 }
+.imgHeight
+{
+  height: 24em;
+}
 
 
  .flicker-in-1{animation:flicker-in-1 2s linear both}

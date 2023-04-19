@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from concurrent.futures import ThreadPoolExecutor
-import json,sys , time
+import json,sys , time , re
 
 s=Service(ChromeDriverManager().install())
 prefs = {"profile.managed_default_content_settings.images": 2}
@@ -36,19 +36,19 @@ def bershka(query):
     for product in products[1:21]:
         ActionChains(driver).scroll_to_element(product).perform()
         title = product.find_element(By.CLASS_NAME , "product-text").text
-        priceEGP = product.find_element(By.CLASS_NAME, "current-price-elem").text
-        price = priceEGP.rsplit(' ', 1)[0]
+        price = product.find_element(By.CLASS_NAME, "current-price-elem").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
         img = product.find_element(By.CLASS_NAME , "image-item").get_attribute("src")
         link = product.find_element(By.CLASS_NAME , "grid-card-link").get_attribute("href")
 
-        ProductsArr.append([{
+        ProductsArr.append({
             "Count" : i,
             "Shop"  : "Bershka",
             "Title" : title,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
-        }])
+        })
         i += 1
     driver.close()
 
@@ -68,19 +68,19 @@ def zara(query):
     for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
         title = product.find_element(By.CLASS_NAME , "product-grid-product-info__name")
-        priceEGP = product.find_element(By.CLASS_NAME, "money-amount__main").text
-        price = priceEGP.rsplit(' ', 1)[0]
+        price= product.find_element(By.CLASS_NAME, "money-amount__main").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
         link = title.get_attribute("href")
         img = product.find_element(By.CLASS_NAME, "media-image__image").get_attribute("src")
 
-        ProductsArr.append([{
+        ProductsArr.append({
             "Count" : i,
             "Shop"  : "Zara",
             "Title" : title.text,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
-        }])
+        })
         i += 1
     driver.close()
 
@@ -89,7 +89,7 @@ def max(query):
     options = Options()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     # options.add_argument('--headless')
-    options.add_experimental_option("prefs", prefs)
+    # options.add_experimental_option("prefs", prefs) doesn't work with max, gets max's logo imgs 
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
     url = "https://www.maxfashion.com/eg/en/search?q=" + query
@@ -101,19 +101,20 @@ def max(query):
         ActionChains(driver).scroll_to_element(product).perform()
         title = product.find_element(By.XPATH , './div[3]').text
         price = product.find_element(By.XPATH , './div[2]').text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
         img_link = product.find_element(By.XPATH , "./div[1]")
         link = img_link.find_element(By.TAG_NAME , "a").get_attribute("href")
         imgs = img_link.find_elements(By.TAG_NAME , "img")
         img= imgs[1].get_attribute("src")
     
-        ProductsArr.append([{
+        ProductsArr.append({
             "Count" : i,
             "Shop"  : "Max",
             "Title" : title,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
-        }])
+        })
         i += 1
     driver.close()
 
@@ -132,17 +133,18 @@ def handm(query):
     for product in products[:20]: 
         title = product.find_element(By.CLASS_NAME, "field--name-name").text
         price = product.find_element(By.CLASS_NAME, "price").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
         img = product.find_element(By.TAG_NAME , "img").get_attribute('src')
         link = product.find_element(By.TAG_NAME , "a").get_attribute("href")
 
-        ProductsArr.append([{
+        ProductsArr.append({
             "Count" : i,
             "Shop"  : "H&M",
             "Title" : title,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
-        }])
+        })
         i += 1
     driver.close() 
 
@@ -155,8 +157,8 @@ def main(query):
         future3 = executor.submit(max, query)  
         future4 = executor.submit(bershka, query) 
     end = time.time()
-    print(json.dumps(ProductsArr, ensure_ascii = False ).encode('utf-8').decode())
-    print(f'time : {end - start : .2f}')     #avg 10 secs
+    print(json.dumps(ProductsArr, ensure_ascii = False ))
+    # print(f'time : {end - start : .2f}')     #avg 10 secs
 
 if __name__ == "__main__":
     main(sys.argv[1])
