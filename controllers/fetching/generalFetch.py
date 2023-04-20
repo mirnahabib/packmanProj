@@ -156,7 +156,7 @@ def main(query):
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(amazon, query)  
         future = executor.submit(jumia, query)  
-        #future = executor.submit(select, query)  
+        future = executor.submit(select, query)  
         #future = executor.submit(noon, query) #noon sometimes runs into problems
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = True ))

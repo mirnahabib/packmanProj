@@ -2,6 +2,12 @@ const express = require('express')
 require('dotenv').config();//Set up env variables
 require('express-async-errors');
 
+//Api documentation
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
+
+
 //Security packages
 const helmet = require('helmet'); //Prevent Cross-Site Scripting (XSS), clickjacking
 const cors = require('cors');
@@ -50,6 +56,11 @@ app.use(express.json());// Allows Json payload on requests.
 //this line allows all files in public folder to be accesible to users
 //app.use(express.static('public'));
 
+app.get('/', (req, res) => {
+  res.send('<h1>PACMAN PROJ API</h1><a href="/api-docs">Documentation</a>');
+});
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
 
 //search default on url 'http://localhost:5000/api/search/general/playstation'
 //added used products options 'http://localhost:5000/api/search/used/general/playstation'
@@ -60,10 +71,6 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 
 
-
-app.use('/', (req, res) =>{
-  res.status(200).send('Home Page')
-})
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

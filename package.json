@@ -23,10 +23,12 @@
     "react-click-outside-hook": "^1.1.1",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "swagger-ui-express": "^4.6.2",
     "validator": "^13.9.0",
     "web-vitals": "^2.1.4",
     "xss": "^1.0.14",
-    "xss-clean": "^0.1.1"
+    "xss-clean": "^0.1.1",
+    "yamljs": "^0.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
