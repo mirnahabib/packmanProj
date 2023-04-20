@@ -1,3 +1,4 @@
+const CustomError = require('../errors');
 const { isTokenValid } = require('../utils');
 const Token = require('../models/Token');
 const { attachCookiesToResponse } = require('../utils');

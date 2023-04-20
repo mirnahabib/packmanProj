@@ -3,7 +3,7 @@ require('dotenv').config();//Set up env variables
 require('express-async-errors');
 
 //Security packages
-const helmet = require('helmet'); //For Cross-Site Scripting (XSS), clickjacking
+const helmet = require('helmet'); //Prevent Cross-Site Scripting (XSS), clickjacking
 const cors = require('cors');
 const xss = require('xss-clean');
 const rateLimiter = require('express-rate-limit'); //Prevent abuse and overloading of the server
@@ -14,7 +14,9 @@ const cookieParser = require('cookie-parser');//Automatically parsing cookies
 
 //Routes
 const authRouter = require('./routes/authRoutes');
-const crawlerRouter = require('./routes/crawlerRoutes')
+const crawlerRouter = require('./routes/crawlerRoutes');
+const userRouter = require('./routes/userRoutes');
+
 
 //Database
 const connectDB = require('./db/connect');
@@ -35,6 +37,7 @@ app.use(
     max: 100, // limit each IP to 100 requests per windowMs (15mins)
   })
 );
+
 app.use(helmet());
 app.use(cors());
 app.use(xss());
@@ -48,10 +51,13 @@ app.use(express.json());// Allows Json payload on requests.
 //app.use(express.static('public'));
 
 
-//search example on url 'http://localhost:5000/api/search/general/playstation'
+//search default on url 'http://localhost:5000/api/search/general/playstation'
 app.use('/api/search', crawlerRouter);
-//login and register
+//login and register 'http://localhost:5000/api/auth/login'
 app.use('/api/auth', authRouter);
+//Manage users data in db (requires admin role except for own profile)
+app.use('/api/users', userRouter);
+
 
 
 app.use('/', (req, res) =>{
