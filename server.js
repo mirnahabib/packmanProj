@@ -52,6 +52,7 @@ app.use(express.json());// Allows Json payload on requests.
 
 
 //search default on url 'http://localhost:5000/api/search/general/playstation'
+//added used products options 'http://localhost:5000/api/search/used/general/playstation'
 app.use('/api/search', crawlerRouter);
 //login and register 'http://localhost:5000/api/auth/login'
 app.use('/api/auth', authRouter);
