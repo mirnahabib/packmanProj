@@ -1,6 +1,7 @@
-.navbar {
+.Navbar {
   font-family: "Press Start 2P", cursive;
-  background-color: lightgrey;
+  background-color: #0e2433;
+  /* background-image: url("./component/imgs/back.jpg"); */
 }
 
 .Font {
