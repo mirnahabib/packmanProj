@@ -46,9 +46,9 @@ export default function Team() {
   ]);
 
   return (
-    <div className="bg-dark pt-5 text-white">
+    <div className="pt-5 text-white">
       <Container className="text-center Font">
-        <h1 className="pb-3 mt-3">MEET OUR TEAM</h1>
+        <h1 className="pb-3 mt-3 border-bottom">MEET OUR TEAM</h1>
 
         {Team && (
           <div className="container pt-5">
@@ -56,16 +56,16 @@ export default function Team() {
               {Team.map((item) => {
                 return (
                   <Row className="pt-5 ">
-                    <Col className="flicker-in-1" sm={12} md={3} lg={3}>
+                    <Col className="flicker-in-1  " sm={12} md={3} lg={3}>
                       <Image
-                        
+                        className="team-border"
                         src={item.photo}
                         roundedCircle
                         fluid
                       />
                     </Col>
-                    <Col sm={12} md={9} lg={9} className="text-center mt-3 mt-md-5">
-                      <div className="container typed">
+                    <Col sm={12} md={9} lg={9} className="text-center mt-3 mt-lg-5 ">
+                      <div className="container heartbeat">
                         <div className="row">
                           <div className="col-12">
                             <h4>{item.Name}</h4>

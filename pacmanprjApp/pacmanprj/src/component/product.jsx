@@ -24,12 +24,11 @@ export default function Product() {
       sortProducts = [...products].sort((a, b) => {
         return a.Title > b.Title ? -1 : 1;
       });
-    }
-    else if (sorting === "Price Asc") {
+    } else if (sorting === "Price ↑") {
       sortProducts = [...products].sort((a, b) => {
         return a.Price > b.Price ? 1 : -1;
       });
-    } else if (sorting === "Price Desc") {
+    } else if (sorting === "Price ↓") {
       sortProducts = [...products].sort((a, b) => {
         return a.Price > b.Price ? -1 : 1;
       });
@@ -158,8 +157,8 @@ export default function Product() {
             >
               <Dropdown.Item eventKey="A-Z">A-Z</Dropdown.Item>
               <Dropdown.Item eventKey="Z-A">Z-A</Dropdown.Item>
-              <Dropdown.Item eventKey="Price Asc">Price Asc</Dropdown.Item>
-              <Dropdown.Item eventKey="Price Desc">Price Desc</Dropdown.Item>
+              <Dropdown.Item eventKey="Price ↑">Price ↑</Dropdown.Item>
+              <Dropdown.Item eventKey="Price ↓">Price ↓</Dropdown.Item>
             </DropdownButton>
           </div>
           <div className="row pt-5">
@@ -174,16 +173,23 @@ export default function Product() {
                   <div className="card bg-dark w-100 Font">
                     <img
                       src={item.Img}
-                      className="card-img-top imgHeight"
+                      className="card-img-top img-props"
                       alt={item.Title}
                     />
                     <div className="card-body d-flex flex-column">
-                      <h5 className="card-title  product-title-font">
+                      <h5 className="card-title  product-title-font text-light">
                         {item.Title}
                       </h5>
-                      <p className="card-text mb-4 product-price-font">
-                        {item.Price} EGP
+                      {item.Price !== 0 ? (
+                        <p className="card-text mb-4 product-price-font">
+                          {item.Price} EGP
+                        </p>
+                      ) : (
+                        <p className="card-text mb-4 product-price-font">
+                        price unavailable
                       </p>
+                      )}
+
                       <a
                         href={item.Link}
                         target="_blank"

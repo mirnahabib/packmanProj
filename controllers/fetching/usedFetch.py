@@ -35,7 +35,7 @@ def olx(query):
             price = product.find_element(By.CLASS_NAME , "_95eae7db").text
             price = re.sub(r"[^0-9\.]+" , '' , price)
         except:
-            price = "Seller didn't add the price"    
+            price = 0    
         img = product.find_element(By.CLASS_NAME , "_76b7f29a").get_attribute("src")
         link = product.find_element(By.CLASS_NAME, "ee2b0479").find_element(By.TAG_NAME, "a").get_attribute("href")
         

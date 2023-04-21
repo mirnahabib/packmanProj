@@ -34,7 +34,7 @@ def amazon(query):
             price = product.find_element(By.CLASS_NAME , "a-price-whole").text
             price = re.sub(r"[^0-9\.]+" , '' , price)
         except:
-            price = None
+            price = 0
         link = product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "a").get_attribute("href")
         img =  product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "img").get_attribute("src")  
 

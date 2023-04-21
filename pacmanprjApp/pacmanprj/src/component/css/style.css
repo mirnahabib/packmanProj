@@ -12,9 +12,18 @@
 .info {
   font-size: 80%;
 }
-.imgHeight
+.img-props
 {
   height: 24em;
+  border: solid;
+  border-radius: 5%;
+  border-color: #0B5ED7;
+}
+
+.team-border{
+  border: solid;
+  border-radius: 5%;
+  border-color: white;
 }
 
 
