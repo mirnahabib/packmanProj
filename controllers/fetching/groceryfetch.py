@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from concurrent.futures import ThreadPoolExecutor
-import json,sys , time
+import json,sys , time , re
 
 s=Service(ChromeDriverManager().install())
 prefs = {"profile.managed_default_content_settings.images": 2}
@@ -30,17 +30,18 @@ def hyperone(query):
     for product in products[:20]:
         title = product.find_element(By.CLASS_NAME , "ProductTitle").text
         price = product.find_element(By.XPATH , "./div[2]/a/div/div[1]").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
         link = product.find_element(By.TAG_NAME , "a").get_attribute("href")
         img = product.find_element(By.TAG_NAME , "img").get_attribute("src")
 
-        ProductsArr.append([{
+        ProductsArr.append({
             "Count" : i,
             "Shop"  : "Hyperone",
             "Title" : title,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
-        }])
+        })
         i += 1
     driver.close()
 
@@ -58,20 +59,26 @@ def gourmet(query):
     allProducts = driver.find_element(By.CLASS_NAME, "products-group")
     products = allProducts.find_elements(By.CLASS_NAME , "product-item-info")
 
+
+    # //*[@id="product-item-info_15619"]
+    # //*[@id="product-item-info_15619"]/a/span/span/img
+
     for product in products[:20]:
+        ActionChains(driver).scroll_to_element(product).perform()
         title = product.find_element(By.CLASS_NAME , "product-item-link").get_attribute("innerHTML")
         price = product.find_element(By.CLASS_NAME , "price").get_attribute("innerHTML")
+        price = re.sub(r"[^0-9\.]" , '' , price)
         link = product.find_element(By.CLASS_NAME , "product-item-photo").get_attribute("href")
-        img = product.find_element(By.CLASS_NAME , "product-image-photo").get_attribute("src")
+        img = product.find_element(By.CLASS_NAME , "product-image-photo").get_attribute("data-src")
 
-        ProductsArr.append([{
+        ProductsArr.append({
             "Count" : i,
             "Shop"  : "Gourmet",
             "Title" : title,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
-        }])
+        })
         i += 1
     driver.close()
 
@@ -92,17 +99,18 @@ def spinney(query):
         ActionChains(driver).scroll_to_element(product).perform()
         title = product.find_element(By.CLASS_NAME , "text-capitalize").text
         price = product.find_element(By.CLASS_NAME , "priceAfter").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
         link = product.find_element(By.CLASS_NAME , "imgwrap").get_attribute("href")
         img = product.find_element(By.CLASS_NAME , "lazy").get_attribute("src")
         
-        ProductsArr.append([{
+        ProductsArr.append({
             "Count" : i,
             "Shop"  : "Spinney",
             "Title" : title,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
-        }])
+        })
         i += 1
     driver.close()
 
@@ -121,18 +129,19 @@ def carrefour(query):
     for product in products[:20]: 
         title = product.find_element(By.CLASS_NAME , "css-1nhiovu")
         price = product.find_element(By.CLASS_NAME , "css-17fvam3").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
         link = title.find_element(By.XPATH , "./a").get_attribute("href")
         img = product.find_element(By.CLASS_NAME , "css-1itwyrf")
         pic = img.find_element(By.XPATH , "./a/img").get_attribute("src")
         
-        ProductsArr.append([{
+        ProductsArr.append({
             "Count" : i,
             "Shop"  : "Carrefour",
             "Title" : title.text,
-            "Price" : price,
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : pic
-        }])
+        })
         i += 1
     driver.close()
 
@@ -145,8 +154,8 @@ def main(query):
         future3 = executor.submit(spinney, query)  
         future4 = executor.submit(carrefour, query) 
     end = time.time()
-    print(json.dumps(ProductsArr, ensure_ascii = False ).encode('utf-8').decode())
-    print(f'time : {end - start : .2f}')        #avg 7 secs
+    print(json.dumps(ProductsArr, ensure_ascii = False ))
+    # print(f'time : {end - start : .2f}')        #avg 7 secs
 
 if __name__ == "__main__":
     main(sys.argv[1])

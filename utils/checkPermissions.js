@@ -1,14 +1,14 @@
 const CustomError = require('../errors');
 
-const chechPermissions = (requestUser, resourceUserId) => {
+const checkPermissions = (requestUser, resourceUserId) => {
   // console.log(requestUser);
   // console.log(resourceUserId);
   // console.log(typeof resourceUserId);
   if (requestUser.role === 'admin') return;
-  if (requestUser.userId === resourceUserId.toString()) return;
+  if (requestUser.userId === resourceUserId.toString()) return; //users can only be authoried to their own profile if they are not admins.
   throw new CustomError.UnauthorizedError(
     'Not authorized to access this route'
   );
 };
 
-module.exports = chechPermissions;
+module.exports = checkPermissions;

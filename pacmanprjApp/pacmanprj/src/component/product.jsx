@@ -1,20 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-import Image from "react-bootstrap/Image";
 import Form from "react-bootstrap/Form";
+import IconAmazon from "./imgs/amazon";
 import InputGroup from "react-bootstrap/InputGroup";
 import IconSearch from "./imgs/search";
-import logo from "./imgs/pacman.png";
 import "./css/style.css";
+import amazon from "./imgs/amazon.svg";
+
 export default function Product() {
   const [products, setProducts] = useState(null);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Category");
+  const [sorting, setSorting] = useState("Sort");
+
+  useEffect(() => {
+    let sortProducts;
+    if (sorting === "A-Z") {
+      sortProducts = [...products].sort((a, b) => {
+        return a.Title > b.Tittle ? 1 : -1;
+      });
+    } else if (sorting === "Z-A") {
+      sortProducts = [...products].sort((a, b) => {
+        return a.Title > b.Title ? -1 : 1;
+      });
+    }
+    else if (sorting === "Price Asc") {
+      sortProducts = [...products].sort((a, b) => {
+        return a.Price > b.Price ? 1 : -1;
+      });
+    } else if (sorting === "Price Desc") {
+      sortProducts = [...products].sort((a, b) => {
+        return a.Price > b.Price ? -1 : 1;
+      });
+    }
+    setProducts(sortProducts);
+  }, [sorting]);
+
+  const handleSorting = (e) => {
+    setSorting(e);
+  };
 
   const handleCat = (e) => {
     setCategory(e);
   };
+
   const fetchData = async () => {
     try {
       const response = await fetch(`/api/search/${category}/${query}`);
@@ -24,9 +54,8 @@ export default function Product() {
       console.error(error);
     }
     console.log(products);
-    console.log(`${query} and the ${category}`);
+    console.log(`${query} ${category}`);
   };
-
   return (
     <div className="">
       {!products && (
@@ -101,9 +130,9 @@ export default function Product() {
                 onSelect={handleCat}
                 align="end"
               >
-                <Dropdown.Item eventKey="General">General</Dropdown.Item>
-                <Dropdown.Item eventKey="Grocery">Grocery</Dropdown.Item>
-                <Dropdown.Item eventKey="Clothes">Clothes</Dropdown.Item>
+                <Dropdown.Item eventKey="general">General</Dropdown.Item>
+                <Dropdown.Item eventKey="grocery">Grocery</Dropdown.Item>
+                <Dropdown.Item eventKey="clothes">Clothes</Dropdown.Item>
               </DropdownButton>
             </div>
           </div>
@@ -120,37 +149,56 @@ export default function Product() {
             </div>
             <div className="col-lg-3 col-12"></div>
           </div>
+          <div className="row pt-3 justify-content-center">
+            <DropdownButton
+              title={sorting}
+              id="sort"
+              onSelect={handleSorting}
+              align="end"
+            >
+              <Dropdown.Item eventKey="A-Z">A-Z</Dropdown.Item>
+              <Dropdown.Item eventKey="Z-A">Z-A</Dropdown.Item>
+              <Dropdown.Item eventKey="Price Asc">Price Asc</Dropdown.Item>
+              <Dropdown.Item eventKey="Price Desc">Price Desc</Dropdown.Item>
+            </DropdownButton>
+          </div>
           <div className="row pt-5">
             <div className="col-12">
               <h3 className="border-bottom mb-4 heartbeat">SEARCH RESULTS</h3>
             </div>
           </div>
           <div className="row">
-            {products.map((item) => (
-              <div className="col-lg-4 mb-3 d-flex align-items-stretch">
-                <div className="card bg-dark Font">
-                  <img
-                    src={item.Img}
-                    className="card-img-top"
-                    alt={item.Title}
-                  />
-                  <div className="card-body d-flex flex-column">
-                    <h5 className="card-title  product-title-font">{item.Title}</h5>
-                    <p className="card-text mb-4 product-price-font">
-                      {item.Price} 
-                    </p>
-                    <a
-                      href={item.Link}
-                      target="_blank"
-                      className="btn btn-primary mt-auto align-self-center"
-                      rel="noreferrer"
-                    >
-                      Check it out
-                    </a>
+            {sorting &&
+              products.map((item) => (
+                <div className="col-lg-4 mb-3 d-flex align-items-stretch">
+                  <div className="card bg-dark w-100 Font">
+                    <img
+                      src={item.Img}
+                      className="card-img-top imgHeight"
+                      alt={item.Title}
+                    />
+                    <div className="card-body d-flex flex-column">
+                      <h5 className="card-title  product-title-font">
+                        {item.Title}
+                      </h5>
+                      <p className="card-text mb-4 product-price-font">
+                        {item.Price} EGP
+                      </p>
+                      <a
+                        href={item.Link}
+                        target="_blank"
+                        className="btn btn-primary mt-auto align-self-center"
+                        rel="noreferrer"
+                      >
+                        Check it out
+                      </a>
+                      {/* {item.Shop === "Amazon" ? 
+                      <IconAmazon className="align-self-end"/>: " "
+                      } */}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       )}
