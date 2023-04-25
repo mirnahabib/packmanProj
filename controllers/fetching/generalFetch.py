@@ -85,7 +85,7 @@ def jumia(query):
 def noon(query):
     i=1
     options = Options()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
@@ -97,10 +97,9 @@ def noon(query):
 
     for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
-        link = product.find_element(By.XPATH , "./a")
+        link = product.find_element(By.TAG_NAME , "a")
         title = link.find_element(By.XPATH , "./div/div/div[2]/div[1]").get_attribute("title")
-        price = link.find_element(By.XPATH , "./div/div/div[2]/div[2]/div/div[1]").text
-        price = re.sub(r"[^0-9\.]+" , '' , price)
+        price = product.find_element(By.CLASS_NAME , "amount").text
         linkURL= link.get_attribute("href")
         try:
             img = link.find_element(By.CLASS_NAME,"lazyload-wrapper").find_element(By.TAG_NAME, "img").get_attribute("src")
@@ -157,7 +156,7 @@ def main(query):
         future = executor.submit(amazon, query)  
         future = executor.submit(jumia, query)  
         future = executor.submit(select, query)  
-        #future = executor.submit(noon, query) #noon sometimes runs into problems
+        future = executor.submit(noon, query) #noon sometimes runs into problems
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = True ))
     # print(f'time : {end - start : .2f}') #avg 5 secs
