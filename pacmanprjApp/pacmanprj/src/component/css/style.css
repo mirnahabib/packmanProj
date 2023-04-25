@@ -5,10 +5,18 @@
   
 }
 
+.blur-background {  
+  backdrop-filter: blur(1px);
+}
 .Font {
   font-family: "Press Start 2P", cursive;
   color: #ffff00;
   
+}
+.email-font{
+  font-family: "Press Start 2P", cursive;
+  font-size: small;
+
 }
 .info {
   font-size: 80%;

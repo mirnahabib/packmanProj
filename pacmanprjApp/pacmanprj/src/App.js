@@ -14,6 +14,8 @@ import Test from "./component/test";
 import Product from "./component/product";
 import Team from "./component/team";
 import Navingbar from "./component/navbar";
+import SignUpForm from "./component/signupform";
+import LoginForm from "./component/loginform";
 
 
 
@@ -58,8 +60,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Product/>}/>
         <Route path='/Team' element={<Team/>}/>
-        <Route path='/Login' element={<Login/>}/>
-        <Route path='/signup' element={<Signup/>}/>
+        <Route path='/signup' element={<SignUpForm/>}/>
+        <Route path='/login' element={<LoginForm/>}/>
         
         
         {/* <Route path='/Login' element={<Login/>}/>
