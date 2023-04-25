@@ -4,9 +4,13 @@ const path = require('path');
 const {spawn} = require("child_process");
 
 const categorizedWebsites = new Map([
-    ["general" ,  "./fetching/generalFetch.py"],
+    ["electronics" ,  "./fetching/electronicsFetch.py"],
     ["grocery" , "./fetching/groceryFetch.py"],
-    ["clothes" , "./fetching/clothesFetch.py"],
+    ["clothing" , "./fetching/clothesFetch.py"],
+    ["other" , "./fetching/allFetch.py"],
+    ["cosmetics" , "./fetching/cosmeticsFetch.py"],
+    ["toys" , "./fetching/toysFetch.py"],
+    ["furniture" , "./fetching/furnitureFetch.py"],
     ["used", "./fetching/usedFetch.py"]
 ])
 
