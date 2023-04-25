@@ -2,10 +2,8 @@ import { Link } from "react-router-dom";
 import "./css/signup.css";
 function Login() {
   return (
-<div style={{ height: "100vh" }}>
+<div className="container align-items-center justify-content-center text-center p-5">
 
-<div className="form-container pt-5" id="">
-        </div>
 <div className="form-container text-white pt-5 ">
 
   <form
@@ -31,7 +29,7 @@ function Login() {
     </div>
     <Link to="/Signup" id="link">New user? signup now</Link>
     <br />
-    <Link to="/Products" id="link">Skip login</Link>
+    <Link to="/" id="link">Skip login</Link>
     <br />
     <button type="submit" className="btn btn-warning mt-3">
       Sign in

@@ -13,6 +13,7 @@ export default function Product() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Category");
   const [sorting, setSorting] = useState("Sort");
+  const [isUsed, setIsUsed] = useState(false);
 
   useEffect(() => {
     let sortProducts;
@@ -45,8 +46,13 @@ export default function Product() {
   };
 
   const fetchData = async () => {
+    let response;
     try {
-      const response = await fetch(`/api/search/${category}/${query}`);
+      if (isUsed === false)
+        response = await fetch(`/api/search/${category}/${query}`);
+      else if (isUsed === true)
+        response = await fetch(`/api/search/used/${category}/${query}`);
+
       const jsonData = await response.json();
       setProducts(jsonData.jsonresult);
     } catch (error) {
@@ -54,6 +60,10 @@ export default function Product() {
     }
     console.log(products);
     console.log(`${query} ${category}`);
+  };
+  
+  const handleUsed = () => {
+    setIsUsed(!isUsed);
   };
   return (
     <div className="">
@@ -88,13 +98,13 @@ export default function Product() {
               >
                 <Dropdown.Item eventKey="general">General</Dropdown.Item>
                 <Dropdown.Item eventKey="grocery">Grocery</Dropdown.Item>
-                <Dropdown.Item eventKey="clothes">Clothes</Dropdown.Item>
+                <Dropdown.Item eventKey="clothes">Clothing</Dropdown.Item>
               </DropdownButton>
             </div>
           </div>
           <div className="row">
             <div className="col-lg-3 col-12"></div>
-            <div className="col-lg-6 pt-lg-0 pt-3 col-12">
+            <div className="col-lg-6 pt-lg-0 pt-3 col-12 ">
               <button
                 onClick={fetchData}
                 type="button"
@@ -103,7 +113,12 @@ export default function Product() {
                 Find My Product!
               </button>
             </div>
-            <div className="col-lg-3 col-12"></div>
+            <div className="col-lg-3 col-12 pt-2 pe-5 ">
+              <div className="d-inline">
+                <input type="checkbox" checked={isUsed} onChange={handleUsed} />
+              </div>
+              <div className="d-inline ps-3">look for secondhand</div>
+            </div>
           </div>
         </div>
       )}
@@ -146,7 +161,12 @@ export default function Product() {
                 Find My Product!
               </button>
             </div>
-            <div className="col-lg-3 col-12"></div>
+            <div className="col-lg-3 col-12 pt-2 pe-5 ">
+              <div className="d-inline">
+                <input type="checkbox" checked={isUsed} onChange={handleUsed} />
+              </div>
+              <div className="d-inline ps-3">look for secondhand</div>
+            </div>
           </div>
           <div className="row pt-3 justify-content-center">
             <DropdownButton
@@ -186,8 +206,8 @@ export default function Product() {
                         </p>
                       ) : (
                         <p className="card-text mb-4 product-price-font">
-                        price unavailable
-                      </p>
+                          price unavailable
+                        </p>
                       )}
 
                       <a

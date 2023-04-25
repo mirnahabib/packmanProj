@@ -18,7 +18,7 @@ def olx(query):
     query = query.replace(" " , "-")
     i=1
     options = Options()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)

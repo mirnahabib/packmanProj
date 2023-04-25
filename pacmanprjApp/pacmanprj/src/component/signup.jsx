@@ -14,13 +14,11 @@ function Signup() {
 
   return (
     
-    <div style={{ backgroundColor: "#212529", height: "100vh" }}>
-
-    
-      <div className="form-container text-white pt-5 ">
+    <div className="container align-items-center justify-content-center text-center p-5">
+      <div className="form-container text-white pt-5 form-data">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="form-data w-50 h-50 "
+          className="w-50 h-50"
         >
           <div className="mb-3 ok">
             <label className="form-label">Name</label>
@@ -123,7 +121,7 @@ function Signup() {
           </div>
           <br />
           <br />
-          <button type="submit" className="btn btn-warning">
+          <button type="submit" className="btn btn-primary">
             Sign up
           </button>
         </form>

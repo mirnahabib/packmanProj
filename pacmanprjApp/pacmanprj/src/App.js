@@ -17,6 +17,7 @@ import Navingbar from "./component/navbar";
 
 
 
+
 // const posts = [
 //   { id: '1', name: 'This first post is about React' },
 //   { id: '2', name: 'This next post is about Preact' },
@@ -57,12 +58,15 @@ function App() {
       <Routes>
         <Route path='/' element={<Product/>}/>
         <Route path='/Team' element={<Team/>}/>
+        <Route path='/Login' element={<Login/>}/>
+        <Route path='/signup' element={<Signup/>}/>
+        
         
         {/* <Route path='/Login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/test' element= {<Test/>}/> */}
       </Routes>
-      
+    
 
       </div>
 
