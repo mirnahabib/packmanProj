@@ -13,7 +13,7 @@ const ItemSchema = mongoose.Schema({
     },   
     category: {
         type: String,
-        enum: ['general', 'grocery', 'clothing'],
+        enum: ['electronics', 'grocery', 'clothing', 'furniture', 'cosmetics', 'toys', 'used','other'],
     },   
     createdAt: { type: Date},
     available: { type: Boolean}

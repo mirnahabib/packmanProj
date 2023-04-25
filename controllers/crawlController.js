@@ -42,7 +42,7 @@ const crawlbyCategory = async (req, res) => {
     const { search: search = 'playstation 5', cat: category = 'general' } = req.params;
     fetchWebsite(category, search)
     .then((result) => {
-        console.log(result);
+        //console.log(result);
         jsonresult = JSON.parse(result);
         res.status(StatusCodes.OK).json({ jsonresult});
     })
@@ -59,7 +59,7 @@ const crawlbyCategoryandUsed = async (req, res) => {
         shopsResult = JSON.parse(results[1]);
         usedResult = JSON.parse(results[0]);
         const jsonresult = usedResult.concat(shopsResult);
-        console.log(JSON.stringify(jsonresult));
+        //console.log(JSON.stringify(jsonresult));
         res.status(StatusCodes.OK).json({ jsonresult});
     })
     .catch((error) =>{

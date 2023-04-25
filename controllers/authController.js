@@ -15,6 +15,7 @@ const crypto = require('crypto');
 const register = async (req, res) => {
   const { email, name, password } = req.body;
 
+
   const emailAlreadyExists = await User.findOne({ email });
   if (emailAlreadyExists) {
     throw new CustomError.BadRequestError('Email already exists');
@@ -33,7 +34,10 @@ const register = async (req, res) => {
     role,
     verificationToken,
   });
-  const origin = 'http://localhost:3000';
+  if (user){
+    console.log(`User created : ${user.email}`);
+  }
+  //const origin = 'http://localhost:3000';
   // const newOrigin = 'https://react-node-user-workflow-front-end.netlify.app';
 
   // const tempOrigin = req.get('origin');
@@ -42,16 +46,30 @@ const register = async (req, res) => {
   // const forwardedHost = req.get('x-forwarded-host');
   // const forwardedProtocol = req.get('x-forwarded-proto');
 
-  await sendVerificationEmail({
-    name: user.name,
-    email: user.email,
-    verificationToken: user.verificationToken,
-    origin,
-  });
-  // send verification token back only while testing in postman!!!
-  res.status(StatusCodes.CREATED).json({
-    msg: 'Success! Please check your email to verify account',
-  });
+  // await sendVerificationEmail({
+  //   name: user.name,
+  //   email: user.email,
+  //   verificationToken: user.verificationToken,
+  //   origin,
+  // });
+  // send verification token back only while testing in postman!
+
+  const tokenUser = createTokenUser(user);
+
+  // create refresh token
+  let refreshToken = '';
+  refreshToken = crypto.randomBytes(40).toString('hex');
+
+  const userAgent = req.headers['user-agent'];
+  const ip = req.ip;
+  const userToken = { refreshToken, ip, userAgent, user: user._id };
+
+  await Token.create(userToken);
+
+  attachCookiesToResponse({ res, user: tokenUser, refreshToken });
+
+  res.status(StatusCodes.CREATED).json({ user: tokenUser, msg: 'Success! You\'re now registered and logged in. Please confirm Email. '});
+
 };
 
 const verifyEmail = async (req, res) => {
@@ -90,9 +108,9 @@ const login = async (req, res) => {
   if (!isPasswordCorrect) {
     throw new CustomError.UnauthenticatedError('Invalid Credentials');
   }
-  if (!user.isVerified) {
-    throw new CustomError.UnauthenticatedError('Please verify your email');
-  }
+  // if (!user.isVerified) {
+  //   throw new CustomError.UnauthenticatedError('Please verify your email');
+  // }
   const tokenUser = createTokenUser(user);
 
   // create refresh token
