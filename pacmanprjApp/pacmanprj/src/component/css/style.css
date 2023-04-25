@@ -28,6 +28,7 @@
 }
 
 
+
  .flicker-in-1{animation:flicker-in-1 2s linear both}
 @keyframes flicker-in-1 {
   0% {
@@ -240,6 +241,15 @@
             animation-timing-function: ease-out;
   }
 }
+
+@media only screen and (max-width: 475px) {
+  .text-resp{
+    font-size:x-small;
+    
+  }
+}
+
+
 
 
 

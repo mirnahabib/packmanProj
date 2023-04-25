@@ -61,7 +61,7 @@ export default function Product() {
     console.log(products);
     console.log(`${query} ${category}`);
   };
-  
+
   const handleUsed = () => {
     setIsUsed(!isUsed);
   };
@@ -96,9 +96,27 @@ export default function Product() {
                 onSelect={handleCat}
                 align="end"
               >
-                <Dropdown.Item eventKey="general">General</Dropdown.Item>
-                <Dropdown.Item eventKey="grocery">Grocery</Dropdown.Item>
-                <Dropdown.Item eventKey="clothes">Clothing</Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="clothing">
+                  Clothing and Fashion
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="cosmetics">
+                  Cosmetics and Bodycare
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="electronics">
+                  Electronics and Devices
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="furniture">
+                  Furnitures and Decor
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="grocery">
+                  Groceries and Supplies
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="toys">
+                  Toys and Games
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="other">
+                  Other (longer search)
+                </Dropdown.Item>
               </DropdownButton>
             </div>
           </div>
@@ -138,15 +156,33 @@ export default function Product() {
               </InputGroup>
             </div>
             <div className="col-lg-3  col-12">
-              <DropdownButton
+            <DropdownButton
                 title={category}
                 id="category"
                 onSelect={handleCat}
                 align="end"
               >
-                <Dropdown.Item eventKey="general">General</Dropdown.Item>
-                <Dropdown.Item eventKey="grocery">Grocery</Dropdown.Item>
-                <Dropdown.Item eventKey="clothes">Clothes</Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="clothing">
+                  Clothing and Fashion
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="cosmetics">
+                  Cosmetics and Bodycare
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="electronics">
+                  Electronics and Devices
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="furniture">
+                  Furnitures and Decor
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="grocery">
+                  Groceries and Supplies
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="toys">
+                  Toys and Games
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="other">
+                  Other (longer search)
+                </Dropdown.Item>
               </DropdownButton>
             </div>
           </div>
@@ -221,6 +257,7 @@ export default function Product() {
                       {/* {item.Shop === "Amazon" ? 
                       <IconAmazon className="align-self-end"/>: " "
                       } */}
+                      <small className="align-self-end">{item.Shop}</small>
                     </div>
                   </div>
                 </div>
