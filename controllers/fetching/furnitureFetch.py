@@ -85,7 +85,8 @@ def jumia(query):
 def noon(query):
     i=1
     options = Options()
-    # options.add_argument('--headless')
+    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
@@ -190,11 +191,11 @@ def ikea(query):
 def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
-        future = executor.submit(amazon, query)  
-        future = executor.submit(jumia, query) 
         future = executor.submit(hubfurniture, query)  
         future = executor.submit(ikea, query)
-        future = executor.submit(noon, query) #noon sometimes runs into problems
+        future = executor.submit(noon, query) 
+        future = executor.submit(amazon, query)  
+        future = executor.submit(jumia, query) 
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = True ))
     # print(f'time : {end - start : .2f}') #avg 5 secs

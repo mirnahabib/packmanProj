@@ -85,7 +85,8 @@ def jumia(query):
 def noon(query):
     i=1
     options = Options()
-    # options.add_argument('--headless')
+    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)

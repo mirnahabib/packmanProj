@@ -85,7 +85,8 @@ def jumia(query):
 def noon(query):
     i=1
     options = Options()
-    # options.add_argument('--headless')
+    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") #make headless work and not return empty list
+    options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
@@ -122,7 +123,8 @@ def select(query):
     i=1
     options = Options()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_argument('--headless')
+    # options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    # options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
     url = "https://select.eg/en/pages/search-results-page?q=" + query
@@ -153,6 +155,7 @@ def select(query):
 def _2B(query):
     i = 1    
     options = Options()
+    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
     options.add_argument('--headless')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #does not work with 2b 
@@ -161,7 +164,7 @@ def _2B(query):
     driver.get(url)
     driver.implicitly_wait(5)
     products = driver.find_elements(By.CLASS_NAME,"product-item-info")
-    driver.implicitly_wait(0)
+    driver.implicitly_wait(1)
 
     for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
@@ -224,12 +227,12 @@ def dubaiphone(query):
 def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
-        future = executor.submit(amazon, query)  
-        future = executor.submit(jumia, query)  
-        # future = executor.submit(select, query)  
-        # future = executor.submit(_2B, query) 
+        # future = executor.submit(select, query) # 2nd slowest works better without headless
+        # future = executor.submit(_2B, query) #the slowest (bottleneck)
         future = executor.submit(dubaiphone, query) 
-        future = executor.submit(noon, query) #noon sometimes runs into problems
+        future = executor.submit(noon, query) 
+        future = executor.submit(amazon, query)  
+        future = executor.submit(jumia, query)
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = True ))
     # print(f'time : {end - start : .2f}') #avg 5 secs

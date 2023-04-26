@@ -83,13 +83,14 @@ def bershka(query):
     i=1
     options = Options()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    # options.add_argument('--headless')
+    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
-    url = "https://www.bershka.com/eg/en/q/" + query
+    url = f"https://www.bershka.com/eg/en/q/{query} woman" 
     driver.get(url)
-    driver.implicitly_wait(15)
+    driver.implicitly_wait(7)
 
     # gender = driver.find_element(By.CLASS_NAME, "gender-filters")
     # men = gender.find_element(By.XPATH , "./button[3]").click()
@@ -121,7 +122,8 @@ def zara(query):
     i=1
     options = Options()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    # options.add_argument('--headless')
+    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
     url = f'https://www.zara.com/eg/en/search?searchTerm={query}&section=WOMAN'
@@ -153,8 +155,9 @@ def max(query):
     i=1
     options = Options()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    # options.add_argument('--headless')
-    # options.add_experimental_option("prefs", prefs) doesn't work with max, gets max's logo imgs 
+    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs) #doesn't work with max, gets max's logo imgs 
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
     url = f'https://www.maxfashion.com/eg/en/search?q={query}%20:allCategories:mxwomen'
@@ -246,7 +249,45 @@ def brantu(query):
             "Img"   : img
         })
         i += 1
-    driver.close()       
+    driver.close()
+
+def lcwaikiki(query):
+    i = 1    
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
+    driver = webdriver.Chrome(service=s , options=options)
+    
+    url = f"https://www.lcwaikiki.eg/en-US/EG/search?q={query} woman"
+    driver.get(url)
+    driver.implicitly_wait(5)
+    products = driver.find_elements(By.CLASS_NAME,"product-card")
+    driver.implicitly_wait(0)
+
+    for product in products[:20]:
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.CLASS_NAME, "product-card__title").text
+        try:
+            price = product.find_element(By.CLASS_NAME , "product-price__cart-price").text
+            price = price.replace(",", ".")
+        except:
+            price = product.find_element(By.CLASS_NAME , "product-price__price").text
+            
+        price = re.sub(r"[^0-9\.]+" , '' , price)  
+        link = product.find_element(By.TAG_NAME , "a").get_attribute("href")
+        img =  product.find_element(By.CLASS_NAME , "product-image__image").get_attribute("src")  
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Lc Waikiki",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
 
 
 def main(query):
@@ -257,8 +298,9 @@ def main(query):
         future = executor.submit(jumia, query)  
         future = executor.submit(handm, query)  
         future = executor.submit(max, query)  
+        future = executor.submit(lcwaikiki, query) 
         future = executor.submit(brantu, query) 
-        # future = executor.submit(bershka, query) 
+        future = executor.submit(bershka, query) 
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = False ))
     # print(f'time : {end - start : .2f}')     #avg 10 secs
