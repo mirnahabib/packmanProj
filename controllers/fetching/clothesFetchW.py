@@ -8,13 +8,11 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from concurrent.futures import ThreadPoolExecutor
-import json,sys ,time , re
+import json,sys , time , re
 
-
-s = Service(ChromeDriverManager().install())
+s=Service(ChromeDriverManager().install())
 prefs = {"profile.managed_default_content_settings.images": 2}
 ProductsArr = []
-
 
 def amazon(query):
     i = 1    
@@ -23,8 +21,7 @@ def amazon(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
     driver = webdriver.Chrome(service=s , options=options)
-    searchedProduct = query
-    url = "https://www.amazon.eg/-/en/s?k=" + searchedProduct
+    url = f"https://www.amazon.eg/-/en/s?k={query} for women"  
     driver.get(url)
     products = driver.find_elements(By.CLASS_NAME,"a-spacing-base")
 
@@ -57,7 +54,7 @@ def jumia(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
 
-    url = "https://www.jumia.com.eg/catalog/?q=" + query
+    url = f"https://www.jumia.com.eg/catalog/?q={query} women" 
     driver.get(url)
     popup = driver.find_element(By.CLASS_NAME,"cw")
     popup.find_element(By.XPATH,"./button").click()
@@ -82,157 +79,189 @@ def jumia(query):
         i += 1
     driver.close() 
 
-def noon(query):
+def bershka(query):
     i=1
     options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     # options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
-    url = "https://www.noon.com/egypt-en/search/?q=" + query
+    url = "https://www.bershka.com/eg/en/q/" + query
     driver.get(url)
-    driver.implicitly_wait(10)
-    products = driver.find_elements(By.CLASS_NAME, "productContainer")
+    driver.implicitly_wait(15)
 
-    for product in products[:20]:
+    # gender = driver.find_element(By.CLASS_NAME, "gender-filters")
+    # men = gender.find_element(By.XPATH , "./button[3]").click()
+    # women = gender.find_element(By.XPATH , "./button[2]")
+
+    products = driver.find_elements(By.CLASS_NAME , "search-product-card")
+
+
+    for product in products[1:21]:
         ActionChains(driver).scroll_to_element(product).perform()
-        link = product.find_element(By.TAG_NAME , "a")
-        title = link.find_element(By.XPATH , "./div/div/div[2]/div[1]").get_attribute("title")
-        price = product.find_element(By.CLASS_NAME , "amount").text
-        linkURL= link.get_attribute("href")
-        try:
-            img = link.find_element(By.CLASS_NAME,"lazyload-wrapper").find_element(By.TAG_NAME, "img").get_attribute("src")
-            
-        except:
-            img = None
-               
-        ProductsArr.append({
-            "Count" : i,
-            "Shop"  : "Noon",
-            "Title" : title,
-            "Price" : float(price),
-            "Link"  : linkURL,
-            "Img"   : img
-        })
-        i += 1
-    driver.close()    
-
-def select(query):
-    i=1
-    options = Options()
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_argument('--headless')
-    options.add_experimental_option("prefs", prefs)
-    driver = webdriver.Chrome(service=s , options=options)
-    url = "https://select.eg/en/pages/search-results-page?q=" + query
-    driver.get(url)
-    driver.implicitly_wait(6)
-
-
-    products = driver.find_elements(By.CLASS_NAME , "snize-product-in-stock")
-
-    for product in products[:20]:
-        title = product.find_element(By.CLASS_NAME , "snize-title").text
-        price = product.find_element(By.CLASS_NAME , "snize-price").text
+        title = product.find_element(By.CLASS_NAME , "product-text").text
+        price = product.find_element(By.CLASS_NAME, "current-price-elem").text
         price = re.sub(r"[^0-9\.]+" , '' , price)
-        link = product.find_element(By.CLASS_NAME, "snize-view-link").get_attribute("href")
-        img = product.find_element(By.CLASS_NAME , "snize-item-image").get_attribute("src")
+        img = product.find_element(By.CLASS_NAME , "image-item").get_attribute("src")
+        link = product.find_element(By.CLASS_NAME , "grid-card-link").get_attribute("href")
 
         ProductsArr.append({
             "Count" : i,
-            "Shop"  : "Select",
+            "Shop"  : "Bershka",
             "Title" : title,
             "Price" : float(price),
-            "Link"  : link,
-            "Img"   : img
-        })
-        i += 1
-    driver.close() 
-
-def _2B(query):
-    i = 1    
-    options = Options()
-    options.add_argument('--headless')
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_experimental_option("prefs", prefs) #does not work with 2b 
-    driver = webdriver.Chrome(service=s , options=options)
-    url = "https://2b.com.eg/en/catalogsearch/result/?q=" + query
-    driver.get(url)
-    driver.implicitly_wait(5)
-    products = driver.find_elements(By.CLASS_NAME,"product-item-info")
-    driver.implicitly_wait(0)
-
-    for product in products[:20]:
-        ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.CLASS_NAME, "product-item-link")
-        try:
-            price = product.find_element(By.CLASS_NAME , "special-price").text
-        except:
-            price = product.find_element(By.CLASS_NAME , "price").text
-        price = re.sub(r"[^0-9\.]+" , '' , price)    
-        link = title.get_attribute("href")
-        title = title.text.replace('"','')
-        img =  product.find_element(By.CLASS_NAME , "product-image-photo").get_attribute("src")  
-
-        ProductsArr.append({
-            "Count" : i,
-            "Shop"  : "2B",
-            "Title" : title,
-            "Price" : (price),
             "Link"  : link,
             "Img"   : img
         })
         i += 1
     driver.close()
 
-def dubaiphone(query):
+def zara(query):
+    i=1
+    options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    # options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s , options=options)
+    url = f'https://www.zara.com/eg/en/search?searchTerm={query}&section=WOMAN'
+    driver.get(url)
+    driver.implicitly_wait(3)
+
+    products = driver.find_elements(By.CLASS_NAME , "product-grid-product")
+
+    for product in products[:20]:
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.CLASS_NAME , "product-grid-product-info__name")
+        price= product.find_element(By.CLASS_NAME, "money-amount__main").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        link = title.get_attribute("href")
+        img = product.find_element(By.CLASS_NAME, "media-image__image").get_attribute("src")
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Zara",
+            "Title" : title.text,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
+
+def max(query):
+    i=1
+    options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    # options.add_argument('--headless')
+    # options.add_experimental_option("prefs", prefs) doesn't work with max, gets max's logo imgs 
+    driver = webdriver.Chrome(service=s , options=options)
+    driver.maximize_window()
+    url = f'https://www.maxfashion.com/eg/en/search?q={query}%20:allCategories:mxwomen'
+    driver.get(url)
+
+    products = driver.find_elements(By.CLASS_NAME , "product")
+
+    for product in products[:20]:
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.XPATH , './div[3]').text
+        price = product.find_element(By.XPATH , './div[2]').text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        img_link = product.find_element(By.XPATH , "./div[1]")
+        link = img_link.find_element(By.TAG_NAME , "a").get_attribute("href")
+        imgs = img_link.find_elements(By.TAG_NAME , "img")
+        img= imgs[1].get_attribute("src")
+    
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Max",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
+
+def handm(query):
+    i=1
+    options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s , options=options)
+    url = f'https://eg.hm.com/en/shop-men/#query={query}&hierarchicalMenu%5Bfield_category.lvl0%5D=Women&page=1'
+    driver.get(url)
+
+    products = driver.find_elements(By.CLASS_NAME , "c-products__item") 
+
+    for product in products[:20]: 
+        title = product.find_element(By.CLASS_NAME, "field--name-name").text
+        price = product.find_element(By.CLASS_NAME, "price").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        img = product.find_element(By.TAG_NAME , "img").get_attribute('src')
+        link = product.find_element(By.TAG_NAME , "a").get_attribute("href")
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "H&M",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
+
+def brantu(query):
     i = 1    
     options = Options()
     options.add_argument('--headless')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
     driver = webdriver.Chrome(service=s , options=options)
-    url = "https://www.dubaiphone.net/en/shop?search=" + query
+    
+    url = f'https://brantu.com/eg-en/search?q={query}'
     driver.get(url)
     driver.implicitly_wait(5)
-    products = driver.find_elements(By.CLASS_NAME,"o_wsale_product_grid_wrapper")
-    driver.implicitly_wait(1)
+    products = driver.find_elements(By.CLASS_NAME,"product-item")
+    driver.implicitly_wait(0)
 
     for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.CLASS_NAME, "o_wsale_products_item_title")
-        price = product.find_element(By.CLASS_NAME , "product_price")
-        price = price.find_element(By.XPATH , "./span[1]").find_element(By.CLASS_NAME, "oe_currency_value").text
+        title = product.find_element(By.CLASS_NAME, "productName").text
+        
+        price = product.find_element(By.CLASS_NAME , "main-price").text
+            
         price = re.sub(r"[^0-9\.]+" , '' , price)  
-        link = title.find_element(By.TAG_NAME , "a").get_attribute("href")
-        title = title.find_element(By.TAG_NAME , "a").get_attribute('content').replace('"','')
-        img =  product.find_element(By.CLASS_NAME , "img").get_attribute("src")  
+        link = product.find_element(By.TAG_NAME , "a").get_attribute("href")
+        img =  product.find_element(By.CLASS_NAME , "main-image").find_element(By.TAG_NAME, "img").get_attribute("src")  
 
         ProductsArr.append({
             "Count" : i,
-            "Shop"  : "Dubai phone",
+            "Shop"  : "Brantu",
             "Title" : title,
             "Price" : float(price),
             "Link"  : link,
             "Img"   : img
         })
         i += 1
-    driver.close()
+    driver.close()       
 
 
 def main(query):
     start = time.time()
-    with ThreadPoolExecutor(max_workers=25) as executor:
+    with ThreadPoolExecutor(max_workers=30) as executor:
+        future = executor.submit(zara, query)  
         future = executor.submit(amazon, query)  
         future = executor.submit(jumia, query)  
-        # future = executor.submit(select, query)  
-        # future = executor.submit(_2B, query) 
-        future = executor.submit(dubaiphone, query) 
-        future = executor.submit(noon, query) #noon sometimes runs into problems
+        future = executor.submit(handm, query)  
+        future = executor.submit(max, query)  
+        future = executor.submit(brantu, query) 
+        # future = executor.submit(bershka, query) 
     end = time.time()
-    print(json.dumps(ProductsArr, ensure_ascii = True ))
-    # print(f'time : {end - start : .2f}') #avg 5 secs
+    print(json.dumps(ProductsArr, ensure_ascii = False ))
+    # print(f'time : {end - start : .2f}')     #avg 10 secs
 
 if __name__ == "__main__":
     main(sys.argv[1])

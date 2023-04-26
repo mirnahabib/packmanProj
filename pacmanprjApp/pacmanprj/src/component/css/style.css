@@ -249,6 +249,13 @@
             animation-timing-function: ease-out;
   }
 }
+.navbar-text:hover{
+  color: #0B5ED7;
+}
+
+.shop-name{
+  font-size:x-small;
+}
 
 @media only screen and (max-width: 475px) {
   .text-resp{

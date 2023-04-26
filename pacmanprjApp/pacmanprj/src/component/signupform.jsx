@@ -58,7 +58,7 @@ const SignupForm = () => {
     <div  className=" container text-light email-font pt-5 blur-background">
          <Row className="justify-content-center">
         <Col lg={6}>
-        <h3 className='Font border-bottom'>Create An Account</h3>
+        <h3 className='Font border-bottom heartbeat'>Create An Account</h3>
         <Form className='pt-2' onSubmit={handleSubmit}>
       <Form.Group controlId='formName'>
         <Form.Label className='pt-2'>Name</Form.Label>

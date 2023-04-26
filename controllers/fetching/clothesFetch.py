@@ -21,8 +21,7 @@ def amazon(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
     driver = webdriver.Chrome(service=s , options=options)
-    searchedProduct = query
-    url = "https://www.amazon.eg/-/en/s?k=" + searchedProduct
+    url = f"https://www.amazon.eg/-/en/s?k={query} for men"  
     driver.get(url)
     products = driver.find_elements(By.CLASS_NAME,"a-spacing-base")
 
@@ -55,7 +54,7 @@ def jumia(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
 
-    url = "https://www.jumia.com.eg/catalog/?q=" + query
+    url = f"https://www.jumia.com.eg/catalog/?q={query} men" 
     driver.get(url)
     popup = driver.find_element(By.CLASS_NAME,"cw")
     popup.find_element(By.XPATH,"./button").click()
@@ -125,7 +124,7 @@ def zara(query):
     # options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
-    url = "https://www.zara.com/eg/en/search?searchTerm=" + query
+    url = f'https://www.zara.com/eg/en/search?searchTerm={query}&section=MAN'
     driver.get(url)
     driver.implicitly_wait(3)
 
@@ -158,7 +157,7 @@ def max(query):
     # options.add_experimental_option("prefs", prefs) doesn't work with max, gets max's logo imgs 
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
-    url = "https://www.maxfashion.com/eg/en/search?q=" + query
+    url = f'https://www.maxfashion.com/eg/en/search?q={query}%20:allCategories:mxmen'
     driver.get(url)
 
     products = driver.find_elements(By.CLASS_NAME , "product")
@@ -191,7 +190,7 @@ def handm(query):
     options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
-    url = "https://eg.hm.com/en/#query=" + query
+    url = f'https://eg.hm.com/en/shop-men/#query={query}&hierarchicalMenu%5Bfield_category.lvl0%5D=Men&page=1'
     driver.get(url)
 
     products = driver.find_elements(By.CLASS_NAME , "c-products__item") 
@@ -212,7 +211,43 @@ def handm(query):
             "Img"   : img
         })
         i += 1
-    driver.close() 
+    driver.close()
+
+def townteam(query):
+    i = 1    
+    options = Options()
+    # options.add_argument('--headless') 
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
+    driver = webdriver.Chrome(service=s , options=options)
+    url = "https://townteam.com/search?type=product&q=" + query
+    driver.get(url)
+    driver.implicitly_wait(5)
+    products = driver.find_elements(By.CLASS_NAME,"product-parent")
+    driver.implicitly_wait(0)
+
+    for product in products[:20]:
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.CLASS_NAME, "tt-title")
+        try:
+            price = product.find_element(By.CLASS_NAME , "new-price").text
+        except:
+            price = product.find_element(By.CLASS_NAME , "tt-price").text            
+        price = re.sub(r"[^0-9\.]+" , '' , price)  
+        link = title.find_element(By.TAG_NAME , "a").get_attribute("href")
+        title = title.text
+        img =  product.find_element(By.CLASS_NAME , "tt-img").find_element(By.TAG_NAME, "img").get_attribute("srcset")  
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Townteam",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()      
 
 
 def main(query):
@@ -223,7 +258,8 @@ def main(query):
         future = executor.submit(jumia, query)  
         future = executor.submit(handm, query)  
         future = executor.submit(max, query)  
-        future = executor.submit(bershka, query) 
+        future = executor.submit(townteam, query) 
+        # future = executor.submit(bershka, query) 
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = False ))
     # print(f'time : {end - start : .2f}')     #avg 10 secs

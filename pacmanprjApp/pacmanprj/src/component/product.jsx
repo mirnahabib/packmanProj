@@ -96,8 +96,11 @@ export default function Product() {
                 onSelect={handleCat}
                 align="end"
               >
-                <Dropdown.Item className="text-resp" eventKey="clothing">
-                  Clothing and Fashion
+                <Dropdown.Item className="text-resp" eventKey="clothingMen">
+                  Clothing and Fashion (Men)
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="clothingWomen">
+                  Clothing and Fashion (Women)
                 </Dropdown.Item>
                 <Dropdown.Item className="text-resp" eventKey="cosmetics">
                   Cosmetics and Bodycare
@@ -162,8 +165,11 @@ export default function Product() {
                 onSelect={handleCat}
                 align="end"
               >
-                <Dropdown.Item className="text-resp" eventKey="clothing">
-                  Clothing and Fashion
+                <Dropdown.Item className="text-resp" eventKey="clothingMen">
+                  Clothing and Fashion (Men)
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="clothingWomen">
+                  Clothing and Fashion (Women)
                 </Dropdown.Item>
                 <Dropdown.Item className="text-resp" eventKey="cosmetics">
                   Cosmetics and Bodycare
@@ -257,7 +263,7 @@ export default function Product() {
                       {/* {item.Shop === "Amazon" ? 
                       <IconAmazon className="align-self-end"/>: " "
                       } */}
-                      <small className="align-self-end">{item.Shop}</small>
+                      <small className="align-self-end shop-name">{item.Shop}</small>
                     </div>
                   </div>
                 </div>

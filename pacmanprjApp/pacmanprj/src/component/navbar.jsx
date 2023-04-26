@@ -12,11 +12,11 @@ export default function Navingbar() {
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav">
               <Nav>
-                <Nav.Link href="/" className="Font">Home</Nav.Link>
-                <Nav.Link href="/login" className="Font">Login</Nav.Link>
-                <Nav.Link href="/Signup" className="Font">Signup</Nav.Link>
-                <Nav.Link href="#" className="Font">Favorites</Nav.Link>
-                <Nav.Link href="/team" className="Font">Team</Nav.Link>
+                <Nav.Link href="/" className="Font navbar-text">Home</Nav.Link>
+                <Nav.Link href="/login" className="Font navbar-text">Login</Nav.Link>
+                <Nav.Link href="/Signup" className="Font navbar-text">Signup</Nav.Link>
+                <Nav.Link href="#" className="Font navbar-text">Favorites</Nav.Link>
+                <Nav.Link href="/team" className="Font navbar-text">Team</Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Container>

@@ -32,7 +32,7 @@ const LoginForm = () => {
       
       <Row className="justify-content-center">
         <Col lg={6}>
-        <h3 className="Font border-bottom">Login</h3>
+        <h3 className="Font border-bottom heartbeat">Login</h3>
           <Form className="pt-2" onSubmit={handleSubmit}>
             <Form.Group controlId="formEmail">
               <Form.Label className="pt-2">Email address</Form.Label>

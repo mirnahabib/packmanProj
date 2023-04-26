@@ -6,12 +6,14 @@ const {spawn} = require("child_process");
 const categorizedWebsites = new Map([
     ["electronics" ,  "./fetching/electronicsFetch.py"],
     ["grocery" , "./fetching/groceryFetch.py"],
-    ["clothing" , "./fetching/clothesFetch.py"],
+    ["clothingMen" , "./fetching/clothesFetch.py"],
+    ["clothingWomen" , "./fetching/clothesFetchW.py"],
     ["other" , "./fetching/allFetch.py"],
     ["cosmetics" , "./fetching/cosmeticsFetch.py"],
     ["toys" , "./fetching/toysFetch.py"],
     ["furniture" , "./fetching/furnitureFetch.py"],
     ["used", "./fetching/usedFetch.py"]
+
 ])
 
 

@@ -116,13 +116,46 @@ def noon(query):
             "Img"   : img
         })
         i += 1
-    driver.close()    
+    driver.close()
+    
+def faces(query):
+    i = 1    
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
+    driver = webdriver.Chrome(service=s , options=options)
+    url = "https://www.faces.com/eg-en/search?q=" + query
+    driver.get(url)
+    driver.implicitly_wait(5)
+    products = driver.find_elements(By.CLASS_NAME,"js-product-tile")
+    driver.implicitly_wait(0)
+
+    for product in products[:20]:
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.CLASS_NAME, "product-tile-name-text").text
+        price = product.find_element(By.CLASS_NAME , "js-price").text            
+        price = re.sub(r"[^0-9\.]+" , '' , price)  
+        link = product.find_element(By.CLASS_NAME , "product-tile-link").get_attribute("href")
+        img =  product.find_element(By.CLASS_NAME , "tile-image").get_attribute("src")  
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Faces",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()        
 
 def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(amazon, query)  
         future = executor.submit(jumia, query)  
+        future = executor.submit(faces, query)
         future = executor.submit(noon, query) #noon sometimes runs into problems
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = True ))
