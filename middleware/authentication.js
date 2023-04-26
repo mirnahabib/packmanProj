@@ -2,7 +2,6 @@ const CustomError = require('../errors');
 const { isTokenValid } = require('../utils');
 const Token = require('../models/Token');
 const { attachCookiesToResponse } = require('../utils');
-
 const authenticateUser = async (req, res, next) => {
   const { refreshToken, accessToken } = req.signedCookies;
 
@@ -32,7 +31,7 @@ const authenticateUser = async (req, res, next) => {
     req.user = payload.user;
     next();
   } catch (error) {
-    throw new CustomError.UnauthenticatedError('Authentication Invalid');
+    throw new CustomError.UnauthenticatedError('Authentication Error');
   }
 };
 
