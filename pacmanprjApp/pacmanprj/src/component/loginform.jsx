@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import axios from 'axios';
+import { Navigate } from 'react-router-dom';
+import Product from "./product";
+import Navingbar from "./navbar";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [navigate, setNavigate] = useState(false);
+  const [user, setUser] = useState({
+    "name": "",
+    "role": "",
+    "userId": ""
+  });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // email validation
@@ -22,11 +32,24 @@ const LoginForm = () => {
     }
 
     // form submitted successfully
-    alert(`Email: ${email}\nPassword: ${password}`);
-    setEmail("");
-    setPassword("");
+    // alert(`Successfully logged in`);
+
+    //Cookies
+    const { data } = await axios.post('/api/auth/login', { email, password }, { withCredentials: true });
+    axios.defaults.headers.common['Authorization'] = `Bearer ${data['token']}`;
+    setUser({
+      "name": data.user.name,
+      "role": data.user.role,
+      "userId": data.user.userId
+    });
+    console.log(user);
+    // setNavigate(true);
   };
 
+  if (navigate) {
+    return <Navigate to="/" />
+  }
+  
   return (
     <div className=" container text-light email-font pt-5 blur-background">
       

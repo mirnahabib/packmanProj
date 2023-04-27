@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Row, Col} from 'react-bootstrap';
+import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -9,13 +11,14 @@ const SignupForm = () => {
     confirmPassword: '',
   });
 
+  const [navigate, setNavigate] = useState(false);
   const { name, email, password, confirmPassword } = formData;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Validate input before submitting form
     if (name.length < 3) {
@@ -37,16 +40,16 @@ const SignupForm = () => {
 
     // Submit form
     alert(`Thank you for signing up, ${name}!`);
-    // Clear form
-    setFormData({
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    });
-    console.log(name , email , password);
+
+       //Token
+       await axios.post('/api/auth/register', { name, email, password });
+       setNavigate(true);
   };
 
+  if (navigate) {
+    return <Navigate to="/login" />
+  }
+  
   const isValidEmail = (email) => {
     // Check if email matches email pattern
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
