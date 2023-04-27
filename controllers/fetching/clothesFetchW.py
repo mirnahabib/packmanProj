@@ -83,7 +83,7 @@ def bershka(query):
     i=1
     options = Options()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36") 
     options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
@@ -122,7 +122,7 @@ def zara(query):
     i=1
     options = Options()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36") 
     options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
@@ -155,9 +155,9 @@ def max(query):
     i=1
     options = Options()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36") 
     options.add_argument('--headless')
-    options.add_experimental_option("prefs", prefs) #doesn't work with max, gets max's logo imgs 
+    options.add_experimental_option("prefs", prefs) 
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
     url = f'https://www.maxfashion.com/eg/en/search?q={query}%20:allCategories:mxwomen'
@@ -256,7 +256,7 @@ def lcwaikiki(query):
     options = Options()
     options.add_argument('--headless')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
+    options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
     
     url = f"https://www.lcwaikiki.eg/en-US/EG/search?q={query} woman"

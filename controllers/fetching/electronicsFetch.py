@@ -85,7 +85,7 @@ def jumia(query):
 def noon(query):
     i=1
     options = Options()
-    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") #make headless work and not return empty list
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36")  
     options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -155,10 +155,10 @@ def select(query):
 def _2B(query):
     i = 1    
     options = Options()
-    options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36") 
     options.add_argument('--headless')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_experimental_option("prefs", prefs) #does not work with 2b 
+    # options.add_experimental_option("prefs", prefs) #does not work with 2b 
     driver = webdriver.Chrome(service=s , options=options)
     url = "https://2b.com.eg/en/catalogsearch/result/?q=" + query
     driver.get(url)
@@ -182,7 +182,7 @@ def _2B(query):
             "Count" : i,
             "Shop"  : "2B",
             "Title" : title,
-            "Price" : (price),
+            "Price" : float(price),
             "Link"  : link,
             "Img"   : img
         })
@@ -194,7 +194,7 @@ def dubaiphone(query):
     options = Options()
     options.add_argument('--headless')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
+    options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s , options=options)
     url = "https://www.dubaiphone.net/en/shop?search=" + query
     driver.get(url)
@@ -227,8 +227,8 @@ def dubaiphone(query):
 def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
-        # future = executor.submit(select, query) # 2nd slowest works better without headless
-        # future = executor.submit(_2B, query) #the slowest (bottleneck)
+        # future = executor.submit(select, query)
+        future = executor.submit(_2B, query) 
         future = executor.submit(dubaiphone, query) 
         future = executor.submit(noon, query) 
         future = executor.submit(amazon, query)  

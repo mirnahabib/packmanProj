@@ -1,23 +1,62 @@
-1-general and electronics:
+1-electronics and devices
     1-amazon
     2-jumia 
     3-noon 
-    4-select
-    5-olx 
+    4-dubai phone
+    5-select*
+    6-2B*
 
-2-grocery 
+2-groceries
     1-carrefour 
     2-spinney
     3-gourmet
     4-hyperone
+    5-amazon
 
-3-clothes
+3-clothing men
     1-h&m
     2-max
     3-bershka
     4-zara
+    5-lc waikiki
+    6-town team
+    7-amazon
+    8-jumia
 
------------------------------------
-freshfood 80% 
-    no links
+4-clothing women
+    1-h&m
+    2-max
+    3-bershka
+    4-zara
+    5-lc waikiki
+    6-brantu
+    7-amazon
+    8-jumia
+
+5-cosmetics
+    1-faces
+    2-amazon
+    3-jumia
+    4-noon
+    
+6-furniture
+    1-ikea
+    2-hub furniture
+    3-amazon
+    4-jumia
+    5-noon
+
+7-toys
+    1-amazon
+    2-noon
+    3-jumia
+
+8-used
+    1-olx
+    2-open sooq
+
+-----------------
+total 22 different websites
+
+
 
