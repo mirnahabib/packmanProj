@@ -20,9 +20,9 @@ router
   .route('/')
   .get(getAllUsers);
 
-router.route('/showMe').get(showCurrentUser);
-router.route('/updateUser').patch(authenticateUser, updateUser);
-router.route('/updateUserPassword').patch(authenticateUser, updateUserPassword);
+router.route('/profile').get(authenticateUser,showCurrentUser);
+router.route('/updateProfile').patch(authenticateUser, updateUser);
+router.route('/updatePassword').patch(authenticateUser, updateUserPassword);
 
 router.route('/:id').get(authenticateUser, getSingleUserbyId);
 router.route('/findbyemail/:email').get(getSingleUserbyemail);

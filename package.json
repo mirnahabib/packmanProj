@@ -31,6 +31,7 @@
     "yamljs": "^0.3.0"
   },
   "scripts": {
+    "devStart": "nodemon server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -69,5 +70,8 @@
   "bugs": {
     "url": "https://github.com/ElteltM/packmanProj/issues"
   },
-  "homepage": "https://github.com/ElteltM/packmanProj#readme"
+  "homepage": "https://github.com/ElteltM/packmanProj#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }
