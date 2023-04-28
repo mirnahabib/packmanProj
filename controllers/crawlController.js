@@ -10,6 +10,7 @@ const categorizedWebsites = new Map([
     ["clothingWomen" , "./fetching/clothesFetchW.py"],
     ["other" , "./fetching/allFetch.py"],
     ["cosmetics" , "./fetching/cosmeticsFetch.py"],
+    ["videogames" , "./fetching/videogamesFetch.py"],
     ["toys" , "./fetching/toysFetch.py"],
     ["furniture" , "./fetching/furnitureFetch.py"],
     ["used", "./fetching/usedFetch.py"]

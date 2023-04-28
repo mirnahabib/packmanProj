@@ -117,6 +117,9 @@ export default function Product() {
                 <Dropdown.Item className="text-resp" eventKey="toys">
                   Toys and Games
                 </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="videogames">
+                  Consoles and Videogames
+                </Dropdown.Item>
                 <Dropdown.Item className="text-resp" eventKey="other">
                   Other (longer search)
                 </Dropdown.Item>
@@ -185,6 +188,9 @@ export default function Product() {
                 </Dropdown.Item>
                 <Dropdown.Item className="text-resp" eventKey="toys">
                   Toys and Games
+                </Dropdown.Item>
+                <Dropdown.Item className="text-resp" eventKey="videogames">
+                  Consoles and Videogames
                 </Dropdown.Item>
                 <Dropdown.Item className="text-resp" eventKey="other">
                   Other (longer search)
