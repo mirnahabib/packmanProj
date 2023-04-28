@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useContext } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
@@ -7,17 +7,16 @@ import Navingbar from "./navbar";
 import jwt_decode from 'jwt-decode';
 import { useGlobalContext } from '../context';
 
+import MyUser from "../Contexts/MyUser";
 
 const LoginForm = () => {
   //const { saveUser } = useGlobalContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [navigate, setNavigate] = useState(false);
-  const [user, setUser] = useState({
-    "name": "",
-    "role": "",
-    "userId": ""
-  });
+
+
+  const {  updateState , updateLogState } = useContext(MyUser); // want to access the global setstates in this component
 
   function googleClientCallbackResonse(response){
     try{
@@ -66,15 +65,26 @@ const LoginForm = () => {
     // alert(`Successfully logged in`);
 
     //Cookies
-    const { data } = await axios.post('/api/auth/login', { email, password }, { withCredentials: true });
-    axios.defaults.headers.common['Authorization'] = `Bearer ${data['token']}`;
-    setUser({
-      "name": data.user.name,
-      "role": data.user.role,
-      "userId": data.user.userId
-    });
-    console.log(user);
-    // setNavigate(true);
+    try {
+      const { data } = await axios.post(
+        "/api/auth/login",
+        { email, password },
+        { withCredentials: true }
+      );
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${data["token"]}`;
+      updateState({
+        name: data.user.name,
+        role: data.user.role,
+        userId: data.user.userId,
+      });
+      updateLogState(true);
+      setNavigate(true);
+    } catch (error) {
+      alert("failed to login")
+      console.log(error);
+    }
   };
 
   if (navigate) {
@@ -117,7 +127,7 @@ const LoginForm = () => {
               Login
             </Button>
             <br/>
-            <div class="" id="googleSignIn"></div>
+            <div className="" id="googleSignIn"></div>
           </Form>
         </Col>
       </Row>
