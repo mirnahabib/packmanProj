@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
 import Product from "./product";
 import Navingbar from "./navbar";
+import jwt_decode from 'jwt-decode';
+import { useGlobalContext } from '../context';
+
 
 const LoginForm = () => {
+  //const { saveUser } = useGlobalContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [navigate, setNavigate] = useState(false);
@@ -14,6 +18,33 @@ const LoginForm = () => {
     "role": "",
     "userId": ""
   });
+
+  function googleClientCallbackResonse(response){
+    try{
+    console.log("jwt google token: " + response.credential)
+    var googleUser = jwt_decode(response.credential);
+    //saveUser(googleUser);   
+    }catch (error) {
+        console.log(error);
+      }
+  }
+  
+  const googleClientLogin = async () => {
+    /* global google */
+    google.accounts.id.initialize({
+        client_id: "509262672064-ppiak8lk7ra2vscpsj29dt4fp0v9re4j.apps.googleusercontent.com",
+        callback: googleClientCallbackResonse
+      });
+    google.accounts.id.renderButton(
+      document.getElementById("googleSignIn"),
+      { theme: "outline", size: "large"}
+    );
+  }
+  
+  useEffect(() => {
+    googleClientLogin();
+  }, []);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,6 +116,8 @@ const LoginForm = () => {
             <Button className="mt-4" variant="primary" type="submit">
               Login
             </Button>
+            <br/>
+            <div class="" id="googleSignIn"></div>
           </Form>
         </Col>
       </Row>

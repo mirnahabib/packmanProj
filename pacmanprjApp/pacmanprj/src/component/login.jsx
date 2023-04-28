@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import "./css/signup.css";
+import { useGlobalContext } from '../context';
+
 function Login() {
   return (
 <div className="container align-items-center justify-content-center text-center p-5">
@@ -34,6 +36,7 @@ function Login() {
     <button type="submit" className="btn btn-warning mt-3">
       Sign in
     </button>
+    <br />
   </form>
 </div>
 </div>

@@ -16,6 +16,8 @@ import Team from "./component/team";
 import Navingbar from "./component/navbar";
 import SignUpForm from "./component/signupform";
 import LoginForm from "./component/loginform";
+import { useGlobalContext } from './context';
+import jwt_decode from 'jwt-decode';
 
 
 
@@ -38,11 +40,33 @@ import LoginForm from "./component/loginform";
 // };
 
 function App() {
-  
-
   const { search } = window.location;
   const query = new URLSearchParams(search).get('s');
   const [searchQuery, setSearchQuery] = useState(query || '');
+
+  function googleClientCallbackResonse(response){
+    try{
+    console.log("jwt google token: " + response.credential)
+    var googleUser = jwt_decode(response.credential);
+    //saveUser(googleUser);   
+    }catch (error) {
+        console.log(error);
+      }
+  }
+  
+  const googleClientLogin = async () => {
+    /* global google */
+    google.accounts.id.initialize({
+        client_id: "509262672064-ppiak8lk7ra2vscpsj29dt4fp0v9re4j.apps.googleusercontent.com",
+        callback: googleClientCallbackResonse
+      });
+    google.accounts.id.prompt();
+  }
+  
+  useEffect(() => {
+    googleClientLogin();
+  }, []);
+  
   // const filteredPosts = filterPosts(posts, searchQuery);
    return (
    

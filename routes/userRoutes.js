@@ -20,7 +20,7 @@ router
   .route('/')
   .get(getAllUsers);
 
-router.route('/profile').get(authenticateUser,showCurrentUser);
+router.route('/showMe').get(authenticateUser,showCurrentUser);
 router.route('/updateProfile').patch(authenticateUser, updateUser);
 router.route('/updatePassword').patch(authenticateUser, updateUserPassword);
 
