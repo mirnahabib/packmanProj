@@ -3,6 +3,9 @@
   background-color: #030f17;
   /* background-image: url("./component/imgs/back.jpg"); */
 }
+.navbar-logo{
+  height: 3em;
+}
 
 .blur-background {
   backdrop-filter: blur(1px);
