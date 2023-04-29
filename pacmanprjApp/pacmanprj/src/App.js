@@ -2,13 +2,13 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import './App.css';
 import {BrowserRouter as Router, Routes , Route} from 'react-router-dom'
-import Home from "./pages/Home";
+// import Home from "./pages/Home";
 import "bootstrap/dist/css/bootstrap.min.css"
 import Search from "./component/Search";
 import "@fontsource/press-start-2p";
 import "./component/css/style.css";
 import Announcer from './component/announcer';
-import Product from "./component/product";
+import Home from "./component/Home";
 import Team from "./component/team";
 import Navingbar from "./component/navbar";
 import SignUpForm from "./component/signupform";
@@ -82,7 +82,7 @@ function App() {
         {/* <Home/> */}
         <Navingbar/>
       <Routes>
-        <Route path='/' element={<Product/>}/>
+        <Route path='/' element={<Home/>}/>
         <Route path='/Team' element={<Team/>}/>
         <Route path='/signup' element={<SignUpForm/>}/>
         <Route path='/login' element={<LoginForm/>}/>

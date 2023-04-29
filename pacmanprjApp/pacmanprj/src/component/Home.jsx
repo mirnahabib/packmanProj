@@ -5,10 +5,19 @@ import Form from "react-bootstrap/Form";
 import IconAmazon from "./imgs/amazon";
 import InputGroup from "react-bootstrap/InputGroup";
 import IconSearch from "./imgs/search";
+import Productcard from "./productcard";
 import "./css/style.css";
+import {
+  Card,
+  Row,
+  Col,
+  Button,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import amazon from "./imgs/amazon.svg";
 
-export default function Product() {
+export default function Home() {
   const [products, setProducts] = useState(null);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Category");
@@ -234,47 +243,11 @@ export default function Product() {
               <h3 className="border-bottom mb-4 heartbeat">SEARCH RESULTS</h3>
             </div>
           </div>
-          <div className="row">
-            {sorting &&
-              products.map((item) => (
-                <div className="col-lg-4 mb-3 d-flex align-items-stretch">
-                  <div className="card bg-dark w-100 Font">
-                    <img
-                      src={item.Img}
-                      className="card-img-top img-props"
-                      alt={item.Title}
-                    />
-                    <div className="card-body d-flex flex-column">
-                      <h5 className="card-title  product-title-font text-light">
-                        {item.Title}
-                      </h5>
-                      {item.Price !== 0 ? (
-                        <p className="card-text mb-4 product-price-font">
-                          {item.Price} EGP
-                        </p>
-                      ) : (
-                        <p className="card-text mb-4 product-price-font">
-                          price unavailable
-                        </p>
-                      )}
-
-                      <a
-                        href={item.Link}
-                        target="_blank"
-                        className="btn btn-primary mt-auto align-self-center"
-                        rel="noreferrer"
-                      >
-                        Check it out
-                      </a>
-                      {/* {item.Shop === "Amazon" ? 
-                      <IconAmazon className="align-self-end"/>: " "
-                      } */}
-                      <small className="align-self-end shop-name">{item.Shop}</small>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
+          <Row xs={1} md={4} className="g-4">
+        {products.map((product) => (
+          <Productcard product={product} />
+        ))}
+      </Row>
         </div>
       )}
     </div>

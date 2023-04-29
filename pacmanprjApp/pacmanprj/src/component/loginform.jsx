@@ -2,7 +2,7 @@ import React, { useState,useEffect,useContext } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
-import Product from "./product";
+import Product from "./Home";
 import Navingbar from "./navbar";
 import jwt_decode from 'jwt-decode';
 import { useGlobalContext } from '../context';
