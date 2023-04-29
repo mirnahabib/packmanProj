@@ -61,6 +61,7 @@ const LoginForm = () => {
       return;
     }
 
+
     // form submitted successfully
     // alert(`Successfully logged in`);
 
@@ -74,13 +75,14 @@ const LoginForm = () => {
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${data["token"]}`;
-      updateState({
+      updateState({ 
         name: data.user.name,
         role: data.user.role,
         userId: data.user.userId,
       });
       updateLogState(true);
       setNavigate(true);
+      console.log(data);
     } catch (error) {
       alert("failed to login")
       console.log(error);

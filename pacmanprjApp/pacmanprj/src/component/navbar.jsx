@@ -7,8 +7,12 @@ import { Link } from 'react-router-dom';
 import logo from "./imgs/logo.png";
 
 export default function Navingbar() {
-  const {user,isLoggedIn} = useContext(MyUser) //want to access the global variables user,isLoggedIn in this component
+  const {user,isLoggedIn, logout} = useContext(MyUser) //want to access the global variables user,isLoggedIn in this component
 
+  // function show()
+  // {
+  //   console.log(user);
+  // }
   return (
     <Navbar expand="lg" className="Navbar sticky-top" >
           <Container>
@@ -27,8 +31,13 @@ export default function Navingbar() {
             </Navbar.Collapse>
             
           </Container>
+          {/* <button onClick={show}>Testing</button> */}
           {
-            isLoggedIn ?  <p className='align-self-end Font pe-3'>hi {user.name}</p> : ""
+            isLoggedIn ? 
+            <div>
+              <p className='align-self-end Font pe-3'>hi {user.name}</p>
+              <button className='pe-5 btn btn-danger' onClick = {logout}>Logout</button>
+            </div> : ""
           }
          
         </Navbar>
