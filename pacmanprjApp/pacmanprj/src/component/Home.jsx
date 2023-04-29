@@ -2,20 +2,12 @@ import React, { useState, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
-import IconAmazon from "./imgs/amazon";
+
 import InputGroup from "react-bootstrap/InputGroup";
 import IconSearch from "./imgs/search";
 import Productcard from "./productcard";
 import "./css/style.css";
-import {
-  Card,
-  Row,
-  Col,
-  Button,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
-import amazon from "./imgs/amazon.svg";
+import { Row } from "react-bootstrap";
 
 export default function Home() {
   const [products, setProducts] = useState(null);
@@ -23,6 +15,21 @@ export default function Home() {
   const [category, setCategory] = useState("Category");
   const [sorting, setSorting] = useState("Sort");
   const [isUsed, setIsUsed] = useState(false);
+  const [numbersOfSites, setNumbersOfSites] = useState(0);
+
+  useEffect(() => {
+    const uniqueStores = [];
+    try {
+      products.forEach((product) => {
+        if (!uniqueStores.includes(product.Shop)) {
+          uniqueStores.push(product.Shop);
+        }
+      });
+      setNumbersOfSites(uniqueStores.length);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [products]);
 
   useEffect(() => {
     let sortProducts;
@@ -171,7 +178,7 @@ export default function Home() {
               </InputGroup>
             </div>
             <div className="col-lg-3  col-12">
-            <DropdownButton
+              <DropdownButton
                 title={category}
                 id="category"
                 onSelect={handleCat}
@@ -241,13 +248,16 @@ export default function Home() {
           <div className="row pt-5">
             <div className="col-12">
               <h3 className="border-bottom mb-4 heartbeat">SEARCH RESULTS</h3>
+              <p className="text-start align-self-start">
+                FOUND {products.length} ITEMS FROM {numbersOfSites} WEBSITES
+              </p>
             </div>
           </div>
           <Row xs={1} md={4} className="g-4">
-        {products.map((product) => (
-          <Productcard product={product} />
-        ))}
-      </Row>
+            {products.map((product) => (
+              <Productcard product={product} />
+            ))}
+          </Row>
         </div>
       )}
     </div>

@@ -5,6 +5,7 @@ import MyUser from "../Contexts/MyUser";
 import { Link } from 'react-router-dom';
 
 import logo from "./imgs/logo.png";
+import packman from "./imgs/packman.png"
 
 export default function Navingbar() {
   const {user,isLoggedIn, logout} = useContext(MyUser) //want to access the global variables user,isLoggedIn in this component
@@ -16,7 +17,7 @@ export default function Navingbar() {
   return (
     <Navbar expand="lg" className="Navbar sticky-top" >
           <Container>
-            <Navbar.Brand > <img src= {logo}  alt='pacman logo' /> </Navbar.Brand>
+            <Navbar.Brand > <img src= {packman} className='navbar-logo'  alt='pacman logo' /> </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav">
               <Nav>
