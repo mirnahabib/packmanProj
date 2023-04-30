@@ -248,9 +248,6 @@ export default function Home() {
           <div className="row pt-5">
             <div className="col-12">
               <h3 className="border-bottom mb-4 heartbeat">SEARCH RESULTS</h3>
-              <p className="text-start align-self-start">
-                FOUND {products.length} ITEMS FROM {numbersOfSites} WEBSITES
-              </p>
             </div>
           </div>
           <Row xs={1} md={4} className="g-4">
