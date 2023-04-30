@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import "./css/signup.css";
-import { useGlobalContext } from '../context';
 
 function Login() {
   return (

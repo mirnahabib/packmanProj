@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    unique: true,
+    unique: [true, 'An account with this email has already been created'],
     required: [true, 'Please provide email'],
     validate: {
       validator: validator.isEmail,
@@ -20,8 +20,8 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Please provide password 6 characters or longer'],
-    minlength: 6,
+    required: false,
+    minlength: [6, 'Please provide password 6 characters or longer'],
   },
   role: {
     type: String,
@@ -42,6 +42,11 @@ const UserSchema = new mongoose.Schema({
   },
   passwordTokenExpirationDate: {
     type: Date,
+  },
+  googleId:{ 
+    type: String, 
+    unique: true,
+    sparse: true
   }
 });
 

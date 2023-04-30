@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Token = require('../models/Token');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
+const jwt_decode = require('jwt-decode');
 const {
   attachCookiesToResponse,
   createTokenUser,
@@ -141,6 +142,56 @@ const login = async (req, res) => {
   res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
+const gLogin = async (req, res) => {
+  const { authCode } = req.body;
+  googleUser = jwt_decode(authCode);
+  if (!authCode) {
+     throw new CustomError.BadRequestError('Google account Invalid');
+   }
+  try {
+    // Check if user is already registered
+    let user = await User.findOne({ googleId: googleUser.sub });
+    // If user is not registered, create new user
+    if (!user) {
+        user = new User({
+            googleId: googleUser.sub,
+            email: googleUser.email,
+            name: googleUser.name,
+            isVerified: true
+        });
+        console.log(User);
+        await user.save();
+    }
+    const tokenUser = createTokenUser(user);
+    // create refresh token
+    let refreshToken = '';
+    // check for existing token
+    const existingToken = await Token.findOne({ user: user._id });
+  
+    if (existingToken) {
+      const { isValid } = existingToken;
+      if (!isValid) {
+        throw new CustomError.UnauthenticatedError('Invalid Credentials');
+      }
+      refreshToken = existingToken.refreshToken;
+      attachCookiesToResponse({ res, user: tokenUser, refreshToken });
+      res.status(StatusCodes.OK).json({ user: tokenUser });
+      return;
+    }
+  
+    refreshToken = crypto.randomBytes(40).toString('hex');
+    const userAgent = req.headers['user-agent'];
+    const ip = req.ip;
+    const userToken = { refreshToken, ip, userAgent, user: user._id };
+    await Token.create(userToken);
+    attachCookiesToResponse({ res, user: tokenUser, refreshToken });
+    res.status(StatusCodes.OK).json({ user: userToken });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error authenticating with Google.');
+  }
+};
+
 const logout = async (req, res) => {
   await Token.findOneAndDelete({ user: req.user.userId });
 
@@ -213,6 +264,7 @@ const resetPassword = async (req, res) => {
 module.exports = {
   register,
   login,
+  gLogin,
   logout,
   verifyEmail,
   forgotPassword,

@@ -4,13 +4,9 @@ import axios from 'axios';
 import { Navigate } from 'react-router-dom';
 import Product from "./Home";
 import Navingbar from "./navbar";
-import jwt_decode from 'jwt-decode';
-import { useGlobalContext } from '../context';
-
 import MyUser from "../Contexts/MyUser";
 
 const LoginForm = () => {
-  //const { saveUser } = useGlobalContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [navigate, setNavigate] = useState(false);
@@ -18,11 +14,30 @@ const LoginForm = () => {
 
   const {  updateState , updateLogState } = useContext(MyUser); // want to access the global setstates in this component
 
-  function googleClientCallbackResonse(response){
+  const googleClientCallbackResonse =  async (response) => {
     try{
-    console.log("jwt google token: " + response.credential)
-    var googleUser = jwt_decode(response.credential);
-    //saveUser(googleUser);   
+      const authCode =  response.credential;
+      try {
+        const { data } = await axios.post(
+          "/api/auth/oauth/google",
+          { authCode },
+          { withCredentials: true }
+        );
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${data["token"]}`;
+        updateState({ 
+          name: data.user.name,
+          role: data.user.role,
+          userId: data.user.userId,
+        });
+        updateLogState(true);
+        setNavigate(true);
+        console.log(data);
+      } catch (error) {
+        alert("failed to login")
+        console.log(error);
+      }
     }catch (error) {
         console.log(error);
       }
@@ -36,7 +51,9 @@ const LoginForm = () => {
       });
     google.accounts.id.renderButton(
       document.getElementById("googleSignIn"),
-      { theme: "outline", size: "large"}
+      { theme: "filled_blue", 
+      size: "large",
+      scope: "openid profile email"}
     );
   }
   
@@ -47,24 +64,19 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     // email validation
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
     if (!emailRegex.test(email)) {
       alert("Please enter a valid email address.");
       return;
     }
-
     // password validation
     if (password.length < 6) {
       alert("Password must be at least 6 characters long.");
       return;
     }
-
-
     // form submitted successfully
     // alert(`Successfully logged in`);
-
     //Cookies
     try {
       const { data } = await axios.post(
@@ -128,6 +140,7 @@ const LoginForm = () => {
             <Button className="mt-4" variant="primary" type="submit">
               Login
             </Button>
+            <br/>
             <br/>
             <div className="" id="googleSignIn"></div>
           </Form>

@@ -6,6 +6,7 @@ const { authenticateUser } = require('../middleware/authentication');
 const {
   register,
   login,
+  gLogin,
   logout,
   verifyEmail,
   forgotPassword,
@@ -14,6 +15,7 @@ const {
 
 router.post('/register', register);
 router.post('/login', login);
+router.post('/oauth/google', gLogin);
 router.delete('/logout',authenticateUser, logout);
 router.post('/verify-email', verifyEmail);
 router.post('/reset-password', resetPassword);
