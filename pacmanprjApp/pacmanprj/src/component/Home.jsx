@@ -148,7 +148,7 @@ export default function Home() {
               <button
                 onClick={fetchData}
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-success"
               >
                 Find My Product!
               </button>
@@ -220,7 +220,7 @@ export default function Home() {
               <button
                 onClick={fetchData}
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-success"
               >
                 Find My Product!
               </button>
@@ -248,6 +248,9 @@ export default function Home() {
           <div className="row pt-5">
             <div className="col-12">
               <h3 className="border-bottom mb-4 heartbeat">SEARCH RESULTS</h3>
+              <p className="align-self-start text-start">
+                FOUND {products.length} ITEMS FROM {numbersOfSites} WEBSITES
+              </p>
             </div>
           </div>
           <Row xs={1} md={4} className="g-4">

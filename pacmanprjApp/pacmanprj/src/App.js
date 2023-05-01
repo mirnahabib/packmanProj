@@ -1,24 +1,21 @@
 import React from "react";
-import { useState, useEffect, useContext } from 'react';
-import './App.css';
-import {BrowserRouter as Router, Routes , Route} from 'react-router-dom'
+import { useState, useEffect, useContext } from "react";
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import Home from "./pages/Home";
-import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/css/bootstrap.min.css";
 import Search from "./component/Search";
 import "@fontsource/press-start-2p";
 import "./component/css/style.css";
-import Announcer from './component/announcer';
+import Announcer from "./component/announcer";
 import Home from "./component/Home";
 import Team from "./component/team";
 import Navingbar from "./component/navbar";
 import SignUpForm from "./component/signupform";
 import LoginForm from "./component/loginform";
-import MyUserProvider from "./Contexts/MyUserProvider";  //parent to share variables with components
-import axios from 'axios';
+import axios from "axios";
 import MyUser from "./Contexts/MyUser";
-
-
-
+import Favourites from "./component/favourites";
 
 // const posts = [
 //   { id: '1', name: 'This first post is about React' },
@@ -39,14 +36,14 @@ import MyUser from "./Contexts/MyUser";
 
 function App() {
   const { search } = window.location;
-  const query = new URLSearchParams(search).get('s');
-  const [searchQuery, setSearchQuery] = useState(query || '');
-  // const { updateState , updateLogState } = useContext(MyUser); // want to access the global setstates in this component
-  const [navigate, setNavigate] = useState(false);
+  const query = new URLSearchParams(search).get("s");
+  const [searchQuery, setSearchQuery] = useState(query || "");
+  const {  updateLogState ,isLoggedIn} = useContext(MyUser);
+  
 
-  const googleClientCallbackResponse =  async (response) => {
-    try{
-      const authCode =  response.credential;
+  const googleClientCallbackResponse = async (response) => {
+    try {
+      const authCode = response.credential;
       try {
         const { data } = await axios.post(
           "/api/auth/oauth/google",
@@ -56,40 +53,34 @@ function App() {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data["token"]}`;
-        // updateState({ 
-        //   name: data.user.name,
-        //   role: data.user.role,
-        //   userId: data.user.userId,
-        // });
-        // updateLogState(true);
-        setNavigate(true);
+        updateLogState(true);
         console.log(data);
       } catch (error) {
-        alert("failed to login")
+        alert("failed to login");
         console.log(error);
       }
-    }catch (error) {
-        console.log(error);
-      }
-  }
-  
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const googleClientLogin = async () => {
     /* global google */
     google.accounts.id.initialize({
-        client_id: "509262672064-ppiak8lk7ra2vscpsj29dt4fp0v9re4j.apps.googleusercontent.com",
-        callback: googleClientCallbackResponse
-      });
+      client_id:
+        "509262672064-ppiak8lk7ra2vscpsj29dt4fp0v9re4j.apps.googleusercontent.com",
+      callback: googleClientCallbackResponse,
+    });
     google.accounts.id.prompt();
-  }
-  
+  };
+
   useEffect(() => {
     googleClientLogin();
   }, []);
-  
+
   // const filteredPosts = filterPosts(posts, searchQuery);
-   return (
-   <MyUserProvider>
-   <Router>
+  return (
+    <Router>
       <div className="App">
         {/* <Announcer message={`${filteredPosts.length} posts`} />   
         <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
@@ -99,22 +90,16 @@ function App() {
           ))}
         </ul> */}
         {/* <Home/> */}
-        <Navingbar/>
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/Team' element={<Team/>}/>
-        <Route path='/signup' element={<SignUpForm/>}/>
-        <Route path='/login' element={<LoginForm/>}/>
-      </Routes>
-    
-
+        <Navingbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Team" element={<Team />} />
+          <Route path="/fav" element={<Favourites/> }/>
+          <Route path="/signup" element={<SignUpForm />} />
+          <Route path="/login" element={<LoginForm />} />
+        </Routes>
       </div>
-
-      
-   </Router>
-   </MyUserProvider>
-  ); 
+    </Router>
+  );
 }
 export default App;
-
-

@@ -35,7 +35,7 @@ const MyUserProvider = ({ children }) => {
           //console.log(data.user);
         }
         )();
-      },[]);
+      },[isLoggedIn]);
 
 
   const updateState = (newValue) => {

@@ -1,9 +1,12 @@
 import React from "react";
-import ReactDom from 'react-dom';
+import ReactDom from "react-dom";
 import App from "./App";
-import './Interceptors/axios';
+import "./Interceptors/axios";
+import MyUserProvider from "./Contexts/MyUserProvider";
 
 ReactDom.render(
-    <App />,document.getElementById('root')
+  <MyUserProvider>
+    <App />
+  </MyUserProvider>,
+  document.getElementById("root")
 );
-
