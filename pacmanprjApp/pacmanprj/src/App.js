@@ -54,7 +54,7 @@ function App() {
           "Authorization"
         ] = `Bearer ${data["token"]}`;
         updateLogState(true);
-        console.log(data);
+        //console.log(data);
       } catch (error) {
         alert("failed to login");
         console.log(error);
@@ -74,9 +74,13 @@ function App() {
     google.accounts.id.prompt();
   };
 
-  useEffect(() => {
-    googleClientLogin();
-  }, []);
+    useEffect(() => {
+      if(isLoggedIn==false){
+      googleClientLogin();
+    }
+    }, []);
+
+
 
   // const filteredPosts = filterPosts(posts, searchQuery);
   return (

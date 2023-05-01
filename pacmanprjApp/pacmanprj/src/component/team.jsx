@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import omar from "./imgs/omar.jpg";
+import telt from "./imgs/telt.jpg";
 import "./css/style.css";
 import IconGithub from "./imgs/icongithub";
 
@@ -10,35 +11,35 @@ export default function Team() {
   const [Team] = useState([
     {
       Name: "Omar El-Damrany",
-      Occupation: "Computer Engineering Student",
+      Occupation: "Computer Engineer",
       WorkedOn: "Backend Web Scraping",
       photo: omar,
       github: "https://github.com/omar-eldamrany",
     },
     {
+      Name: "Mahmoud El Telt",
+      Occupation: "Computer Engineer",
+      photo: telt,
+      WorkedOn: "NodeJs/ExpressJS backend",
+      github: "https://github.com/ElteltM",
+    },
+    {
       Name: "",
-      Occupation: "Computer Engineering Student",
+      Occupation: "Computer Engineer",
       photo: null,
       WorkedOn: "",
       github: "",
     },
     {
       Name: "",
-      Occupation: "Computer Engineering Student",
+      Occupation: "Computer Engineer",
       photo: null,
       WorkedOn: "",
       github: "",
     },
     {
       Name: "",
-      Occupation: "Computer Engineering Student",
-      photo: null,
-      WorkedOn: "",
-      github: "",
-    },
-    {
-      Name: "",
-      Occupation: "Computer Engineering Student",
+      Occupation: "Computer Engineer",
       photo: null,
       WorkedOn: "",
       github: "",
