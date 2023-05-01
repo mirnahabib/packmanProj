@@ -22,6 +22,7 @@ const cookieParser = require('cookie-parser');//Automatically parsing cookies
 const authRouter = require('./routes/authRoutes');
 const crawlerRouter = require('./routes/crawlerRoutes');
 const userRouter = require('./routes/userRoutes');
+const favouriteRouter = require('./routes/favRoutes');
 
 
 //Database
@@ -69,6 +70,9 @@ app.use('/api/search', crawlerRouter);
 app.use('/api/auth', authRouter);
 //Manage users data in db (requires admin role except for own profile)
 app.use('/api/users', userRouter);
+//Manage favourites (requires logged in user)
+// '/' to retrieve user's favourites list, '/addOrRemove' to add or remmove one item to his favourites list.
+app.use('/api/favourites', favouriteRouter);
 
 
 
