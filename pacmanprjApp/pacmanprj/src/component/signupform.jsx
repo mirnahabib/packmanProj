@@ -10,7 +10,7 @@ const SignupForm = () => {
     googleClientLogin();
   }, []);
 
-  const { updateState, updateLogState } = useContext(MyUser);
+  const { updateState, updateLogState, isLoggedIn } = useContext(MyUser);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,7 +18,6 @@ const SignupForm = () => {
     confirmPassword: "",
   });
 
-  const [navigate, setNavigate] = useState(false);
   const { name, email, password, confirmPassword } = formData;
 
   const googleClientCallbackResonse = async (response) => {
@@ -34,7 +33,6 @@ const SignupForm = () => {
           "Authorization"
         ] = `Bearer ${data["token"]}`;
         updateLogState(true);
-        setNavigate(true);
         console.log(data);
       } catch (error) {
         alert("failed to login");
@@ -103,91 +101,89 @@ const SignupForm = () => {
       userId: data.user.userId,
     });
     updateLogState(true);
-    setNavigate(true);
   };
-
-  if (navigate) {
-    return <Navigate to="/" />;
-  }
 
   const isValidEmail = (email) => {
     // Check if email matches email pattern
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
   };
+  if (isLoggedIn) {
+    return <Navigate to="/" />;
+  } else {
+    return (
+      <div className=" container text-light email-font pt-5 blur-background">
+        <Row className="justify-content-center">
+          <Col lg={6}>
+            <h3 className="Font border-bottom heartbeat">Create An Account</h3>
+            <Form className="pt-2" onSubmit={handleSubmit}>
+              <Form.Group controlId="formName">
+                <Form.Label className="pt-2">Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="name"
+                  className="text-resp"
+                  placeholder="Enter Name"
+                  value={name}
+                  onChange={handleChange}
+                  minLength="3"
+                  required
+                />
+              </Form.Group>
 
-  return (
-    <div className=" container text-light email-font pt-5 blur-background">
-      <Row className="justify-content-center">
-        <Col lg={6}>
-          <h3 className="Font border-bottom heartbeat">Create An Account</h3>
-          <Form className="pt-2" onSubmit={handleSubmit}>
-            <Form.Group controlId="formName">
-              <Form.Label className="pt-2">Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                className="text-resp"
-                placeholder="Enter Name"
-                value={name}
-                onChange={handleChange}
-                minLength="3"
-                required
-              />
-            </Form.Group>
+              <Form.Group controlId="formEmail">
+                <Form.Label className="pt-2">Email address</Form.Label>
+                <Form.Control
+                  type="email"
+                  name="email"
+                  className="text-resp"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
 
-            <Form.Group controlId="formEmail">
-              <Form.Label className="pt-2">Email address</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                className="text-resp"
-                placeholder="Enter email"
-                value={email}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
+              <Form.Group controlId="formPassword">
+                <Form.Label className="pt-2">Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="password"
+                  className="text-resp"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={handleChange}
+                  minLength="6"
+                  required
+                />
+              </Form.Group>
 
-            <Form.Group controlId="formPassword">
-              <Form.Label className="pt-2">Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                className="text-resp"
-                placeholder="Enter password"
-                value={password}
-                onChange={handleChange}
-                minLength="6"
-                required
-              />
-            </Form.Group>
+              <Form.Group controlId="formConfirmPassword">
+                <Form.Label className="pt-2">Confirm Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="confirmPassword"
+                  className="text-resp"
+                  placeholder="Re-enter password"
+                  value={confirmPassword}
+                  onChange={handleChange}
+                  minLength="6"
+                  required
+                />
+              </Form.Group>
 
-            <Form.Group controlId="formConfirmPassword">
-              <Form.Label className="pt-2">Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="confirmPassword"
-                className="text-resp"
-                placeholder="Re-enter password"
-                value={confirmPassword}
-                onChange={handleChange}
-                minLength="6"
-                required
-              />
-            </Form.Group>
-
-            <Button className="mt-4" variant="primary" type="submit">
-              Sign up
-            </Button>
-            <div class="d-flex justify-content-center pt-3">
-              <div id="googleSignIn"></div>
-            </div>
-          </Form>
-        </Col>
-      </Row>
-    </div>
-  );
+              <Button className="mt-4" variant="primary" type="submit">
+                Sign up
+              </Button>
+              <div class="d-flex justify-content-center pt-3">
+                <div id="googleSignIn"></div>
+              </div>
+            </Form>
+          </Col>
+        </Row>
+      </div>
+    );
+  }
 };
 
 export default SignupForm;

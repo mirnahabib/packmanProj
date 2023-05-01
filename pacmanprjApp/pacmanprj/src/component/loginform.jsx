@@ -7,9 +7,8 @@ import MyUser from "../Contexts/MyUser";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [navigate, setNavigate] = useState(false);
 
-  const { updateState, updateLogState } = useContext(MyUser); // want to access the global setstates in this component
+  const { updateState, updateLogState, isLoggedIn } = useContext(MyUser); // want to access the global setstates in this component
 
   const googleClientCallbackResonse = async (response) => {
     try {
@@ -24,7 +23,6 @@ const LoginForm = () => {
           "Authorization"
         ] = `Bearer ${data["token"]}`;
         updateLogState(true);
-        setNavigate(true);
         console.log(data);
       } catch (error) {
         alert("failed to login");
@@ -88,7 +86,6 @@ const LoginForm = () => {
         userId: data.user.userId,
       });
       updateLogState(true);
-      setNavigate(true);
       console.log(data);
     } catch (error) {
       alert("failed to login");
@@ -96,53 +93,53 @@ const LoginForm = () => {
     }
   };
 
-  if (navigate) {
+  if (isLoggedIn) {
     return <Navigate to="/" />;
+  } else {
+    return (
+      <div className=" container text-light email-font pt-5 blur-background">
+        <Row className="justify-content-center">
+          <Col lg={6}>
+            <h3 className="Font border-bottom heartbeat">Login</h3>
+            <Form className="pt-2" onSubmit={handleSubmit}>
+              <Form.Group controlId="formEmail">
+                <Form.Label className="pt-2">Email address</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  value={email}
+                  className="text-resp"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group controlId="formPassword">
+                <Form.Label className="pt-2">Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter password"
+                  className="text-resp"
+                  value={password}
+                  minLength="6"
+                  required
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Form.Group>
+
+              <Button className="mt-4" variant="primary" type="submit">
+                Login
+              </Button>
+
+              <div class="d-flex justify-content-center pt-3">
+                <div id="googleSignIn"></div>
+              </div>
+            </Form>
+          </Col>
+        </Row>
+      </div>
+    );
   }
-
-  return (
-    <div className=" container text-light email-font pt-5 blur-background">
-      <Row className="justify-content-center">
-        <Col lg={6}>
-          <h3 className="Font border-bottom heartbeat">Login</h3>
-          <Form className="pt-2" onSubmit={handleSubmit}>
-            <Form.Group controlId="formEmail">
-              <Form.Label className="pt-2">Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                className="text-resp"
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group controlId="formPassword">
-              <Form.Label className="pt-2">Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter password"
-                className="text-resp"
-                value={password}
-                minLength="6"
-                required
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-    
-            <Button className="mt-4" variant="primary" type="submit">
-              Login
-            </Button>
-
-            <div class="d-flex justify-content-center pt-3">
-              <div id="googleSignIn"></div>
-            </div>
-          </Form>
-        </Col>
-      </Row>
-    </div>
-  );
 };
 
 export default LoginForm;
