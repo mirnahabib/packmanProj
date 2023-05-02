@@ -74,11 +74,12 @@ function App() {
     google.accounts.id.prompt();
   };
 
-    useEffect(() => {
-      if(isLoggedIn==false){
+  useEffect(() => {
+    console.log(isLoggedIn);
+    if (!isLoggedIn) { // Check if user is not logged in
       googleClientLogin();
     }
-    }, []);
+  }, [isLoggedIn]);
 
 
 

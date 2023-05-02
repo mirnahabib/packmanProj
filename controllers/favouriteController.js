@@ -14,10 +14,13 @@ const fav = async (req, res) => {
         const existingFav = await favourite.findOne(fav);
         if(existingFav){
             await favourite.deleteOne(fav);
+            res.status(204).json({ msg: 'Favourite removed successfully' });
+
         }else{
             await favourite.create(fav);
+            res.status(StatusCodes.CREATED).json({msg: 'Favourite Added successfully' });
+
         }
-        res.status(StatusCodes.OK);
         
     }catch (error){
         console.log(error);
@@ -27,7 +30,9 @@ const fav = async (req, res) => {
 const favList = async (req, res) => {
     try{
         const { userId } = req.body;
-        const favlist = await favourite.find({ user: userId });
+        const favItems = await favourite.find({ user: userId });
+        const itemId = favItems.map((favItem) => favItem.Item);
+        const favlist = await Item.find({ _id: { $in: itemId } });
         res.status(StatusCodes.OK).json({favlist});
         
     }catch (error){
