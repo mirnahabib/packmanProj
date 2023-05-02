@@ -16,6 +16,7 @@ export default function Home() {
   const [sorting, setSorting] = useState("Sort");
   const [isUsed, setIsUsed] = useState(false);
   const [numbersOfSites, setNumbersOfSites] = useState(0);
+  const [isLoading , setIsLoading] = useState(false);
 
   useEffect(() => {
     const uniqueStores = [];
@@ -62,6 +63,7 @@ export default function Home() {
   };
 
   const fetchData = async () => {
+    setIsLoading(true)
     let response;
     try {
       if (isUsed === false)
@@ -76,6 +78,7 @@ export default function Home() {
     }
     console.log(products);
     console.log(`${query} ${category}`);
+    setIsLoading(false)
   };
 
   const handleUsed = () => {
@@ -152,6 +155,11 @@ export default function Home() {
               >
                 Find My Product!
               </button>
+              {
+                (isLoading) ? <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div> : ""
+              }
             </div>
             <div className="col-lg-3 col-12 pt-2 pe-5 ">
               <div className="d-inline">
@@ -224,6 +232,11 @@ export default function Home() {
               >
                 Find My Product!
               </button>
+              {
+                (isLoading) ? <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div> : ""
+              }
             </div>
             <div className="col-lg-3 col-12 pt-2 pe-5 ">
               <div className="d-inline">
