@@ -8,7 +8,7 @@ import games2egypt from "./imgs/icons/games2egypt.png";
 import gameworld from "./imgs/icons/gameworld.png";
 import gourmet from "./imgs/icons/Gourmet.png";
 import handm from "./imgs/icons/HnM.png";
-import hubfurniture from "./imgs/icons/hubfurnituree.png";
+import hubfurniture from "./imgs/icons/hubfurniture.png";
 import hyper1 from "./imgs/icons/Hyper1.png";
 import ikea from "./imgs/icons/ikea.png";
 import Jumia from "./imgs/icons/jumia.png";
