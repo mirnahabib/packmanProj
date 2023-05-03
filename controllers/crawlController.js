@@ -47,6 +47,7 @@ const crawlbyCategory = async (req, res) => {
     .then((result) => {
         //console.log(result);
         jsonresult = JSON.parse(result);
+        jsonresult.sort(() => Math.random() - 0.5);
         res.status(StatusCodes.OK).json({ jsonresult});
     })
     .catch((error) =>{
@@ -62,6 +63,7 @@ const crawlbyCategoryandUsed = async (req, res) => {
         shopsResult = JSON.parse(results[1]);
         usedResult = JSON.parse(results[0]);
         const jsonresult = usedResult.concat(shopsResult);
+        jsonresult.sort(() => Math.random() - 0.5);
         //console.log(JSON.stringify(jsonresult));
         res.status(StatusCodes.OK).json({ jsonresult});
     })

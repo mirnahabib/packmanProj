@@ -19,7 +19,7 @@ import noon from "./imgs/icons/noon.png";
 import olx from "./imgs/icons/olx.png";
 import zara from "./imgs/icons/zara.png"
 import opensooq from "./imgs/icons/opensooq.png";
-import Select from "./imgs/icons/Select.png";
+import Select from "./imgs/icons/select.png";
 import shamy from "./imgs/icons/elshamy.png";
 import spinneys from "./imgs/icons/spinneys.png";
 import Amazon from "./imgs/icons/Amazon.png";

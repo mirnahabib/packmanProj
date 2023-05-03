@@ -9,6 +9,17 @@ import Productcard from "./productcard";
 import "./css/style.css";
 import { Row } from "react-bootstrap";
 
+const categories = {
+  clothingMen: "Clothing and Fashion (Men)",
+  clothingWomen: "Clothing and Fashion (Women)",
+  cosmetics: "Cosmetics and Bodycare",
+  electronics: "Electronics and Devices",
+  furniture: "Furnitures and Decor",
+  grocery: "Groceries and Supplies",
+  toys: "Toys and Games",
+  videogames: "Consoles and Videogames",
+  other: "Other (longer search)",
+};
 export default function Home() {
   const [products, setProducts] = useState(null);
   const [query, setQuery] = useState("");
@@ -63,6 +74,7 @@ export default function Home() {
   };
 
   const fetchData = async () => {
+
     setIsLoading(true)
     let response;
     try {
@@ -87,87 +99,76 @@ export default function Home() {
   return (
     <div className="">
       {!products && (
-        <div className=" row position-absolute top-50 start-50 translate-middle Font align-items-center justify-content-center text-center">
+        //container align-items-center justify-content-center text-center Font
+        <div className="row position-absolute top-50 start-50 translate-middle Font align-items-center justify-content-center text-center col-lg-8">
           {/* <Image src={logo} fluid /> */}
           <div className="row heartbeat">
             <div className="col-12 ">
               <h3 className="pb-3 mt-3  ">Find what you are looking for</h3>
             </div>
           </div>
-
           <div className="row">
-            <div className="col-lg-9 col-12">
               <InputGroup className="mb-3">
+              <div className="col">
                 <Form.Control
                   className=""
                   placeholder="Search..."
                   aria-label="Text input with dropdown button"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                />
+                />      
+                </div>
+                <div className="col-md-auto">
                 <IconSearch className="mt-2 ms-2" />
+                </div>
+                <div className="col-12 col-md-auto">
+                <button
+                  onClick={() => {
+                    if (category !== "Category") {
+                      fetchData();
+                    }
+                  }}
+                  type="button"
+                  className="btn btn-success ms-2"
+                >
+                  Find My Product!
+                </button>
+                </div>
+                {isLoading && (
+              <div className="d-flex align-items-center ms-2">
+                <div className="spinner-border text-success me-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            )}
               </InputGroup>
             </div>
-            <div className="col-lg-3  col-12">
+            <div className="row">
+            <div className="col-md-auto">
               <DropdownButton
                 title={category}
                 id="category"
                 onSelect={handleCat}
                 align="end"
               >
-                <Dropdown.Item className="text-resp" eventKey="clothingMen">
-                  Clothing and Fashion (Men)
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="clothingWomen">
-                  Clothing and Fashion (Women)
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="cosmetics">
-                  Cosmetics and Bodycare
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="electronics">
-                  Electronics and Devices
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="furniture">
-                  Furnitures and Decor
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="grocery">
-                  Groceries and Supplies
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="toys">
-                  Toys and Games
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="videogames">
-                  Consoles and Videogames
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="other">
-                  Other (longer search)
-                </Dropdown.Item>
+                {Object.keys(categories).map((cat) => (
+                  <Dropdown.Item
+                    key={cat}
+                    className="text-resp"
+                    eventKey={cat}
+                  >
+                    {categories[cat]}
+                  </Dropdown.Item>
+                ))}
               </DropdownButton>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-lg-3 col-12"></div>
-            <div className="col-lg-6 pt-lg-0 pt-3 col-12 ">
-              <button
-                onClick={fetchData}
-                type="button"
-                className="btn btn-success"
-              >
-                Find My Product!
-              </button>
-              {
-                (isLoading) ? <div class="spinner-border text-success" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div> : ""
-              }
-            </div>
-            <div className="col-lg-3 col-12 pt-2 pe-5 ">
-              <div className="d-inline">
-                <input type="checkbox" checked={isUsed} onChange={handleUsed} />
               </div>
-              <div className="d-inline ps-3">look for secondhand</div>
-            </div>
-          </div>
+              <div className="col">
+                <div className="d-inline">
+                  <input type="checkbox" checked={isUsed} onChange={handleUsed} />
+                </div>
+                <div className="d-inline ps-3">look for secondhand products as well</div>
+              </div>
+        </div>
         </div>
       )}
       {products && (
@@ -185,73 +186,55 @@ export default function Home() {
                 <IconSearch className="mt-2 ms-2" />
               </InputGroup>
             </div>
-            <div className="col-lg-3  col-12">
-              <DropdownButton
-                title={category}
-                id="category"
-                onSelect={handleCat}
-                align="end"
-              >
-                <Dropdown.Item className="text-resp" eventKey="clothingMen">
-                  Clothing and Fashion (Men)
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="clothingWomen">
-                  Clothing and Fashion (Women)
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="cosmetics">
-                  Cosmetics and Bodycare
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="electronics">
-                  Electronics and Devices
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="furniture">
-                  Furnitures and Decor
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="grocery">
-                  Groceries and Supplies
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="toys">
-                  Toys and Games
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="videogames">
-                  Consoles and Videogames
-                </Dropdown.Item>
-                <Dropdown.Item className="text-resp" eventKey="other">
-                  Other (longer search)
-                </Dropdown.Item>
-              </DropdownButton>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-lg-3 col-12"></div>
-            <div className="col-lg-6 pt-lg-0 pt-3 col-12">
-              <button
+            <div className="col-lg-3 col-md-auto">
+            <button
                 onClick={fetchData}
                 type="button"
                 className="btn btn-success"
               >
                 Find My Product!
               </button>
-              {
-                (isLoading) ? <div class="spinner-border text-success" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div> : ""
-              }
-            </div>
-            <div className="col-lg-3 col-12 pt-2 pe-5 ">
-              <div className="d-inline">
-                <input type="checkbox" checked={isUsed} onChange={handleUsed} />
+            {isLoading && (
+              <div className="d-flex align-items-center ms-2 col-md-auto">
+                <div className="spinner-border text-success me-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
               </div>
-              <div className="d-inline ps-3">look for secondhand</div>
+            )}   
             </div>
           </div>
+          <div className="row">
+            <div className="col-md-auto">
+              <DropdownButton
+                title={category}
+                id="category"
+                onSelect={handleCat}
+                align="end"
+              >
+                {Object.keys(categories).map((cat) => (
+                  <Dropdown.Item
+                    key={cat}
+                    className="text-resp"
+                    eventKey={cat}
+                  >
+                    {categories[cat]}
+                  </Dropdown.Item>
+                ))}
+              </DropdownButton>
+              </div>
+              <div className="col">
+                <div className="d-inline">
+                  <input type="checkbox" checked={isUsed} onChange={handleUsed} />
+                </div>
+                <div className="d-inline">look for secondhand products as well</div>
+              </div>
+        </div>
           <div className="row pt-3 justify-content-center">
             <DropdownButton
               title={sorting}
               id="sort"
               onSelect={handleSorting}
-              align="end"
-            >
+              align="end">
               <Dropdown.Item eventKey="A-Z">A-Z</Dropdown.Item>
               <Dropdown.Item eventKey="Z-A">Z-A</Dropdown.Item>
               <Dropdown.Item eventKey="Price ↑">Price ↑</Dropdown.Item>
