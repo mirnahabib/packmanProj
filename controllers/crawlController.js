@@ -1,5 +1,6 @@
 const Item = require('../models/Item');
-const { StatusCodes } = require('http-status-codes');
+const Price = require('../models/Price');
+const { StatusCodes, PRECONDITION_FAILED } = require('http-status-codes');
 const path = require('path');
 const {spawn} = require("child_process");
 
@@ -17,6 +18,36 @@ const categorizedWebsites = new Map([
 
 ])
 
+
+async function storeItems(itemsJson, category){
+    for (let i = 0; i < itemsJson.length; i++) {
+        const item = new Item({
+            title: itemsJson[i].Title,
+            currentPrice: itemsJson[i].Price,
+            link: itemsJson[i].Link,
+            img: itemsJson[i].Img,
+            store: itemsJson[i].Shop,
+            category: category,
+        });
+        const existingItem = await Item.findOne({link: item.link})
+        if(existingItem){
+            if(existingItem.currentPrice != item.currentPrice){
+                console.log(`unmatching prices curr: ${existingItem.currentPrice} new: ${item.Price}`);
+                const oldPrice = existingItem.currentPrice;
+                await Item.findOneAndUpdate({link: item.link}, { $set: { currentPrice: item.currentPrice } })
+                const price = new Price({
+                    item: existingItem,
+                    price: oldPrice
+                });
+                await Price.create(price);
+            }
+        }else{
+            if(item.currentPrice != null && item.currentPrice != 0){
+                await Item.create(item);
+            }
+        }   
+    }
+}
 
 async function fetchWebsite(category, searchQuery) {
 return new Promise((resolve, reject) => {
@@ -44,9 +75,10 @@ return new Promise((resolve, reject) => {
 const crawlbyCategory = async (req, res) => {
     const { search: search = 'playstation 5', cat: category = 'general' } = req.params;
     fetchWebsite(category, search)
-    .then((result) => {
+    .then(async (result) => {
         //console.log(result);
         jsonresult = JSON.parse(result);
+        await storeItems(jsonresult, category);
         jsonresult.sort(() => Math.random() - 0.5);
         res.status(StatusCodes.OK).json({ jsonresult});
     })
@@ -59,10 +91,11 @@ const crawlbyCategory = async (req, res) => {
 const crawlbyCategoryandUsed = async (req, res) => {
     const { search: search, cat: category } = req.params;
     Promise.all([fetchWebsite('used', search), fetchWebsite(category, search)])
-    .then(results =>{
+    .then(async results =>{
         shopsResult = JSON.parse(results[1]);
         usedResult = JSON.parse(results[0]);
         const jsonresult = usedResult.concat(shopsResult);
+        await storeItems(jsonresult, category);
         jsonresult.sort(() => Math.random() - 0.5);
         //console.log(JSON.stringify(jsonresult));
         res.status(StatusCodes.OK).json({ jsonresult});

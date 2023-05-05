@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const ItemSchema = mongoose.Schema({
     title: { type: String },
-    price: { 
+    store: { type: String },
+    currentPrice: { 
         type: Number,
         default: 0.00 
     },
@@ -16,13 +17,15 @@ const ItemSchema = mongoose.Schema({
         type: String,
         enum: ['electronics', 'grocery', 'clothing', 'furniture', 'cosmetics', 'toys', 'used', 'games', 'other'],
     },   
-    createdAt: { type: Date},
-    available: { type: Boolean}
+    lastFetched: { type: Date},
 });
 
 ItemSchema.pre('save', async function (){
-    this.createdAt = new Date();
-    this.available = true;
+    this.lastFetched = new Date();
 });
 
+ItemSchema.post('findOne', function(next) {
+    this.update({}, { $set: { lastFetched: new Date() } });
+  });
+  
 module.exports = mongoose.model('Item', ItemSchema);
