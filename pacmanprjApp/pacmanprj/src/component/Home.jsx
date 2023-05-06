@@ -18,6 +18,8 @@ const categories = {
   grocery: "Groceries and Supplies",
   toys: "Toys and Games",
   videogames: "Consoles and Videogames",
+  // computerhardware: "Computer Hardware",
+  // supplements: "Vitamins and Supplements",
   other: "Other (longer search)",
 };
 export default function Home() {

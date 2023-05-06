@@ -223,11 +223,45 @@ def dubaiphone(query):
         i += 1
     driver.close()
 
+def btech(query):
+    i=1
+    options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    # options.add_argument("user-agent=Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s , options=options)
+    url = f'https://btech.com/en/catalogsearch/result/?q={query}'
+    driver.get(url)
+    driver.implicitly_wait(5)
+
+
+    products = driver.find_elements(By.CLASS_NAME , "product-item-view")
+
+    for product in products[:20]:
+        title = product.find_element(By.CLASS_NAME , "plpTitle").text
+        price = product.find_element(By.CLASS_NAME , "price-wrapper").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        link = product.find_element(By.CLASS_NAME, "listingWrapperSection").get_attribute("href")
+        img = product.find_element(By.CLASS_NAME , "product-image-photo").get_attribute("src")
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "B.Tech",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close() 
+
 
 def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
         # future = executor.submit(select, query)
+        future = executor.submit(btech,query)
         future = executor.submit(_2B, query) 
         future = executor.submit(dubaiphone, query) 
         future = executor.submit(noon, query) 

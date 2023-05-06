@@ -87,7 +87,7 @@ export default function Productcard(props) {
                 <img
                   className=""
                   src={Logos.get(props.product.Shop)}
-                  alt="NO"
+                  alt={props.product.Shop}
                   height="35em"
                 />
               </div>

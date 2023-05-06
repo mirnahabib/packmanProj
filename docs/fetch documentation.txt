@@ -5,6 +5,7 @@
     4-dubai phone
     5-select*
     6-2B*
+    7-btech
 
 2-groceries
     1-carrefour 
@@ -57,13 +58,23 @@
     3-shamy
     4-gameworld
 
+10-computerhardware
+    1-maximumhardware
+    2-badrgroup
+    3-baraka
+    4-sigma
+    5-compuscience
 
-10-used
+11-supplements
+    1-iherb
+    2-biovea
+
+12-used
     1-olx
     2-open sooq
 
 -----------------
-total 26 different websites
+total 34 different websites
 
 
 
