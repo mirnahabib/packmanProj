@@ -80,7 +80,7 @@ const crawlbyCategory = async (req, res) => {
     .then(async (result) => {
         //console.log(result);
         jsonresult = JSON.parse(result);
-        await storeItems(jsonresult, category);
+        // await storeItems(jsonresult, category);
         jsonresult.sort(() => Math.random() - 0.5);
         res.status(StatusCodes.OK).json({ jsonresult});
     })
@@ -97,7 +97,7 @@ const crawlbyCategoryandUsed = async (req, res) => {
         shopsResult = JSON.parse(results[1]);
         usedResult = JSON.parse(results[0]);
         const jsonresult = usedResult.concat(shopsResult);
-        await storeItems(jsonresult, category);
+        // await storeItems(jsonresult, category);
         jsonresult.sort(() => Math.random() - 0.5);
         //console.log(JSON.stringify(jsonresult));
         res.status(StatusCodes.OK).json({ jsonresult});

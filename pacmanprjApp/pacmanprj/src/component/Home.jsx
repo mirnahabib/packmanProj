@@ -9,6 +9,9 @@ import Productcard from "./productcard";
 import "./css/style.css";
 import { Row } from "react-bootstrap";
 
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+
 const categories = {
   clothingMen: "Clothing and Fashion (Men)",
   clothingWomen: "Clothing and Fashion (Women)",
@@ -24,12 +27,32 @@ const categories = {
 };
 export default function Home() {
   const [products, setProducts] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Category");
   const [sorting, setSorting] = useState("Sort");
   const [isUsed, setIsUsed] = useState(false);
   const [numbersOfSites, setNumbersOfSites] = useState(0);
-  const [isLoading , setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [maxPrice, setmaxPrice] = useState(999999);
+  const [minPrice, setminPrice] = useState(0);
+  const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
+  const [Stores, setStores] = useState(["All"]);
+  const [selectedStore, setSelectedStore] = useState("All");
+
+  useEffect(() => {
+    const uniqueStores = [];
+    try {
+      filteredProducts.forEach((product) => {
+        if (!uniqueStores.includes(product.Shop)) {
+          uniqueStores.push(product.Shop);
+        }
+      });
+      setNumbersOfSites(uniqueStores.length);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [filteredProducts]);
 
   useEffect(() => {
     const uniqueStores = [];
@@ -39,7 +62,8 @@ export default function Home() {
           uniqueStores.push(product.Shop);
         }
       });
-      setNumbersOfSites(uniqueStores.length);
+      let x = [...Stores, ...uniqueStores];
+      setStores([...new Set(x)]);
     } catch (error) {
       console.log(error);
     }
@@ -75,9 +99,12 @@ export default function Home() {
     setCategory(e);
   };
 
-  const fetchData = async () => {
+  const handleSelectedStore = (e) => {
+    setSelectedStore(e);
+  };
 
-    setIsLoading(true)
+  const fetchData = async () => {
+    setIsLoading(true);
     let response;
     try {
       if (isUsed === false)
@@ -92,12 +119,63 @@ export default function Home() {
     }
     console.log(products);
     console.log(`${query} ${category}`);
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   const handleUsed = () => {
     setIsUsed(!isUsed);
   };
+
+  useEffect(() => {
+    if (products) {
+      let max = 0;
+      let min = 1000000000000000;
+
+      products.forEach((product) => {
+        if (product.Price > max) {
+          max = product.Price;
+          setmaxPrice(product.Price);
+        }
+        if (product.Price < min) {
+          min = product.Price;
+          setminPrice(product.Price);
+        }
+      });
+    }
+  }, [products]);
+
+  useEffect(() => {
+    if (products) {
+      setFilteredProducts(products);
+    }
+  }, [products]);
+
+  const handlePriceChange = (value) => {
+    setPriceRange(value);
+  };
+
+  function filter() {
+    if (products) {
+      if (selectedStore !== "All") {
+        setFilteredProducts(
+          products.filter(
+            (product) =>
+              product.Price >= priceRange[0] &&
+              product.Price <= priceRange[1] &&
+              product.Shop === selectedStore
+          )
+        );
+      } else {
+        setFilteredProducts(
+          products.filter(
+            (product) =>
+              product.Price >= priceRange[0] && product.Price <= priceRange[1]
+          )
+        );
+      }
+    }
+  }
+
   return (
     <div className="">
       {!products && (
@@ -110,7 +188,7 @@ export default function Home() {
             </div>
           </div>
           <div className="row">
-              <InputGroup className="mb-3">
+            <InputGroup className="mb-3">
               <div className="col">
                 <Form.Control
                   className=""
@@ -118,12 +196,12 @@ export default function Home() {
                   aria-label="Text input with dropdown button"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                />      
-                </div>
-                <div className="col-md-auto">
+                />
+              </div>
+              <div className="col-md-auto">
                 <IconSearch className="mt-2 ms-2" />
-                </div>
-                <div className="col-12 col-md-auto">
+              </div>
+              <div className="col-12 col-md-auto">
                 <button
                   onClick={() => {
                     if (category !== "Category") {
@@ -135,17 +213,20 @@ export default function Home() {
                 >
                   Find My Product!
                 </button>
-                </div>
-                {isLoading && (
-              <div className="d-flex align-items-center ms-2">
-                <div className="spinner-border text-success me-2" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
               </div>
-            )}
-              </InputGroup>
-            </div>
-            <div className="row">
+              {isLoading && (
+                <div className="d-flex align-items-center ms-2">
+                  <div
+                    className="spinner-border text-success me-2"
+                    role="status"
+                  >
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              )}
+            </InputGroup>
+          </div>
+          <div className="row">
             <div className="col-md-auto">
               <DropdownButton
                 title={category}
@@ -154,23 +235,21 @@ export default function Home() {
                 align="end"
               >
                 {Object.keys(categories).map((cat) => (
-                  <Dropdown.Item
-                    key={cat}
-                    className="text-resp"
-                    eventKey={cat}
-                  >
+                  <Dropdown.Item key={cat} className="text-resp" eventKey={cat}>
                     {categories[cat]}
                   </Dropdown.Item>
                 ))}
               </DropdownButton>
+            </div>
+            <div className="col">
+              <div className="d-inline">
+                <input type="checkbox" checked={isUsed} onChange={handleUsed} />
               </div>
-              <div className="col">
-                <div className="d-inline">
-                  <input type="checkbox" checked={isUsed} onChange={handleUsed} />
-                </div>
-                <div className="d-inline ps-3">look for secondhand products as well</div>
+              <div className="d-inline ps-3">
+                look for secondhand products as well
               </div>
-        </div>
+            </div>
+          </div>
         </div>
       )}
       {products && (
@@ -189,20 +268,23 @@ export default function Home() {
               </InputGroup>
             </div>
             <div className="col-lg-3 col-md-auto">
-            <button
+              <button
                 onClick={fetchData}
                 type="button"
                 className="btn btn-success"
               >
                 Find My Product!
               </button>
-            {isLoading && (
-              <div className="d-flex align-items-center ms-2 col-md-auto">
-                <div className="spinner-border text-success me-2" role="status">
-                  <span className="visually-hidden">Loading...</span>
+              {isLoading && (
+                <div className="d-flex align-items-center ms-2 col-md-auto">
+                  <div
+                    className="spinner-border text-success me-2"
+                    role="status"
+                  >
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
                 </div>
-              </div>
-            )}   
+              )}
             </div>
           </div>
           <div className="row">
@@ -214,45 +296,87 @@ export default function Home() {
                 align="end"
               >
                 {Object.keys(categories).map((cat) => (
-                  <Dropdown.Item
-                    key={cat}
-                    className="text-resp"
-                    eventKey={cat}
-                  >
+                  <Dropdown.Item key={cat} className="text-resp" eventKey={cat}>
                     {categories[cat]}
                   </Dropdown.Item>
                 ))}
               </DropdownButton>
+            </div>
+            <div className="col">
+              <div className="d-inline">
+                <input type="checkbox" checked={isUsed} onChange={handleUsed} />
               </div>
-              <div className="col">
-                <div className="d-inline">
-                  <input type="checkbox" checked={isUsed} onChange={handleUsed} />
-                </div>
-                <div className="d-inline">look for secondhand products as well</div>
+              <div className="d-inline">
+                look for secondhand products as well
               </div>
-        </div>
+            </div>
+          </div>
           <div className="row pt-3 justify-content-center">
-            <DropdownButton
+            <div>
+              <div  style={{position: "absolute",top: 320,right: 5,width: "15%",height: "100vh"}}>
+              <DropdownButton
               title={sorting}
               id="sort"
               onSelect={handleSorting}
-              align="end">
+              align="end"
+            >
               <Dropdown.Item eventKey="A-Z">A-Z</Dropdown.Item>
               <Dropdown.Item eventKey="Z-A">Z-A</Dropdown.Item>
               <Dropdown.Item eventKey="Price ↑">Price ↑</Dropdown.Item>
               <Dropdown.Item eventKey="Price ↓">Price ↓</Dropdown.Item>
             </DropdownButton>
+            <br />
+                <p>Price Range</p>
+                <Slider
+                  min={minPrice}
+                  max={maxPrice}
+                  range
+                  defaultValue={[minPrice, maxPrice]}
+                  value={priceRange}
+                  onChange={handlePriceChange}
+                />
+                <div >
+                  {/* <span>{`${priceRange} EGP `}</span> */}
+                  <span>[{priceRange[0]}-{priceRange[1]}] EGP</span>
+                </div>
+                <div className="row">
+                  <div className="col" >
+                  <br/>
+                  <p>Website:</p>
+                    <DropdownButton
+                      title={selectedStore}
+                      id="store"
+                      onSelect={handleSelectedStore}
+                      align="end"
+                    >
+                      {Stores.map((store) => (
+                        <Dropdown.Item className="text-resp" eventKey={store}>
+                          {store}
+                        </Dropdown.Item>
+                      ))}
+                    </DropdownButton>
+                  </div>
+                </div>
+
+                <button className="btn btn-success mt-3" onClick={filter}>
+                  filter
+                </button>
+              </div>
+            </div>
           </div>
+
           <div className="row pt-5">
             <div className="col-12">
               <h3 className="border-bottom mb-4 heartbeat">SEARCH RESULTS</h3>
+
               <p className="align-self-start text-start">
-                FOUND {products.length} ITEMS FROM {numbersOfSites} WEBSITES
+                FOUND {filteredProducts.length} ITEMS FROM {numbersOfSites}{" "}
+                WEBSITES
               </p>
             </div>
           </div>
           <Row xs={1} md={4} className="g-4">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <Productcard product={product} />
             ))}
           </Row>
