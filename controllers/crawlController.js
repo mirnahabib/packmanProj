@@ -1,5 +1,8 @@
 const Item = require('../models/Item');
 const Price = require('../models/Price');
+const {  storeItems,
+    updatePriceIfChanged,
+    } = require('./itemController');
 const { StatusCodes, PRECONDITION_FAILED } = require('http-status-codes');
 const path = require('path');
 const {spawn} = require("child_process");
@@ -20,36 +23,6 @@ const categorizedWebsites = new Map([
 
 ])
 
-
-async function storeItems(itemsJson, category){
-    for (let i = 0; i < itemsJson.length; i++) {
-        const item = new Item({
-            title: itemsJson[i].Title,
-            currentPrice: itemsJson[i].Price,
-            link: itemsJson[i].Link,
-            img: itemsJson[i].Img,
-            store: itemsJson[i].Shop,
-            category: category,
-        });
-        const existingItem = await Item.findOne({link: item.link})
-        if(existingItem){
-            if(existingItem.currentPrice != item.currentPrice){
-                console.log(`unmatching prices curr: ${existingItem.currentPrice} new: ${item.Price}`);
-                const oldPrice = existingItem.currentPrice;
-                await Item.findOneAndUpdate({link: item.link}, { $set: { currentPrice: item.currentPrice } })
-                const price = new Price({
-                    item: existingItem,
-                    price: oldPrice
-                });
-                await Price.create(price);
-            }
-        }else{
-            if(item.currentPrice != null && item.currentPrice != 0){
-                await Item.create(item);
-            }
-        }   
-    }
-}
 
 async function fetchWebsite(category, searchQuery) {
 return new Promise((resolve, reject) => {

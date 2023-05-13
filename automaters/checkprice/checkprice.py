@@ -510,33 +510,35 @@ def gameworld(link):
     
     driver.close()      
 
-def main(link):
+def main(link, store):
     start = time.time()
-    # gameworld(link)
-    # shamy(link)
-    # egygamer(link)
-    # games2egypt(link)
-    # hyperone(link)
-    # gourmet(link)
-    # spinney(link)
-    # carrefour(link)
-    # hubfurniture(link)
-    # ikea(link)
-    # faces(link)
-    # brantu(link) <- not working yet
-    # bershka(link)
-    # lcwaikiki(link)
-    # townteam(link)
-    # handm(link)
-    # max(link)
-    # zara(link)
-    # amazon(link)
-    # jumia(link)
-    # noon(link)
-    # dubaiphone(link)
-    # _2B(link)
-    # select(link)
-
+    switch = {
+        "amazon": amazon,
+        "noon": noon,
+        "jumia": jumia,
+        "dubaiphone": dubaiphone,
+        "_2B": _2B,
+        "select": select,
+        "zara": zara,
+        "max": max,
+        "handm": handm,
+        "townteam": townteam,
+        "lcwaikiki": lcwaikiki,
+        "bershka": bershka,
+        "bershka": bershka,
+        "faces": faces,
+        "ikea": ikea,
+        "hubfurniture": hubfurniture,
+        "carrefour": carrefour,
+        "spinney": spinney,
+        "gourmet": gourmet,
+        "hyperone": hyperone,
+        "games2egypt": games2egypt,
+        "egygamer": egygamer,
+        "shamy": shamy,
+        "gameworld": gameworld,
+    }
+    switch.get(store)(link)
 
     end = time.time()
     print(json.dumps(the_price, ensure_ascii=True))
@@ -545,4 +547,4 @@ def main(link):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])

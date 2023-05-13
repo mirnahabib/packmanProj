@@ -16,16 +16,25 @@ const {
   addUser,
 } = require('../controllers/userController');
 
+const {
+  getNotifications,
+  notificationsSeen
+} = require('../controllers/NotificationCrontroller');
+
 router
   .route('/')
   .get(getAllUsers);
 
-router.route('/showMe').get(authenticateUser,showCurrentUser);
+router.route('/showMe').get(authenticateUser, showCurrentUser);
 router.route('/updateProfile').patch(authenticateUser, updateUser);
 router.route('/updatePassword').patch(authenticateUser, updateUserPassword);
 
 router.route('/:id').get(authenticateUser, getSingleUserbyId);
 router.route('/findbyemail/:email').get(getSingleUserbyemail);
+
+
+router.route('/notifications').get(authenticateUser, getNotifications);
+router.route('/notifications/seen').post(authenticateUser, notificationsSeen);
 
 //router.route('/addUser').post(addUser);
 

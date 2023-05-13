@@ -34,6 +34,8 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 const authenticateUser = require('./middleware/authentication');
 const { process_params } = require('express/lib/router');
 
+//Automaters
+const scheduleDailyPriceCheck = require('./automaters/dailyPriceCheck');
 
 const app = express();
 
@@ -78,6 +80,8 @@ app.use('/api/favourites', favouriteRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
+
+scheduleDailyPriceCheck();
 
 const start = async () => {
   try {

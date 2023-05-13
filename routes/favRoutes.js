@@ -5,7 +5,7 @@ const { authenticateUser } = require('../middleware/authentication');
 const { addITem } = require('../controllers/itemController');
 const { fav, favList } = require('../controllers/favouriteController');
 
-router.post('/addOrRemove', authenticateUser, addITem, fav);
+router.post('/addOrRemove', authenticateUser, fav);
 router.get('/', authenticateUser, favList);
 
 module.exports = router;

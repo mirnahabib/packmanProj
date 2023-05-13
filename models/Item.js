@@ -15,7 +15,6 @@ const ItemSchema = mongoose.Schema({
     },   
     category: {
         type: String,
-        enum: ['electronics', 'grocery', 'clothing', 'furniture', 'cosmetics', 'toys', 'used', 'games', 'other'],
     },   
     lastFetched: { type: Date},
 });
@@ -24,8 +23,5 @@ ItemSchema.pre('save', async function (){
     this.lastFetched = new Date();
 });
 
-ItemSchema.post('findOne', function(next) {
-    this.update({}, { $set: { lastFetched: new Date() } });
-  });
   
 module.exports = mongoose.model('Item', ItemSchema);
