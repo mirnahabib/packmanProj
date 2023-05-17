@@ -23,8 +23,8 @@ def amazon(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
     driver = webdriver.Chrome(service=s , options=options)
-    searchedProduct = query
-    url = "https://www.amazon.eg/-/en/s?k=" + searchedProduct
+    
+    url = f'https://www.amazon.eg/s?k={query}&i=beauty&language=en_AE'
     driver.get(url)
     products = driver.find_elements(By.CLASS_NAME,"a-spacing-base")
 
@@ -57,7 +57,7 @@ def jumia(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
 
-    url = "https://www.jumia.com.eg/catalog/?q=" + query
+    url = f'https://www.jumia.com.eg/health-beauty/?q={query}'
     driver.get(url)
     popup = driver.find_element(By.CLASS_NAME,"cw")
     popup.find_element(By.XPATH,"./button").click()
@@ -91,7 +91,7 @@ def noon(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
-    url = "https://www.noon.com/egypt-en/search/?q=" + query
+    url = f'https://www.noon.com/egypt-en/beauty-and-health/?limit=20&q={query}'
     driver.get(url)
     driver.implicitly_wait(10)
     products = driver.find_elements(By.CLASS_NAME, "productContainer")

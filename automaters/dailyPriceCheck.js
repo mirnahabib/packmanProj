@@ -67,7 +67,7 @@ const priceCheck = async() => {
   
 function scheduleDailyPriceCheck() {
   const now = new Date();
-  const millisTill6pm = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0, 0) - now;
+  let millisTill6pm = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0, 0) - now;
   if (millisTill6pm < 0) {
       millisTill6pm += 86400000; // it's after 6pm, try 6pm tomorrow.
   }

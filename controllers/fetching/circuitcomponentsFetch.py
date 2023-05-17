@@ -6,15 +6,13 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from concurrent.futures import ThreadPoolExecutor
-import json, sys, re
+import json, sys, re , time
 
 s = Service(ChromeDriverManager().install())
 prefs = {"profile.managed_default_content_settings.images": 2}
 ProductsArr = []
 
-
-
-def iherb(query):
+def futureElectronics(query):
     i=1
     options = Options()
     options.add_argument('--headless')
@@ -22,25 +20,66 @@ def iherb(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
-    url = "https://eg.iherb.com/search?sug=magnesium&kw=" + query
+    url = f'https://store.fut-electronics.com/search?type=product&q={query}'
     driver.get(url)
+    time.sleep(1) # titles , prices returns empty without waiting
 
-    products = driver.find_elements(By.CLASS_NAME , "product-cell-container")
+    products = driver.find_element(By.CLASS_NAME , "product-grid")
+    products = products.find_elements(By.TAG_NAME,"div")
+
+
+    for product in products[:20]:
+        if product.get_attribute("class") == 'sold-out':
+            continue
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.TAG_NAME , "h3").text
+        price = product.find_element(By.TAG_NAME, "h4").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        img = product.find_element(By.TAG_NAME , "img").get_attribute("src")
+        link = product.find_element(By.TAG_NAME, "a").get_attribute("href")
+        
+        if (title != '' and price != ''):
+            ProductsArr.append({
+                "Count" : i,
+                "Shop"  : "Future Electronics",
+                "Title" : title,
+                "Price" : float(price),
+                "Link"  : link,
+                "Img"   : img
+            } )
+            i += 1
+    driver.close()        
+
+def makersElectronics(query):
+    i=1
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    driver = webdriver.Chrome(service=s , options=options)
+    driver.maximize_window()
+    url = f'https://makerselectronics.com/?term=&s={query}&post_type=product&taxonomy=product_cat'
+    driver.get(url)    
+    products = driver.find_elements(By.CLASS_NAME,"product-wrapper")
 
     for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.CLASS_NAME , "product-title").text
+        if product.find_element(By.CLASS_NAME,"product-label").text == "Sold out":
+            continue
+        title = product.find_element(By.CLASS_NAME , "product-name")
+        price = product.find_element(By.CLASS_NAME , "price")
         try:
-            price = product.find_element(By.CLASS_NAME , "discount-red").text  
+            price = price.find_element(By.TAG_NAME , "ins").text  
         except:
-            price = product.find_element(By.CLASS_NAME , "price").text 
-        price = re.sub(r"[^0-9\.]+" , '' , price)    
-        img = product.find_element(By.CLASS_NAME , "product-image").find_element(By.TAG_NAME,"img").get_attribute("src")
-        link = product.find_element(By.CLASS_NAME, "product-link").get_attribute("href")
+            price = price.find_element(By.CLASS_NAME, "woocommerce-Price-amount").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        img = product.find_element(By.CLASS_NAME , "thumbnail-wrapper").find_element(By.TAG_NAME,"img").get_attribute("src")
+        link = title.find_element(By.TAG_NAME, "a").get_attribute("href")
+        title = title.text
         
         ProductsArr.append({
             "Count" : i,
-            "Shop"  : "iHerb",
+            "Shop"  : "Makers Electronics",
             "Title" : title,
             "Price" : float(price),
             "Link"  : link,
@@ -48,53 +87,17 @@ def iherb(query):
         } )
         i += 1
     driver.close()
-# ss 
-def biovea(query):
-    i = 1    
-    options = Options()
-    options.add_argument('--headless')
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
-    driver = webdriver.Chrome(service=s , options=options)
-    url = f"https://www.biovea.com/eg/productlist/results?KW={query}"
-    driver.get(url)
-    driver.implicitly_wait(5)
-    products = driver.find_elements(By.CLASS_NAME,"prod-card--dispatch")
-    driver.implicitly_wait(0)
 
-    for product in products[:20]:
-        ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.CLASS_NAME, "prod-card__title")
-        try:
-            price = product.find_element(By.CLASS_NAME , "prod-pricing__savings--pack").text.split(" ")[2]
-        except:
-            price = product.find_element(By.CLASS_NAME , "our-price").text.split(" ")[0]
-        price = re.sub(r"[^0-9\.]+" , '' , price)  
-        link = title.find_element(By.TAG_NAME , "a").get_attribute("href")
-        img =  product.find_element(By.CLASS_NAME , "prod-card__image").find_element(By.TAG_NAME,"img").get_attribute("src")  
-        title = title.text
-        ProductsArr.append({
-            "Count" : i,
-            "Shop"  : "Biovea",
-            "Title" : title,
-            "Price" : float(price),
-            "Link"  : link,
-            "Img"   : img
-        })
-        i += 1
-    driver.close()
-
-def nowfoodsegypt(query):
+def ram(query):
     i=1
     options = Options()
-    options.add_argument('--headless')
-    options.add_experimental_option("prefs", prefs)
+    # options.add_argument('--headless')
+    # options.add_experimental_option("prefs", prefs)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
-    url = f'https://nowfoodsegypt.com/?product_cat=&s={query}&post_type=product'
-    driver.get(url)
-
+    url = f'https://ram-e-shop.com/?s={query}&product_cat=0&post_type=product'
+    driver.get(url)    
     products = driver.find_elements(By.CLASS_NAME , "product-type-simple")
 
     for product in products[:20]:
@@ -112,23 +115,26 @@ def nowfoodsegypt(query):
         
         ProductsArr.append({
             "Count" : i,
-            "Shop"  : "Now Foods Egypt",
+            "Shop"  : "RAM",
             "Title" : title,
             "Price" : float(price),
             "Link"  : link,
             "Img"   : img
         } )
         i += 1
-    driver.close() 
+    driver.close()    
+
+    
 
 
 def main(query):
-
+   
     with ThreadPoolExecutor(max_workers=25) as executor:
-        future = executor.submit(iherb, query)
-        future = executor.submit(biovea, query)  # bottleneck 
-        future = executor.submit(nowfoodsegypt, query)
-
+        future = executor.submit(futureElectronics, query)
+        future = executor.submit(makersElectronics, query) 
+        # future = executor.submit(ram, query) #empty titles 
+    
+        
     print(json.dumps(ProductsArr, ensure_ascii = True ))
 
 if __name__ == "__main__":

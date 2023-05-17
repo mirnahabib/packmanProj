@@ -254,13 +254,50 @@ def btech(query):
             "Img"   : img
         })
         i += 1
-    driver.close() 
+    driver.close()
+
+def dream2000(query):
+    i = 1    
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s , options=options)
+    url = "https://dream2000.com/en/catalogsearch/result/?q=" + query
+    driver.get(url)
+    driver.implicitly_wait(5)
+    products = driver.find_elements(By.CLASS_NAME,"product-item-info")
+    driver.implicitly_wait(0)
+
+    for product in products[:20]:
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.CLASS_NAME, "product-item-link")
+        try:
+            price = product.find_element(By.CLASS_NAME , "special-price").text
+        except:
+            price = product.find_element(By.CLASS_NAME , "price").text 
+        price = re.sub(r"[^0-9\.]+" , '' , price)  
+        link = title.get_attribute("href")
+        title = title.text
+        img =  product.find_element(By.CLASS_NAME , "product-image-photo").get_attribute("src")  
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Dream2000",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
 
 
 def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
         # future = executor.submit(select, query)
+        future = executor.submit(dream2000,query)
         future = executor.submit(btech,query)
         future = executor.submit(_2B, query) 
         future = executor.submit(dubaiphone, query) 

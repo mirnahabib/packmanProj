@@ -8,13 +8,11 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from concurrent.futures import ThreadPoolExecutor
-import json,sys ,time , re
+import json,sys , time , re
 
-
-s = Service(ChromeDriverManager().install())
+s=Service(ChromeDriverManager().install())
 prefs = {"profile.managed_default_content_settings.images": 2}
 ProductsArr = []
-
 
 def amazon(query):
     i = 1    
@@ -23,7 +21,7 @@ def amazon(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
     driver = webdriver.Chrome(service=s , options=options)
-    url = f'https://www.amazon.eg/s?k={query}&i=home&language=en_AE'
+    url = f"https://www.amazon.eg/s?k={query}&rh=n%3A21845143031&language=en_AE&ref=nb_sb_noss"  
     driver.get(url)
     products = driver.find_elements(By.CLASS_NAME,"a-spacing-base")
 
@@ -56,7 +54,7 @@ def jumia(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
 
-    url = f'https://www.jumia.com.eg/home-office/?q={query}'
+    url = f"https://www.jumia.com.eg/category-fashion-by-jumia/?q={query}&gender=Kids#catalog-listing" 
     driver.get(url)
     popup = driver.find_element(By.CLASS_NAME,"cw")
     popup.find_element(By.XPATH,"./button").click()
@@ -81,123 +79,159 @@ def jumia(query):
         i += 1
     driver.close() 
 
-def noon(query):
+
+def zara(query):
     i=1
     options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36") 
     options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s , options=options)
+    url = f'https://www.zara.com/eg/en/search?searchTerm={query}&section=KID'
+    driver.get(url)
+    driver.implicitly_wait(3)
+
+    products = driver.find_elements(By.CLASS_NAME , "product-grid-product")
+
+    for product in products[:20]:
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.CLASS_NAME , "product-grid-product-info__name")
+        price= product.find_element(By.CLASS_NAME, "money-amount__main").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        link = title.get_attribute("href")
+        img = product.find_element(By.CLASS_NAME, "media-image__image").get_attribute("src")
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Zara",
+            "Title" : title.text,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
+
+def max(query):
+    i=1
+    options = Options()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36") 
+    options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs) 
     driver = webdriver.Chrome(service=s , options=options)
     driver.maximize_window()
-    url = f'https://www.noon.com/egypt-en/home-and-kitchen/?limit=20&q={query}'
+    url = f'https://www.maxfashion.com/eg/en/search?q={query}%20:allCategories:mxkids'
     driver.get(url)
-    driver.implicitly_wait(10)
-    products = driver.find_elements(By.CLASS_NAME, "productContainer")
+
+    products = driver.find_elements(By.CLASS_NAME , "product")
 
     for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
-        link = product.find_element(By.TAG_NAME , "a")
-        title = link.find_element(By.XPATH , "./div/div/div[2]/div[1]").get_attribute("title")
-        price = product.find_element(By.CLASS_NAME , "amount").text
-        linkURL= link.get_attribute("href")
+        title = product.find_element(By.XPATH , './div[3]').text
+        price = product.find_element(By.XPATH , './div[2]').text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        img_link = product.find_element(By.XPATH , "./div[1]")
+        link = img_link.find_element(By.TAG_NAME , "a").get_attribute("href")
+        imgs = img_link.find_elements(By.TAG_NAME , "img")
+        img= imgs[1].get_attribute("src")
+    
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Max",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
+
+def handm(query):
+    i=1
+    options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s , options=options)
+    url = f'https://eg.hm.com/en/#query={query}&hierarchicalMenu%5Bfield_category.lvl0%5D=Kids&page=1'
+    driver.get(url)
+
+    products = driver.find_elements(By.CLASS_NAME , "c-products__item") 
+
+    for product in products[:20]: 
+        title = product.find_element(By.CLASS_NAME, "field--name-name").text
         try:
-            img = link.find_element(By.CLASS_NAME,"lazyload-wrapper").find_element(By.TAG_NAME, "img").get_attribute("src")
+            price = product.find_element(By.CLASS_NAME, "special--price").text
+        except:
+            price = product.find_element(By.CLASS_NAME, "price").text    
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        img = product.find_element(By.TAG_NAME , "img").get_attribute('src')
+        link = product.find_element(By.TAG_NAME , "a").get_attribute("href")
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "H&M",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
+    
+def lcwaikiki(query):
+    i = 1    
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
+    driver = webdriver.Chrome(service=s , options=options)
+    
+    url = f"https://www.lcwaikiki.eg/en-US/EG/search?q={query} kid"
+    driver.get(url)
+    driver.implicitly_wait(5)
+    products = driver.find_elements(By.CLASS_NAME,"product-card")
+    driver.implicitly_wait(0)
+
+    for product in products[:20]:
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.CLASS_NAME, "product-card__title").text
+        try:
+            price = product.find_element(By.CLASS_NAME , "product-price__cart-price").text
+            price = price.replace(",", ".")
+        except:
+            price = product.find_element(By.CLASS_NAME , "product-price__price").text
             
-        except:
-            img = None
-               
-        ProductsArr.append({
-            "Count" : i,
-            "Shop"  : "Noon",
-            "Title" : title,
-            "Price" : float(price),
-            "Link"  : linkURL,
-            "Img"   : img
-        })
-        i += 1
-    driver.close()
-
-def hubfurniture(query):
-    i = 1    
-    options = Options()
-    options.add_argument('--headless')
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
-    driver = webdriver.Chrome(service=s , options=options)
-    url = "https://hubfurniture.com.eg/en/catalogsearch/result/?q=" + query
-    driver.get(url)
-    driver.implicitly_wait(5)
-    products = driver.find_elements(By.CLASS_NAME,"product-item")
-    driver.implicitly_wait(0)
-
-    for product in products[:20]:
-        ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.CLASS_NAME, "product-item-link").text
-        try:
-            price = product.find_element(By.CLASS_NAME , "special-price").text
-        except:
-            price = product.find_element(By.CLASS_NAME , "price").text
-        price = re.sub(r"[^0-9\.]+" , '' , price)    
-        link = product.find_element(By.CLASS_NAME , "product-item-photo").get_attribute("href")
-        img =  product.find_element(By.CLASS_NAME , "product-image-photo").get_attribute("src")  
-
-        ProductsArr.append({
-            "Count" : i,
-            "Shop"  : "Hub furniture",
-            "Title" : title,
-            "Price" : float(price),
-            "Link"  : link,
-            "Img"   : img
-        })
-        i += 1
-    driver.close()
-
-def ikea(query):
-    i = 1    
-    options = Options()
-    options.add_argument('--headless')
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
-    driver = webdriver.Chrome(service=s , options=options)
-    url = "https://www.ikea.com/eg/en/search/?q=" + query
-    driver.get(url)
-    driver.implicitly_wait(5)
-    products = driver.find_elements(By.CLASS_NAME,"pip-product-compact")
-    driver.implicitly_wait(0)
-
-    for product in products[:20]:
-        ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.CLASS_NAME, "pip-header-section__title--small").text
-        price = product.find_element(By.CLASS_NAME , "pip-price__integer").text            
         price = re.sub(r"[^0-9\.]+" , '' , price)  
-        link = product.find_element(By.CLASS_NAME , "pip-product-compact__wrapper-link").get_attribute("href")
-        img =  product.find_element(By.CLASS_NAME , "pip-image").get_attribute("src")  
+        link = product.find_element(By.TAG_NAME , "a").get_attribute("href")
+        img =  product.find_element(By.CLASS_NAME , "product-image__image").get_attribute("src")  
 
         ProductsArr.append({
             "Count" : i,
-            "Shop"  : "Ikea",
+            "Shop"  : "Lc Waikiki",
             "Title" : title,
             "Price" : float(price),
             "Link"  : link,
             "Img"   : img
         })
         i += 1
-    driver.close()
-
+    driver.close()          
 
 
 def main(query):
     start = time.time()
-    with ThreadPoolExecutor(max_workers=25) as executor:
-        future = executor.submit(hubfurniture, query)  
-        future = executor.submit(ikea, query)
-        future = executor.submit(noon, query) 
+    with ThreadPoolExecutor(max_workers=30) as executor:
+        future = executor.submit(zara, query)  
         future = executor.submit(amazon, query)  
-        future = executor.submit(jumia, query) 
+        future = executor.submit(jumia, query)  
+        future = executor.submit(handm, query)  
+        future = executor.submit(max, query)  
+        future = executor.submit(lcwaikiki, query) 
     end = time.time()
-    print(json.dumps(ProductsArr, ensure_ascii = True ))
-    # print(f'time : {end - start : .2f}') #avg 5 secs
+    print(json.dumps(ProductsArr, ensure_ascii = False ))
+    # print(f'time : {end - start : .2f}')     #avg 10 secs
 
 if __name__ == "__main__":
     main(sys.argv[1])
