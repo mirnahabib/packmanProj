@@ -1,5 +1,3 @@
-const Item = require('../models/Item');
-const Price = require('../models/Price');
 const {  storeItems,
     updatePriceIfChanged,
     } = require('./itemController');

@@ -19,7 +19,7 @@ ProductsArr = []
 def amazon(query):
     i = 1    
     options = Options()
-    options.add_argument('--headless')
+    #options.add_argument('--headless')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
     driver = webdriver.Chrome(service=s , options=options)
@@ -260,13 +260,13 @@ def btech(query):
 def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
-        # future = executor.submit(select, query)
+        future = executor.submit(select, query)
         future = executor.submit(btech,query)
-        future = executor.submit(_2B, query) 
-        future = executor.submit(dubaiphone, query) 
+        #future = executor.submit(_2B, query) 
+        #future = executor.submit(dubaiphone, query) 
         future = executor.submit(noon, query) 
         future = executor.submit(amazon, query)  
-        future = executor.submit(jumia, query)
+        #future = executor.submit(jumia, query)
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = True ))
     # print(f'time : {end - start : .2f}') #avg 5 secs

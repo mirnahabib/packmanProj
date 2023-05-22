@@ -9,7 +9,6 @@ const NotificationSchema = mongoose.Schema({
     item: { 
         type: mongoose.Types.ObjectId,
         ref: 'Item',
-        required: true,
     },
     text: { type: String, required: true },
     seen: { type: Boolean, default: false,},

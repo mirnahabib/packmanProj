@@ -1,10 +1,12 @@
 const Item = require('../models/Item');
 const favourite = require('../models/Favourite');
+const Notification = require('../models/Notification');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const {
   checkPermissions,
 } = require('../utils');
+const { createNotification } = require('./NotificationCrontroller');
 
 const addITem = async (req, res, next) => {
   const { title, price, link, img, category } = req.body;
@@ -36,16 +38,31 @@ const removeItem = async (req) => {
 
 
 async function updatePriceIfChanged(item) {
+  console.log('update price method');
   const existingItem = await Item.findOne({ link: item.link });
+  console.log(existingItem);
   if (existingItem && existingItem.currentPrice != item.currentPrice) {
-      console.log(`Unmatching prices curr: ${existingItem.currentPrice} new: ${item.Price}`);
-      const oldPrice = existingItem.currentPrice;
-      await Item.findOneAndUpdate({ link: item.link }, { $set: { currentPrice: item.currentPrice, lastFetched: Date.now() } });
-      const price = new Price({
-          item: existingItem,
-          price: oldPrice,
+    console.log('update price method new price');
+    console.log(`Unmatching prices curr: ${existingItem.currentPrice} new: ${item.currentPrice}`);
+    const oldPrice = existingItem.currentPrice;
+    await Item.findOneAndUpdate({ link: item.link }, { $set: { currentPrice: item.currentPrice, lastFetched: Date.now() } });
+    const price = new Price({
+        item: existingItem,
+        price: oldPrice,
       });
-      await Price.create(price);
+    await Price.create(price);
+    //notifying users of price update
+    const usersToNotify = await favourite.distinct('user', {item});
+    if(usersToNotify){
+      usersToNotify.forEach(async (user) => {
+        const notifText = `Price update on one of your wishlist items! ${item.title.slice(0, 20)}... Old price: ${oldPrice}, new price: ${item.currentPrice}. Click for more details!`;
+        await Notification.create({
+          user,
+          item: item._id,
+          text: notifText
+        });
+      });
+    }
   }
 }
 

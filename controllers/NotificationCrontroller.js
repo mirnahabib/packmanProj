@@ -19,7 +19,8 @@ const createNotification = async (user, text) => {
 const getNotifications = async (req, res) => {
   const userId = req.body;
   try {
-    const notifications = await Notification.find({ userId })
+    const notifications = await Notification.find({ user:userId })  
+      .populate('item', 'link')
       .sort({ date: -1 }) 
       .limit(20); // Retrieve only the most recent 20 notifications
 
