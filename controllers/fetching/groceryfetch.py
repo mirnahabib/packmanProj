@@ -22,7 +22,7 @@ def amazon(query):
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
     driver = webdriver.Chrome(service=s , options=options)
     searchedProduct = query
-    url = "https://www.amazon.eg/-/en/s?k=" + searchedProduct
+    url = f'https://www.amazon.eg/s?k={query}&i=grocery&language=en_AE'
     driver.get(url)
     products = driver.find_elements(By.CLASS_NAME,"a-spacing-base")
 

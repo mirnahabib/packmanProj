@@ -21,7 +21,7 @@ def amazon(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
     driver = webdriver.Chrome(service=s , options=options)
-    url = f"https://www.amazon.eg/-/en/s?k={query} for men"  
+    url = f"https://www.amazon.eg/s?k={query}&i=fashion&rh=n%3A18018165031%2Cn%3A21845147031&dc&language=en"  
     driver.get(url)
     products = driver.find_elements(By.CLASS_NAME,"a-spacing-base")
 
@@ -54,7 +54,7 @@ def jumia(query):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
 
-    url = f"https://www.jumia.com.eg/catalog/?q={query} men" 
+    url = f"https://www.jumia.com.eg/category-fashion-by-jumia/?q={query}&gender=Male#catalog-listing" 
     driver.get(url)
     popup = driver.find_element(By.CLASS_NAME,"cw")
     popup.find_element(By.XPATH,"./button").click()
@@ -200,7 +200,10 @@ def handm(query):
 
     for product in products[:20]: 
         title = product.find_element(By.CLASS_NAME, "field--name-name").text
-        price = product.find_element(By.CLASS_NAME, "price").text
+        try:
+            price = product.find_element(By.CLASS_NAME, "special--price").text
+        except:
+            price = product.find_element(By.CLASS_NAME, "price").text    
         price = re.sub(r"[^0-9\.]+" , '' , price)
         img = product.find_element(By.TAG_NAME , "img").get_attribute('src')
         link = product.find_element(By.TAG_NAME , "a").get_attribute("href")

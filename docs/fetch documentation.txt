@@ -6,6 +6,7 @@
     5-select*
     6-2B*
     7-btech
+    8-dream2000
 
 2-groceries
     1-carrefour 
@@ -52,29 +53,35 @@
     2-noon
     3-jumia
 
-9-videogames
+8-videogames
     1-games2egypt
     2-egygamer
     3-shamy
     4-gameworld
 
-10-computerhardware
+9-computerhardware
     1-maximumhardware
     2-badrgroup
     3-baraka
     4-sigma
     5-compuscience
 
-11-supplements
+10-supplements
     1-iherb
     2-biovea
+    3-nowfoodsegypt
+
+11-circuits componenets
+    1-makers electronics
+    2-future electronics
+    3-ram
 
 12-used
     1-olx
     2-open sooq
 
 -----------------
-total 34 different websites
+total 39 different websites
 
 
 

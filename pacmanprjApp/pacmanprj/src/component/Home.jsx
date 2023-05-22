@@ -15,14 +15,16 @@ import "rc-slider/assets/index.css";
 const categories = {
   clothingMen: "Clothing and Fashion (Men)",
   clothingWomen: "Clothing and Fashion (Women)",
+  clothingKids: "Clothing and Fashion (Kids)",
   cosmetics: "Cosmetics and Bodycare",
   electronics: "Electronics and Devices",
   furniture: "Furnitures and Decor",
   grocery: "Groceries and Supplies",
   toys: "Toys and Games",
   videogames: "Consoles and Videogames",
-  // computerhardware: "Computer Hardware",
-  // supplements: "Vitamins and Supplements",
+  computerhardware: "Computer Hardware",
+  supplements: "Vitamins and Supplements",
+  circuits: "Circuits and Components",
   other: "Other (longer search)",
 };
 export default function Home() {
@@ -62,8 +64,7 @@ export default function Home() {
           uniqueStores.push(product.Shop);
         }
       });
-      let x = [...Stores, ...uniqueStores];
-      setStores([...new Set(x)]);
+      setStores([["All"], ...uniqueStores]);
     } catch (error) {
       console.log(error);
     }
@@ -375,7 +376,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <Row xs={1} md={4} className="g-4">
+          <Row sm={1} md={3} lg={4} className="g-4">
             {filteredProducts.map((product) => (
               <Productcard product={product} />
             ))}
