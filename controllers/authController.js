@@ -3,6 +3,7 @@ const Token = require('../models/Token');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const jwt_decode = require('jwt-decode');
+const {createNotification} = require('./NotificationCrontroller');
 const {
   attachCookiesToResponse,
   createTokenUser,
@@ -38,22 +39,6 @@ const register = async (req, res) => {
   if (user){
     console.log(`User created : ${user.email}`);
   }
-  //const origin = 'http://localhost:3000';
-  // const newOrigin = 'https://react-node-user-workflow-front-end.netlify.app';
-
-  // const tempOrigin = req.get('origin');
-  // const protocol = req.protocol;
-  // const host = req.get('host');
-  // const forwardedHost = req.get('x-forwarded-host');
-  // const forwardedProtocol = req.get('x-forwarded-proto');
-
-  // await sendVerificationEmail({
-  //   name: user.name,
-  //   email: user.email,
-  //   verificationToken: user.verificationToken,
-  //   origin,
-  // });
-  // send verification token back only while testing in postman!
 
   const tokenUser = createTokenUser(user);
 
@@ -66,7 +51,7 @@ const register = async (req, res) => {
   const userToken = { refreshToken, ip, userAgent, user: user._id };
 
   await Token.create(userToken);
-
+  createNotification(user, `Welcome to Packman ${user.name}! You will be receiving updates on your wishlist items here!`);
   attachCookiesToResponse({ res, user: tokenUser, refreshToken });
 
   res.status(StatusCodes.CREATED).json({ user: tokenUser, msg: 'Success! You\'re now registered and logged in. Please confirm Email. '});
@@ -185,6 +170,7 @@ const gLogin = async (req, res) => {
     const userToken = { refreshToken, ip, userAgent, user: user._id };
     await Token.create(userToken);
     attachCookiesToResponse({ res, user: tokenUser, refreshToken });
+    createNotification(user, `Welcome to Packman ${user.name}! You will be receiving updates on your wishlist items here!`);
     res.status(StatusCodes.OK).json({ user: userToken });
   } catch (err) {
     console.error(err);

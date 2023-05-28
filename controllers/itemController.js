@@ -1,4 +1,5 @@
 const Item = require('../models/Item');
+const Price = require('../models/Price');
 const favourite = require('../models/Favourite');
 const Notification = require('../models/Notification');
 const { StatusCodes } = require('http-status-codes');
