@@ -29,16 +29,15 @@ const fav = async (req, res) => {
 
 const favList = async (req, res) => {
     try{
-        const { userId } = req.body;
-        const favItems = await favourite.find({ user: userId });
-        const itemId = favItems.map((favItem) => favItem.Item);
+        const user = req.user.userId;
+        const favItems = await favourite.find({ user: user });
+        const itemId = favItems.map((favItem) => favItem.item);
         const favlist = await Item.find({ _id: { $in: itemId } });
         res.status(StatusCodes.OK).json({favlist});
         
     }catch (error){
         console.log(error);
     }
-
 }
 module.exports = {
     fav,
