@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
   Card,
   Row,
@@ -7,37 +7,70 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import IconAmazon from "./imgs/amazon";
+import IconHeart from "./heart";
+import IconHeartFilled from "./heartfilled";
 import { Logos } from "./logos";
+import MyUser from "../Contexts/MyUser";
 
 export default function Productcard(props) {
+  const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
+
+  const { isLoggedIn, user } = useContext(MyUser);
+
+  const add2Wishlist = async () => {
+    let link = props.product.Link;
+    let userID = user.userId;
+    fetch("api/favourites/addOrRemove", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: userID , link: link }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+    setIsAddedToWishlist(!isAddedToWishlist);
+    console.log(isAddedToWishlist);
+  };
+
   return (
     <Col>
       <Card className="h-100 bg-dark shadow-lg bor">
-        <a
+        {/* <a
           href={props.product.Link}
           alt={props.product.Title}
           target="_blank"
           rel="noreferrer"
+        > */}
+        <div
+          className="img-props"
+          style={{
+            height: "300px",
+            display: "flex",
+            alignItems: "center",
+          }}
         >
-          <div
-            className="img-props"
-            style={{
-              height: "300px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <img
-              className="card-img-top"
-              stop
-              width="100%"
-              src={props.product.Img}
-              alt={props.product.Title}
-              style={{ objectFit: "contain", maxHeight: "100%" }}
-            />
-          </div>
-        </a>
+          {isLoggedIn ? (
+            <button
+              className={`${isAddedToWishlist ? "pressed" : ""} fav`}
+              onClick={add2Wishlist}
+              aria-label="Add to wishlist"
+            >
+              {isAddedToWishlist ? <IconHeartFilled /> : <IconHeart />}
+            </button>
+          ) : (
+            ""
+          )}
+
+          <img
+            className="card-img-top"
+            stop
+            width="100%"
+            src={props.product.Img}
+            alt={props.product.Title}
+            style={{ objectFit: "contain", maxHeight: "100%" }}
+          />
+        </div>
+        {/* </a> */}
         <Card.Body className="text-light">
           <OverlayTrigger
             placement="bottom"

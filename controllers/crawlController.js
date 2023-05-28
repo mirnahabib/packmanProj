@@ -53,7 +53,7 @@ const crawlbyCategory = async (req, res) => {
     .then(async (result) => {
         //console.log(result);
         jsonresult = JSON.parse(result);
-        await storeItems(jsonresult, category);
+        // await storeItems(jsonresult, category);
         jsonresult.sort(() => Math.random() - 0.5);
         res.status(StatusCodes.OK).json({ jsonresult});
     })

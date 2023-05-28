@@ -68,7 +68,7 @@ a:hover {
   transition: transform 0.3s ease-in-out;
 }
 
-.card:hover {
+/* .card:hover {
   transform: scale(1.05);
 }
 
@@ -78,6 +78,25 @@ a:hover {
 
 .card:hover img {
   filter: brightness(70%);
+} */
+
+.img-props .fav {
+  position: absolute;
+  top: 3%;
+  left: 0%;
+  background-color: #555;
+  color: #0b5ed7;
+  background-color: transparent;
+
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.img-props .fav:hover {
+  color: rgb(153, 20, 20);
+}
+.img-props .pressed {
+  color: rgb(153, 20, 20);
 }
 
 .flicker-in-1 {
