@@ -68,6 +68,47 @@ def noon(link):
 
     driver.close()
 
+def btech(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+    product = driver.find_element(By.CLASS_NAME, "product-info-price")
+    try:
+        price = product.find_element(By.CLASS_NAME, "non_dealer_price")
+        price = price.find_element(By.CLASS_NAME, "price-huge-static").text
+    except:
+        price = driver.find_element(By.CLASS_NAME, "price-huge-static").text
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": (price),
+    })
+
+    driver.close()
+
+def dream2000(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    product = driver.find_element(By.CLASS_NAME, "product-info-main")
+    try:
+        price = product.find_element(By.CLASS_NAME, "special-price").text
+    except:
+        price = product.find_element(By.CLASS_NAME, "price").text        
+
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()
+
 def dubaiphone(link):
     options = Options()
     options.add_argument('--headless')
@@ -508,42 +549,232 @@ def gameworld(link):
         "Price": float(price),
     })
     
-    driver.close()      
+    driver.close()
+
+def maximumhardware(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    product = driver.find_element(By.CLASS_NAME, "price-group")
+    try:
+        price = product.find_element(By.CLASS_NAME, "product-price-new").text
+    except:
+        price = product.text        
+
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()   
+
+def baraka(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    price = driver.find_element(By.CLASS_NAME, "product-price").text
+          
+    price = price.split(" ")[0]
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()   
+
+def sigma(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    price = driver.find_element(By.CLASS_NAME, "product_page_price").text
+          
+    price = price.split(" ")[0]
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()   
+
+def compuscience(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    price = driver.find_element(By.CLASS_NAME, "current-price-display").text
+          
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()       
+
+def iherb(link):
+    options = Options()
+    # options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    product = driver.find_element(By.CLASS_NAME, "product-action-container")
+    
+    try:
+        price = product.find_element(By.CLASS_NAME, "s24").text
+    except:
+        price = product.find_element(By.CLASS_NAME, "price-inner-text").text   
+
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()    
+
+def biovea(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    price = driver.find_element(By.CLASS_NAME, "price--our-price").text
+    price = price.split(" ")[0]    
+
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()       
+
+def nowfoodsegypt(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    product = driver.find_element(By.CLASS_NAME , "product-page-price")
+
+    try:
+        price = product.find_element(By.TAG_NAME , "ins").text  
+    except:
+        price = product.find_element(By.CLASS_NAME, "woocommerce-Price-amount").text   
+
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()   
+
+def future(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    price = driver.find_element(By.CLASS_NAME, "product-price").text
+        
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()    
+
+def makers(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    product = driver.find_element(By.CLASS_NAME , "entry-summary")
+    price = product.find_element(By.CLASS_NAME, "price")
+
+    try:
+        price = price.find_element(By.TAG_NAME , "ins").text  
+    except:
+        price = price.find_element(By.CLASS_NAME, "woocommerce-Price-amount").text 
+        
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()  
+ 
 
 def main(link, store):
     start = time.time()
     switch = {
-        "amazon": amazon,
-        "noon": noon,
-        "jumia": jumia,
-        "dubaiphone": dubaiphone,
-        "_2B": _2B,
-        "select": select,
-        "zara": zara,
-        "max": max,
-        "handm": handm,
-        "townteam": townteam,
-        "lcwaikiki": lcwaikiki,
-        "bershka": bershka,
-        "bershka": bershka,
-        "faces": faces,
-        "ikea": ikea,
-        "hubfurniture": hubfurniture,
-        "carrefour": carrefour,
-        "spinney": spinney,
-        "gourmet": gourmet,
-        "hyperone": hyperone,
-        "games2egypt": games2egypt,
-        "egygamer": egygamer,
-        "shamy": shamy,
-        "gameworld": gameworld,
+        "Amazon": amazon,
+        "Noon": noon,
+        "Jumia": jumia,
+        "Dubai phone": dubaiphone,
+        "B.Tech" : btech,
+        "2B": _2B,
+        "Dream2000": dream2000,
+        "Select": select,
+        "Zara": zara,
+        "Max": max,
+        "H&M": handm,
+        "Town Team": townteam,
+        "Lc Waikiki": lcwaikiki,
+        "Bershka": bershka,
+        # "Brantu": bershka,
+        "Faces": faces,
+        "Ikea": ikea,
+        "Hub furniture": hubfurniture,
+        "Carrefour": carrefour,
+        "Spinney": spinney,
+        "Gourmet": gourmet,
+        "Hyperone": hyperone,
+        "Games2Egypt": games2egypt,
+        "Egygamer": egygamer,
+        "Shamy": shamy,
+        "Game World": gameworld,
+        "Maximum Hardware": maximumhardware,
+        "Badr Group": maximumhardware,
+        "Baraka" : baraka,
+        "Sigma": sigma,
+        "Compu Science": compuscience,
+        "iHerb":iherb, # only work without headless
+        "Biovea": biovea,
+        "Now Foods Egypt": nowfoodsegypt,
+        "Future Electronics" : future,
+        "Makers Electronics" : makers,
+        "RAM" : makers,
     }
     switch.get(store)(link)
 
     end = time.time()
     print(json.dumps(the_price, ensure_ascii=True))
 
-    # print(f'time : {end - start : .2f}')     #avg 10 secs
+    # print(f'time : {end - start : .2f}')
 
 
 if __name__ == "__main__":

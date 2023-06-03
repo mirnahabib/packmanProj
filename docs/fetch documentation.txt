@@ -22,8 +22,11 @@
     4-zara
     5-lc waikiki
     6-town team
-    7-amazon
-    8-jumia
+    7-american eagle
+    8-activ
+    9-adidas
+    10-amazon
+    11-jumia
 
 4-clothing women
     1-h&m
@@ -32,56 +35,74 @@
     4-zara
     5-lc waikiki
     6-brantu
-    7-amazon
-    8-jumia
+    7-american eagle
+    8-adidas
+    9-amazon
+    10-jumia
 
-5-cosmetics
+5-clothing Kids
+    1-zara
+    2-h&m 
+    3-max 
+    4-adidas
+    5-lcwaikiki
+    6-amazon
+    7-jumia
+
+
+6-cosmetics
     1-faces
     2-amazon
     3-jumia
     4-noon
     
-6-furniture
+7-furniture
     1-ikea
     2-hub furniture
     3-amazon
     4-jumia
     5-noon
 
-7-toys
+8-toys
     1-amazon
     2-noon
     3-jumia
 
-8-videogames
+9-videogames
     1-games2egypt
     2-egygamer
     3-shamy
     4-gameworld
 
-9-computerhardware
+10-computerhardware
     1-maximumhardware
     2-badrgroup
     3-baraka
     4-sigma
     5-compuscience
 
-10-supplements
+11-supplements
     1-iherb
     2-biovea
     3-nowfoodsegypt
 
-11-circuits componenets
+12-circuits componenets
     1-makers electronics
     2-future electronics
     3-ram
 
-12-used
+13-used
     1-olx
     2-open sooq
 
+14-? uncat
+    1-fabegypt
+    2-egyptlaptop
+    3-bouri
+
 -----------------
-total 39 different websites
+total 42 different websites
++ 3 without cat 
 
 
 
