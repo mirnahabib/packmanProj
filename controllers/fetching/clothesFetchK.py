@@ -217,7 +217,39 @@ def lcwaikiki(query):
             "Img"   : img
         })
         i += 1
-    driver.close()          
+    driver.close()
+
+def adidas(query):
+    i=1
+    options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    # options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s , options=options)
+    url = f'https://www.adidas.com.eg/en/kids-search?q={query}'
+    driver.get(url)
+
+    products = driver.find_elements(By.CLASS_NAME , "product-tile") 
+
+    for product in products[:20]: 
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.CLASS_NAME, "link")
+        price = product.find_element(By.CLASS_NAME, "sales").text  
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        img = product.find_element(By.CLASS_NAME , "tile-image").get_attribute('src')
+        link = title.get_attribute("href")
+        title = title.text
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Adidas",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
 
 
 def main(query):
@@ -226,6 +258,7 @@ def main(query):
         future = executor.submit(zara, query)  
         future = executor.submit(amazon, query)  
         future = executor.submit(jumia, query)  
+        future = executor.submit(adidas, query)
         future = executor.submit(handm, query)  
         future = executor.submit(max, query)  
         future = executor.submit(lcwaikiki, query) 

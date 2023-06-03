@@ -292,8 +292,111 @@ def lcwaikiki(query):
             "Img"   : img
         })
         i += 1
-    driver.close()          
+    driver.close()  
 
+def adidas(query):
+    i=1
+    options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    # options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s , options=options)
+    url = f'https://www.adidas.com.eg/en/men-search?q={query}'
+    driver.get(url)
+
+    products = driver.find_elements(By.CLASS_NAME , "product-tile") 
+
+    for product in products[:20]: 
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.CLASS_NAME, "link")
+        price = product.find_element(By.CLASS_NAME, "sales").text  
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        img = product.find_element(By.CLASS_NAME , "tile-image").get_attribute('src')
+        link = title.get_attribute("href")
+        title = title.text
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Adidas",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()  
+
+def americaneagle(query):
+    i=1
+    options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s , options=options)
+    url = f'https://www.americaneagle.com.eg/en/american-eagle/shop-men/#query={query}&hierarchicalMenu%5Bfield_category.lvl0%5D=Men&page=1'
+    driver.get(url)
+
+    products = driver.find_elements(By.CLASS_NAME , "c-products__item") 
+
+    for product in products[:20]: 
+        ActionChains(driver).scroll_to_element(product).perform()
+        title = product.find_element(By.CLASS_NAME, "field--name-name")
+        try:
+            price = product.find_element(By.CLASS_NAME, "special--price").text
+        except:
+            price = product.find_element(By.CLASS_NAME, "price").text   
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        img = product.find_element(By.CLASS_NAME , "alshaya_search_mainimage").get_attribute('data-sku-image')
+        link = title.find_element(By.TAG_NAME, "a").get_attribute("href")
+        title = title.text
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "American Eagle",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
+
+def activ(query):
+    i=1
+    options = Options()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_argument('--headless')
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s , options=options)
+    url = f'https://activaboualaa.com/search?q={query}&options%5Bprefix%5D=last'
+    driver.get(url)
+
+    products = driver.find_element(By.CLASS_NAME , "product-grid") 
+    products = products.find_elements(By.CLASS_NAME, "grid__item")
+
+    for product in products[:20]: 
+        ActionChains(driver).scroll_to_element(product).perform()
+        info = product.find_element(By.XPATH, "./div/div/div[2]")
+        title = info.find_element(By.CLASS_NAME, "full-unstyled-link")
+        price = info.find_element(By.CLASS_NAME, "price-item--regular").text
+        if (price == ""):
+            price = info.find_element(By.CLASS_NAME, "price-item--sale").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        img = product.find_element(By.CLASS_NAME , "motion-reduce").get_attribute('src')
+        link = title.get_attribute("href")
+        title = title.text
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Activ",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()    
+                  
 
 def main(query):
     start = time.time()
@@ -301,8 +404,11 @@ def main(query):
         future = executor.submit(zara, query)  
         future = executor.submit(amazon, query)  
         future = executor.submit(jumia, query)  
-        future = executor.submit(handm, query)  
+        future = executor.submit(handm, query) 
+        future = executor.submit(adidas, query)  
         future = executor.submit(max, query)  
+        future = executor.submit(activ, query)  
+        future = executor.submit(americaneagle, query) 
         future = executor.submit(lcwaikiki, query) 
         future = executor.submit(townteam, query) 
         future = executor.submit(bershka, query) 
