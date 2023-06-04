@@ -18,12 +18,8 @@ def amazon(link):
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(service=s, options=options)
     driver.get(link)
-    product = driver.find_element(By.ID, "ppd")
 
-    price = product.find_element(
-        By.CLASS_NAME, "a-price").find_element(By.XPATH, "./span[2]").text
-    if "\n" in price:
-        price = price.split("\n")[0]
+    price = driver.find_element(By.CLASS_NAME, "priceToPay").find_element(By.CLASS_NAME, "a-price-whole").text
     price = re.sub(r"[^0-9\.]+", '', price)
     the_price.append({
         "Price": float(price),
@@ -726,6 +722,62 @@ def makers(link):
     })
 
     driver.close()  
+
+def americaneagle(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    try : 
+        price = driver.find_element(By.CLASS_NAME, "special--price").text
+    except:
+        price = driver.find_element(By.CLASS_NAME , "price-amount").text 
+        
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close() 
+
+def adidas(link):
+    options = Options()
+    # options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    price = driver.find_element(By.CLASS_NAME, "prices").find_element(By.CLASS_NAME , "sales").find_element(By.CLASS_NAME, "value").get_attribute("content")
+        
+    price = re.sub(r"[^0-9\.]+", '', price)
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close() 
+
+def activ(link):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(service=s, options=options)
+    driver.get(link)
+
+    price = driver.find_element(By.CLASS_NAME, "price-item--regular").text
+    if (price == ""):
+        price = driver.find_element(By.CLASS_NAME, "price-item--sale").text
+    price = re.sub(r"[^0-9\.]+" , '' , price)
+        
+    the_price.append({
+        "Price": float(price),
+    })
+
+    driver.close()     
  
 
 def main(link, store):
@@ -768,6 +820,10 @@ def main(link, store):
         "Future Electronics" : future,
         "Makers Electronics" : makers,
         "RAM" : makers,
+        "American Eagle" : americaneagle,
+        "Adidas" : adidas, # only work without headless
+        "Activ" : activ,
+
     }
     switch.get(store)(link)
 
