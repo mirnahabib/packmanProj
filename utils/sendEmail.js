@@ -2,15 +2,17 @@ const nodemailer = require('nodemailer');
 const nodemailerConfig = require('./nodemailerConfig');
 
 const sendEmail = async ({ to, subject, html }) => {
-  let testAccount = await nodemailer.createTestAccount();
-
+  //let testAccount = await nodemailer.createTestAccount();
   const transporter = nodemailer.createTransport(nodemailerConfig);
-
   return transporter.sendMail({
-    from: '', // sender address
+    from: 'projectpackman@gmail.com', // sender address
     to,
     subject,
     html,
+  }, function(error){
+    if(error){
+      console.log(error);
+    }
   });
 };
 

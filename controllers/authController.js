@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Token = require('../models/Token');
+const sendWelcomeEmail = require("../utils/sendWelcomeEmail");
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const jwt_decode = require('jwt-decode');
@@ -53,7 +54,10 @@ const register = async (req, res) => {
   await Token.create(userToken);
   createNotification(user, `Welcome to Packman ${user.name}! You will be receiving updates on your wishlist items here!`);
   attachCookiesToResponse({ res, user: tokenUser, refreshToken });
-
+  await sendWelcomeEmail({
+    name: user.name, 
+    email: user.email
+  });
   res.status(StatusCodes.CREATED).json({ user: tokenUser, msg: 'Success! You\'re now registered and logged in. Please confirm Email. '});
 
 };
@@ -171,6 +175,10 @@ const gLogin = async (req, res) => {
     await Token.create(userToken);
     attachCookiesToResponse({ res, user: tokenUser, refreshToken });
     createNotification(user, `Welcome to Packman ${user.name}! You will be receiving updates on your wishlist items here!`);
+    await sendWelcomeEmail({
+      name: user.name, 
+      email: user.email
+    });
     res.status(StatusCodes.OK).json({ user: userToken });
   } catch (err) {
     console.error(err);

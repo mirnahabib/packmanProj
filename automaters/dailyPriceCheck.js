@@ -41,7 +41,7 @@ const priceCheck = async() => {
     });
     //price check each item then update in the database
     items.forEach(async (item) => {
-      let storeName= item.store.toLowerCase().replace(/\s/g, ""); //store names in the database aren't similar to store list in priceCheck
+      let storeName= item.store; //store names in the database aren't similar to store list in priceCheck
       checkPriceFetch(item.link, storeName)
       .then(async (result) => {
         jsonresult = JSON.parse(result);
