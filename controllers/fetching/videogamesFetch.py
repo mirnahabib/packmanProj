@@ -34,7 +34,7 @@ def games2egypt(query):
             price = product.find_element(By.CLASS_NAME , "int_price").text
             price = re.sub(r"[^0-9\.]+" , '' , price)
         except:
-            price = 0    
+            continue   
         img = product.find_element(By.CLASS_NAME , "product__img").find_element(By.TAG_NAME , "img").get_attribute("src")
         link = title.find_element(By.TAG_NAME, "a").get_attribute("href")
         title = title.text
@@ -72,7 +72,7 @@ def egygamer(query):
             price = product.find_element(By.CLASS_NAME , "price").text
             price = re.sub(r"[^0-9\.]+" , '' , price)  
         except:
-            price = 0
+            continue
 
         link = title.get_attribute('href')
         img =  product.find_element(By.CLASS_NAME , "product-image-photo").get_attribute("src")  

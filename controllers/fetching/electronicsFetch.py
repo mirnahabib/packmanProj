@@ -34,7 +34,7 @@ def amazon(query):
             price = product.find_element(By.CLASS_NAME , "a-price-whole").text
             price = re.sub(r"[^0-9\.]+" , '' , price)
         except:
-            price = 0
+            continue
         link = product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "a").get_attribute("href")
         img =  product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "img").get_attribute("src")  
 
@@ -299,11 +299,11 @@ def main(query):
         # future = executor.submit(select, query)
         future = executor.submit(dream2000,query)
         future = executor.submit(btech,query)
-        #future = executor.submit(_2B, query) 
-        #future = executor.submit(dubaiphone, query) 
+        # future = executor.submit(_2B, query) 
+        future = executor.submit(dubaiphone, query) 
         future = executor.submit(noon, query) 
         future = executor.submit(amazon, query)  
-        #future = executor.submit(jumia, query)
+        future = executor.submit(jumia, query)
     end = time.time()
     print(json.dumps(ProductsArr, ensure_ascii = True ))
     # print(f'time : {end - start : .2f}') #avg 5 secs

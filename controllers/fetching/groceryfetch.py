@@ -32,7 +32,7 @@ def amazon(query):
             price = product.find_element(By.CLASS_NAME , "a-price-whole").text
             price = re.sub(r"[^0-9\.]+" , '' , price)
         except:
-            price = 0
+            continue
         link = product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "a").get_attribute("href")
         img =  product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "img").get_attribute("src")  
 
@@ -185,7 +185,7 @@ def main(query):
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(hyperone, query)  
         future = executor.submit(gourmet, query)  
-        future = executor.submit(spinney, query)  
+        # future = executor.submit(spinney, query)  
         future = executor.submit(carrefour, query) 
         future = executor.submit(amazon, query) 
 

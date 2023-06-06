@@ -71,7 +71,7 @@ def egyptlaptop(query):
             price = product.find_element(By.CLASS_NAME , "ty-price-num").text
             price = re.sub(r"[^0-9\.]+" , '' , price)  
         except:
-            price = 0
+            continue
         
         link = title.get_attribute("href")
         img =  product.find_element(By.CLASS_NAME , "cm-image").get_attribute("src")  
