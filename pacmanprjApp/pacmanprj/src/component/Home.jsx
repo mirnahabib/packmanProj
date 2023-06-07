@@ -312,20 +312,11 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+
           <div className="row pt-3 justify-content-center">
-            <div>
-              <div  style={{position: "absolute",top: 320,right: 5,width: "15%",height: "100vh"}}>
-              <DropdownButton
-              title={sorting}
-              id="sort"
-              onSelect={handleSorting}
-              align="end"
-            >
-              <Dropdown.Item eventKey="A-Z">A-Z</Dropdown.Item>
-              <Dropdown.Item eventKey="Z-A">Z-A</Dropdown.Item>
-              <Dropdown.Item eventKey="Price ↑">Price ↑</Dropdown.Item>
-              <Dropdown.Item eventKey="Price ↓">Price ↓</Dropdown.Item>
-            </DropdownButton>
+            <div class="filter">
+              <div class="filter" style={{position: "absolute",top: 100,right: 5,width: "15%",height: "100vh"}}>
             <br />
                 <p>Price Range</p>
                 <Slider
@@ -358,13 +349,27 @@ export default function Home() {
                     </DropdownButton>
                   </div>
                 </div>
-
                 <button className="btn btn-success mt-3" onClick={filter}>
                   filter
                 </button>
+                <br/>
+                  <DropdownButton
+                    title={sorting}
+                    id="sort"
+                    onSelect={handleSorting}
+                    align="end"
+                  >
+                  <Dropdown.Item eventKey="A-Z">A-Z</Dropdown.Item>
+                  <Dropdown.Item eventKey="Z-A">Z-A</Dropdown.Item>
+                  <Dropdown.Item eventKey="Price ↑">Price ↑</Dropdown.Item>
+                  <Dropdown.Item eventKey="Price ↓">Price ↓</Dropdown.Item>
+                  </DropdownButton>
               </div>
             </div>
           </div>
+
+
+
 
           <div className="row pt-5">
             <div className="col-12">
