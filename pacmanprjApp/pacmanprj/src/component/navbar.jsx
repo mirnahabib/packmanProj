@@ -24,7 +24,9 @@ export default function Navingbar() {
       <Container>
         <Navbar.Brand>
           {" "}
+          <Nav.Link as={Link} to ="/">
           <img src={packman} className="navbar-logo" alt="pacman logo" />{" "}
+          </Nav.Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
@@ -47,8 +49,8 @@ export default function Navingbar() {
                 Signup
               </Nav.Link>
             )}
-            <Nav.Link as={Link} to="/team" className="Font navbar-text">
-              Team
+            <Nav.Link as={Link} to="/about" className="Font navbar-text">
+              About
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

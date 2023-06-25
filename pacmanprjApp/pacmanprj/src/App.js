@@ -9,7 +9,7 @@ import "@fontsource/press-start-2p";
 import "./component/css/style.css";
 import Announcer from "./component/announcer";
 import Home from "./component/Home";
-import Team from "./component/team";
+import Team from "./component/about";
 import Navingbar from "./component/navbar";
 import SignUpForm from "./component/signupform";
 import LoginForm from "./component/loginform";
@@ -98,7 +98,7 @@ function App() {
         <Navingbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Team" element={<Team />} />
+          <Route path="/about" element={<Team />} />
           <Route path="/fav" element={<Favourites/> }/>
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="/login" element={<LoginForm />} />

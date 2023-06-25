@@ -313,68 +313,73 @@ export default function Home() {
             </div>
           </div>
 
-
           <div className="row pt-3 justify-content-center">
             <div class="filter">
-              <div class="filter" style={{position: "absolute",top: 100,right: 5,width: "15%",height: "100vh"}}>
-            <br />
-            <Row sm={1} md={1} lg={1} >
-                <p>Price Range</p>
-                <Slider
-                  min={minPrice}
-                  max={maxPrice}
-                  range
-                  defaultValue={[minPrice, maxPrice]}
-                  value={priceRange}
-                  onChange={handlePriceChange}
-                />
-                <div >
-                  {/* <span>{`${priceRange} EGP `}</span> */}
-                  <span>[{priceRange[0]}-{priceRange[1]}] EGP</span>
-                </div>
-                <div className="row">
-                  <div className="col" >
-                  <br/>
-                  
-                  <p>Website:</p>
-                    <DropdownButton
-                      title={selectedStore}
-                      id="store"
-                      onSelect={handleSelectedStore}
-                      align="end"
-                    >
-                      {Stores.map((store) => (
-                        <Dropdown.Item className="text-resp" eventKey={store}>
-                          {store}
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
+              <div
+                class="filter"
+                style={{
+                  position: "absolute",
+                  top: 100,
+                  right: 5,
+                  width: "15%",
+                  height: "100vh",
+                }}
+              >
+                <br />
+                <Row sm={1} md={1} lg={1}>
+                  <p>Price Range</p>
+                  <Slider
+                    min={minPrice}
+                    max={maxPrice}
+                    range
+                    defaultValue={[minPrice, maxPrice]}
+                    value={priceRange}
+                    onChange={handlePriceChange}
+                  />
+                  <div>
+                    {/* <span>{`${priceRange} EGP `}</span> */}
+                    <span>
+                      [{priceRange[0]}-{priceRange[1]}] EGP
+                    </span>
                   </div>
-                </div>
+                  <div className="row">
+                    <div className="col">
+                      <br />
+
+                      <p>Website:</p>
+                      <DropdownButton
+                        title={selectedStore}
+                        id="store"
+                        onSelect={handleSelectedStore}
+                        align="end"
+                      >
+                        {Stores.map((store) => (
+                          <Dropdown.Item className="text-resp" eventKey={store}>
+                            {store}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
+                    </div>
+                  </div>
                 </Row>
                 <button className="btn btn-success mt-3" onClick={filter}>
                   filter
                 </button>
-                <br/>
-                  <DropdownButton
-                    title={sorting}
-                    id="sort"
-                    onSelect={handleSorting}
-                    align="end"
-                  >
+                <br />
+                <DropdownButton
+                  title={sorting}
+                  id="sort"
+                  onSelect={handleSorting}
+                  align="end"
+                >
                   <Dropdown.Item eventKey="A-Z">A-Z</Dropdown.Item>
                   <Dropdown.Item eventKey="Z-A">Z-A</Dropdown.Item>
                   <Dropdown.Item eventKey="Price ↑">Price ↑</Dropdown.Item>
                   <Dropdown.Item eventKey="Price ↓">Price ↓</Dropdown.Item>
-                  </DropdownButton>
-                 
+                </DropdownButton>
               </div>
             </div>
           </div>
-
-
-
-
           <div className="row pt-5">
             <div className="col-12">
               <h3 className="border-bottom mb-4 heartbeat">SEARCH RESULTS</h3>
