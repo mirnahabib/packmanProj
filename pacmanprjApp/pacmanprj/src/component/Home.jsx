@@ -318,6 +318,7 @@ export default function Home() {
             <div class="filter">
               <div class="filter" style={{position: "absolute",top: 100,right: 5,width: "15%",height: "100vh"}}>
             <br />
+            <Row sm={1} md={1} lg={1} >
                 <p>Price Range</p>
                 <Slider
                   min={minPrice}
@@ -334,6 +335,7 @@ export default function Home() {
                 <div className="row">
                   <div className="col" >
                   <br/>
+                  
                   <p>Website:</p>
                     <DropdownButton
                       title={selectedStore}
@@ -349,6 +351,7 @@ export default function Home() {
                     </DropdownButton>
                   </div>
                 </div>
+                </Row>
                 <button className="btn btn-success mt-3" onClick={filter}>
                   filter
                 </button>
@@ -364,6 +367,7 @@ export default function Home() {
                   <Dropdown.Item eventKey="Price ↑">Price ↑</Dropdown.Item>
                   <Dropdown.Item eventKey="Price ↓">Price ↓</Dropdown.Item>
                   </DropdownButton>
+                 
               </div>
             </div>
           </div>

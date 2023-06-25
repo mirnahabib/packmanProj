@@ -32,6 +32,7 @@ export default function Navingbar() {
             <Nav.Link as={Link} to="/" className="Font navbar-text">
               Home
             </Nav.Link>
+          
             {isLoggedIn ? (
               ""
             ) : (

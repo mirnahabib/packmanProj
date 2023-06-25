@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Row } from "react-bootstrap";
+import { Row , Container} from "react-bootstrap";
 import Productcard from "./productcard";
+import { Logos } from "./logos";
 
 
 export default function Favourites() {
@@ -21,21 +22,50 @@ export default function Favourites() {
   }, []);
 
   return (
-    <>
-      <div className=" row position-absolute top-50 start-50 translate-middle Font align-items-center justify-content-center text-center">
-        <div className="row">
-          <div className="col-12 ">
-            {favList.map((product) => (
-              <div className="p-3 my-3 border border-warning">
-                <p>{product.title}</p>
-                <p>{product.currentPrice} EGP</p>
-                <a href={product.link}><img src ={product.img} alt={product.title}></img></a>
-                <small>{product.store}</small>
-              </div>
-            ))}
+    <div>
+      <Container className="text-center Font" width="10px">
+      <Row sm={1} md={1} lg={1} >
+        {favList.map((product) => (
+          <div className="col p-3 my-3 border border-warning">
+            <p>{product.title}</p>
+           
+            <p>{product.currentPrice} EGP</p>
+            <a href={product.link}>
+              <img   width= "200px" src={product.img} alt={product.title}></img>
+            </a>
+            {/* <small>{product.store}</small> */}
+            
+            <p><img 
+                  className=""
+                  src={Logos.get(product.store)}
+                  alt={product.store}
+                  height="35em"
+                /> </p>
           </div>
-        </div>
-      </div>
-    </>
+        ))}
+        </Row>
+      </Container>
+    </div>
+    
+      // <div className=" row position-absolute top-50 start-50 translate-middle Font align-items-center justify-content-center text-center">
+      //   <div className="row">
+      //     <div className="col-12 ">
+      //     <Row sm={1} md={3} lg={1} className="g-4">
+      //     {favList.map((product) => (
+           
+            
+      //         <div className="p-3 my-3 border border-warning">
+                 
+      //           <p>{product.title}</p>
+      //           <p>{product.currentPrice} EGP</p>
+      //           <a href={product.link}><img src ={product.img} alt={product.title}></img></a>
+      //           <small>{product.store}</small>
+      //         </div>
+      //       ))}
+      //     </Row>
+      //     </div>
+      //   </div>
+      // </div>
+    
   );
 }
