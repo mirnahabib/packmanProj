@@ -25,7 +25,6 @@ const categories = {
   computerhardware: "Computer Hardware",
   supplements: "Vitamins and Supplements",
   circuits: "Circuits and Components",
-  other: "Other (longer search)",
 };
 export default function Home() {
   const [products, setProducts] = useState(null);
@@ -52,7 +51,7 @@ export default function Home() {
       });
       setNumbersOfSites(uniqueStores.length);
     } catch (error) {
-      console.log(error);
+      // console.log(error); do nothing
     }
   }, [filteredProducts]);
 
@@ -66,7 +65,7 @@ export default function Home() {
       });
       setStores([["All"], ...uniqueStores]);
     } catch (error) {
-      console.log(error);
+      // console.log(error); do nothing
     }
   }, [products]);
 

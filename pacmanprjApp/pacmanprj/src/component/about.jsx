@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
-import omar from "./imgs/omar.JPG";
+import omar from "./imgs/omar.jpg";
 import telt from "./imgs/telt.jpg";
 import mostafa from "./imgs/mostafa.JPG";
 import "./css/style.css";

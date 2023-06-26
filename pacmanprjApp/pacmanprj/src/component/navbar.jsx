@@ -12,10 +12,10 @@ import { Link, Navigate } from "react-router-dom";
 import packman from "./imgs/packman.png";
 
 export default function Navingbar() {
-  const { user, isLoggedIn, logout } = useContext(MyUser); //want to access the global variables user,isLoggedIn in this component
+  const { user, isLoggedIn, isUserSaved, logout } = useContext(MyUser); //want to access the global variables user,isLoggedIn in this component
 
   const handleOptionClick = (option) => {
-    console.log(`Selected ${option}`);
+    // console.log(`Selected ${option}`);
     if (option === "LOGOUT") logout();
   };
 
@@ -55,7 +55,7 @@ export default function Navingbar() {
           </Nav>
         </Navbar.Collapse>
       </Container>
-      {isLoggedIn ? (
+      {isLoggedIn && isUserSaved ? (
         <div>
           <DropdownButton
             className="pe-3"

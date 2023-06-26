@@ -23,7 +23,7 @@ const LoginForm = () => {
           "Authorization"
         ] = `Bearer ${data["token"]}`;
         updateLogState(true);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         alert("failed to login");
         console.log(error);
@@ -86,7 +86,7 @@ const LoginForm = () => {
         userId: data.user.userId,
       });
       updateLogState(true);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       alert("failed to login");
       console.log(error);
@@ -131,7 +131,7 @@ const LoginForm = () => {
                 Login
               </Button>
 
-              <div class="d-flex justify-content-center pt-3">
+              <div className="d-flex justify-content-center pt-3">
                 <div id="googleSignIn"></div>
               </div>
             </Form>

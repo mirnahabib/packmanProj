@@ -5,14 +5,16 @@ import axios from 'axios';
 const MyUserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isUserSaved , setIsUserSaved] = useState(false);
+    
 
     //Logout
     const logout = async () =>
     {
         await axios.delete('/api/auth/logout',{},{withCredentials: true});
-        setUser(null);
+        // setUser(null);
         updateLogState(false);
+        setIsUserSaved(false);
     }
 
     //Currently logged in user's information
@@ -22,11 +24,10 @@ const MyUserProvider = ({ children }) => {
             const {data} = await axios.get('/api/users/showMe');
             setUser(data.user);
             updateLogState(true);
-            setIsLoading(false);
+            setIsUserSaved(true);
           }catch{
             setUser(null);
             updateLogState(false);
-            setIsLoading(false);
           }
 
         })();
@@ -41,7 +42,7 @@ const MyUserProvider = ({ children }) => {
     }
 
     return (
-        <MyUser.Provider value={{ user, isLoggedIn, updateState, updateLogState, logout }}>
+        <MyUser.Provider value={{ user, isLoggedIn, isUserSaved ,updateState, updateLogState, logout }}>
             {children}
         </MyUser.Provider>
     );
