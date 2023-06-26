@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
-
+import Offcanvas from "react-bootstrap/Offcanvas";
+import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import IconSearch from "./imgs/search";
 import Productcard from "./productcard";
@@ -79,7 +80,7 @@ export default function Home() {
     setIsTyping(true);
   };
 
-   // voice to text end
+  // voice to text end
 
   useEffect(() => {
     const uniqueStores = [];
@@ -145,14 +146,11 @@ export default function Home() {
 
   const fetchData = async () => {
     setIsLoading(true);
-    let method ;
-    if (isTyping)
-    {
-      method = query
-    }
-    else 
-    {
-      method = transcript
+    let method;
+    if (isTyping) {
+      method = query;
+    } else {
+      method = transcript;
     }
     let response;
     try {
@@ -224,6 +222,11 @@ export default function Home() {
       }
     }
   }
+
+  // filter
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   return (
     <div className="">
@@ -374,74 +377,82 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          <div className="row pt-3 justify-content-center">
-            <div className="filter">
-              <div
-                className="filter"
-                style={{
-                  position: "absolute",
-                  top: 100,
-                  right: 5,
-                  width: "15%",
-                  height: "100vh",
-                }}
-              >
-                <br />
-                <Row sm={1} md={1} lg={1}>
-                  <p>Price Range</p>
-                  <Slider
-                    min={minPrice}
-                    max={maxPrice}
-                    range
-                    defaultValue={[minPrice, maxPrice]}
-                    value={priceRange}
-                    onChange={handlePriceChange}
-                  />
-                  <div>
-                    {/* <span>{`${priceRange} EGP `}</span> */}
+          <Button variant="primary" onClick={handleShow}>
+            Show Filter
+          </Button>
+          <Offcanvas className="Font bg-dark" show={show} onHide={handleClose}>
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title>Filter</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <div className="filter">
+                <div className="row">
+                  <div className="col-12">
+                    <p>Price Range</p>
+                  </div>
+                  <div className="col-12">
+                    <Slider
+                      min={minPrice}
+                      max={maxPrice}
+                      range
+                      defaultValue={[minPrice, maxPrice]}
+                      value={priceRange}
+                      onChange={handlePriceChange}
+                    />
                     <span>
                       [{priceRange[0]}-{priceRange[1]}] EGP
                     </span>
                   </div>
-                  <div className="row">
-                    <div className="col">
-                      <br />
+                </div>
 
-                      <p>Website:</p>
-                      <DropdownButton
-                        title={selectedStore}
-                        id="store"
-                        onSelect={handleSelectedStore}
-                        align="end"
-                      >
-                        {Stores.map((store) => (
-                          <Dropdown.Item className="text-resp" eventKey={store}>
-                            {store}
-                          </Dropdown.Item>
-                        ))}
-                      </DropdownButton>
-                    </div>
+                <div className="row mt-3">
+                  <div className="col-6">
+                    <p>Website:</p>
                   </div>
-                </Row>
-                <button className="btn btn-success mt-3" onClick={filter}>
-                  filter
-                </button>
-                <br />
-                <DropdownButton
-                  title={sorting}
-                  id="sort"
-                  onSelect={handleSorting}
-                  align="end"
-                >
-                  <Dropdown.Item eventKey="A-Z">A-Z</Dropdown.Item>
-                  <Dropdown.Item eventKey="Z-A">Z-A</Dropdown.Item>
-                  <Dropdown.Item eventKey="Price ↑">Price ↑</Dropdown.Item>
-                  <Dropdown.Item eventKey="Price ↓">Price ↓</Dropdown.Item>
-                </DropdownButton>
+                  <div className="col-6">
+                    <DropdownButton
+                      title={selectedStore}
+                      id="store"
+                      onSelect={handleSelectedStore}
+                      align="end"
+                      className="btn-sm"
+                    >
+                      {Stores.map((store) => (
+                        <Dropdown.Item className="text-resp" eventKey={store}>
+                          {store}
+                        </Dropdown.Item>
+                      ))}
+                    </DropdownButton>
+                  </div>
+                </div>
+
+                <div className="row mt-3">
+                  <div className="col-6">
+                    <p>Sort By:</p>
+                  </div>
+                  <div className="col-6">
+                    <DropdownButton
+                      title={sorting}
+                      id="sort"
+                      onSelect={handleSorting}
+                      align="end"
+                    >
+                      <Dropdown.Item eventKey="A-Z">A-Z</Dropdown.Item>
+                      <Dropdown.Item eventKey="Z-A">Z-A</Dropdown.Item>
+                      <Dropdown.Item eventKey="Price ↑">Price ↑</Dropdown.Item>
+                      <Dropdown.Item eventKey="Price ↓">Price ↓</Dropdown.Item>
+                    </DropdownButton>
+                  </div>
+                </div>
+                <div className="row text-center">
+                  <button className="btn btn-success mt-3" onClick={filter}>
+                    filter
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
+            </Offcanvas.Body>
+          </Offcanvas>
+
           <div className="row pt-5">
             <div className="col-12">
               <h3 className="border-bottom mb-4 heartbeat">SEARCH RESULTS</h3>
