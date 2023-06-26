@@ -81,7 +81,7 @@ app.use('/api/favourites', favouriteRouter);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-//scheduleDailyPriceCheck();
+scheduleDailyPriceCheck();
 
 const start = async () => {
   try {

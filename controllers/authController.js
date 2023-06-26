@@ -142,6 +142,7 @@ const gLogin = async (req, res) => {
     let user = await User.findOne({ googleId: googleUser.sub });
     // If user is not registered, create new user
     if (!user) {
+        registeringNewUser = true;
         user = new User({
             googleId: googleUser.sub,
             email: googleUser.email,
@@ -174,11 +175,15 @@ const gLogin = async (req, res) => {
     const userToken = { refreshToken, ip, userAgent, user: user._id };
     await Token.create(userToken);
     attachCookiesToResponse({ res, user: tokenUser, refreshToken });
-    createNotification(user, `Welcome to Packman ${user.name}! You will be receiving updates on your wishlist items here!`);
-    await sendWelcomeEmail({
-      name: user.name, 
-      email: user.email
-    });
+    
+    if(registeringNewUser){
+      createNotification(user, `Welcome to Packman ${user.name}! You will be receiving updates on your wishlist items here!`);
+      await sendWelcomeEmail({
+        name: user.name, 
+        email: user.email
+      });
+    }
+
     res.status(StatusCodes.OK).json({ user: userToken });
   } catch (err) {
     console.error(err);
