@@ -13,8 +13,8 @@ export default function Favourites() {
         let response = await fetch(`/api/favourites/`);
         const jsonData = await response.json();
         setfavList(jsonData.favlist);
-        console.log(jsonData.favlist);
-        console.log(jsonData.favlist[0].currentPrice)
+        // console.log(jsonData.favlist);
+        // console.log(jsonData.favlist[0].currentPrice)
       } catch (error) {
         console.error(error);
       }

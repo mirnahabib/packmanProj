@@ -8,9 +8,13 @@ import IconSearch from "./imgs/search";
 import Productcard from "./productcard";
 import "./css/style.css";
 import { Row } from "react-bootstrap";
-
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import MicOff from "./imgs/micoff";
+import MicOn from "./imgs/micon";
 
 const categories = {
   clothingMen: "Clothing and Fashion (Men)",
@@ -29,7 +33,6 @@ const categories = {
 export default function Home() {
   const [products, setProducts] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Category");
   const [sorting, setSorting] = useState("Sort");
   const [isUsed, setIsUsed] = useState(false);
@@ -40,6 +43,43 @@ export default function Home() {
   const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
   const [Stores, setStores] = useState(["All"]);
   const [selectedStore, setSelectedStore] = useState("All");
+
+  // voice to text start
+  const { transcript, resetTranscript } = useSpeechRecognition();
+  const [isTyping, setIsTyping] = useState(false);
+  const [query, setQuery] = useState("");
+  const [isTalking, setIsTalking] = useState(false);
+
+  const handleStartListening = () => {
+    setIsTyping(false);
+    SpeechRecognition.startListening({ continuous: true });
+  };
+
+  const handleStopListening = () => {
+    SpeechRecognition.stopListening();
+    if (!isTyping && transcript) {
+      setQuery(transcript);
+      resetTranscript();
+    }
+  };
+
+  const handleButtonPress = () => {
+    setIsTyping(false);
+    setIsTalking(true);
+    handleStartListening();
+  };
+
+  const handleButtonRelease = () => {
+    setIsTalking(false);
+    handleStopListening();
+  };
+
+  const handleChange = (event) => {
+    setQuery(event.target.value);
+    setIsTyping(true);
+  };
+
+   // voice to text end
 
   useEffect(() => {
     const uniqueStores = [];
@@ -105,20 +145,29 @@ export default function Home() {
 
   const fetchData = async () => {
     setIsLoading(true);
+    let method ;
+    if (isTyping)
+    {
+      method = query
+    }
+    else 
+    {
+      method = transcript
+    }
     let response;
     try {
       if (isUsed === false)
-        response = await fetch(`/api/search/${category}/${query}`);
+        response = await fetch(`/api/search/${category}/${method}`);
       else if (isUsed === true)
-        response = await fetch(`/api/search/used/${category}/${query}`);
+        response = await fetch(`/api/search/used/${category}/${method}`);
 
       const jsonData = await response.json();
       setProducts(jsonData.jsonresult);
     } catch (error) {
       console.error(error);
     }
-    console.log(products);
-    console.log(`${query} ${category}`);
+    // console.log(products);
+    // console.log(`${query} ${category}`);
     setIsLoading(false);
   };
 
@@ -194,12 +243,19 @@ export default function Home() {
                   className=""
                   placeholder="Search..."
                   aria-label="Text input with dropdown button"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  value={isTyping ? query : transcript}
+                  onChange={handleChange}
                 />
               </div>
               <div className="col-md-auto">
-                <IconSearch className="mt-2 ms-2" />
+                <button
+                  onMouseDown={handleButtonPress}
+                  onMouseUp={handleButtonRelease}
+                  disabled={isTyping}
+                  className="ms-1"
+                >
+                  {isTalking ? <MicOn /> : <MicOff />}
+                </button>
               </div>
               <div className="col-12 col-md-auto">
                 <button
@@ -261,10 +317,17 @@ export default function Home() {
                   className=""
                   placeholder={query}
                   aria-label="Text input with dropdown button"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  value={isTyping ? query : transcript}
+                  onChange={handleChange}
                 />
-                <IconSearch className="mt-2 ms-2" />
+                <button
+                  onMouseDown={handleButtonPress}
+                  onMouseUp={handleButtonRelease}
+                  disabled={isTyping}
+                  className="ms-1"
+                >
+                  {isTalking ? <MicOn /> : <MicOff />}
+                </button>
               </InputGroup>
             </div>
             <div className="col-lg-3 col-md-auto">
@@ -313,9 +376,9 @@ export default function Home() {
           </div>
 
           <div className="row pt-3 justify-content-center">
-            <div class="filter">
+            <div className="filter">
               <div
-                class="filter"
+                className="filter"
                 style={{
                   position: "absolute",
                   top: 100,
