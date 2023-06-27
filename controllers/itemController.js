@@ -50,6 +50,7 @@ async function updatePriceIfChanged(item) {
       const price = new Price({
           item: existingItem,
           price: oldPrice,
+          date: existingItem.lastFetched
         });
       await Price.create(price);
 
