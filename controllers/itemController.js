@@ -41,13 +41,12 @@ const removeItem = async (req) => {
 
 async function updatePriceIfChanged(item) {
   try{
-    const existingItem = await Item.findOne({ link: item.link });
-
+    const existingItem = await Item.findOneAndUpdate({ link: item.link }, {$set: { lastFetched: Date.now() }});
     //update price
     if (existingItem && existingItem.currentPrice != item.currentPrice) {
       console.log(`Unmatching prices curr: ${existingItem.currentPrice} new: ${item.currentPrice}`);
       const oldPrice = existingItem.currentPrice;
-      await Item.findOneAndUpdate({ link: item.link }, { $set: { currentPrice: item.currentPrice, lastFetched: Date.now() } });
+      await Item.findOneAndUpdate({ link: item.link }, { $set: { currentPrice: item.currentPrice } });
       const price = new Price({
           item: existingItem,
           price: oldPrice,

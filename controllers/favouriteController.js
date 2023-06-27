@@ -1,5 +1,6 @@
 const Item = require('../models/Item');
 const favourite = require('../models/Favourite');
+const Price = require('../models/Price');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 
@@ -30,10 +31,18 @@ const fav = async (req, res) => {
 const favList = async (req, res) => {
     try{
         const user = req.user.userId;
-        const favItems = await favourite.find({ user: user });
-        const itemId = favItems.map((favItem) => favItem.item);
-        const favlist = await Item.find({ _id: { $in: itemId } });
-        res.status(StatusCodes.OK).json({favlist});
+        const favItems = await favourite.find({ user: user });  //retrieveing fav items for user from database
+        const itemId = favItems.map((favItem) => favItem.item); //retrieveing items Ids from fav list
+        const favlist = await Item.find({ _id: { $in: itemId } });  //retrieving items from database using items Ids
+        const prices = await Price.find({ item: { $in: itemId } }); //retrieving old prices for each item
+        pricesList = favlist.map((favItem) => ({_id: favItem._id} )); //mapping prices with each other for a single item Id
+        pricesList.forEach(pitem => {
+            pitem.prices = prices
+            .filter(price => price.item == String(pitem._id))
+            .map(({ price, date }) => ({ price, date }));
+          });
+          
+        res.status(StatusCodes.OK).json({favlist, pricesList});
         
     }catch (error){
         console.log(error);
