@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Card,
   Row,
@@ -7,13 +7,13 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import IconHeart from "./heart";
-import IconHeartFilled from "./heartfilled";
+import IconHeart from "./imgs/heart";
+import IconHeartFilled from "./imgs/heartfilled";
 import { Logos } from "./logos";
 import MyUser from "../Contexts/MyUser";
 
 export default function Productcard(props) {
-  const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
+  const [isAddedToWishlist, setIsAddedToWishlist] = useState(204);
 
   const { isLoggedIn, user } = useContext(MyUser);
 
@@ -23,18 +23,23 @@ export default function Productcard(props) {
     fetch("api/favourites/addOrRemove", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: userID , link: link }),
+      body: JSON.stringify({ userId: userID, link: link }),
     })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
+      .then((response) => {
+        setIsAddedToWishlist(response.status);
+        return response.json();
+      })
+      // .then((data) => console.log(data))
       .catch((error) => console.error(error));
-    setIsAddedToWishlist(!isAddedToWishlist);
-    console.log(isAddedToWishlist);
   };
+
+  useEffect(() => {
+    setIsAddedToWishlist(204);
+  }, [props.product]);
 
   return (
     <Col>
-      <Card className="h-100 bg-dark shadow-lg bor">
+      <Card className="h-100 bg-dark shadow-lg">
         {/* <a
           href={props.product.Link}
           alt={props.product.Title}
@@ -51,11 +56,11 @@ export default function Productcard(props) {
         >
           {isLoggedIn ? (
             <button
-              className={`${isAddedToWishlist ? "pressed" : ""} fav`}
+              className={`${isAddedToWishlist === 201 ? "pressed" : ""} fav`}
               onClick={add2Wishlist}
               aria-label="Add to wishlist"
             >
-              {isAddedToWishlist ? <IconHeartFilled /> : <IconHeart />}
+              {isAddedToWishlist === 201 ? <IconHeartFilled /> : <IconHeart />}
             </button>
           ) : (
             ""
@@ -116,7 +121,7 @@ export default function Productcard(props) {
             </div>
 
             {
-              <div class="d-flex flex-row-reverse">
+              <div className="d-flex flex-row-reverse">
                 <img
                   className=""
                   src={Logos.get(props.product.Shop)}

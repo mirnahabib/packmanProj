@@ -24,8 +24,8 @@ export default function Navingbar() {
       <Container>
         <Navbar.Brand>
           {" "}
-          <Nav.Link as={Link} to ="/">
-          <img src={packman} className="navbar-logo" alt="pacman logo" />{" "}
+          <Nav.Link as={Link} to="/">
+            <img src={packman} className="navbar-logo" alt="pacman logo" />{" "}
           </Nav.Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
@@ -34,7 +34,7 @@ export default function Navingbar() {
             <Nav.Link as={Link} to="/" className="Font navbar-text">
               Home
             </Nav.Link>
-          
+
             {isLoggedIn ? (
               ""
             ) : (
@@ -54,24 +54,26 @@ export default function Navingbar() {
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
+        <Navbar.Collapse className="justify-content-end">
+          {isLoggedIn && isUserSaved ? (
+            <div>
+              <DropdownButton
+                className="pe-3"
+                title={user.name}
+                variant="primary"
+                onSelect={(eventKey) => handleOptionClick(eventKey)}
+              >
+                <Dropdown.Item as={Link} to="/fav">
+                  Favourites
+                </Dropdown.Item>
+                <Dropdown.Item eventKey="LOGOUT">Logout</Dropdown.Item>
+              </DropdownButton>
+            </div>
+          ) : (
+            ""
+          )}
+        </Navbar.Collapse>
       </Container>
-      {isLoggedIn && isUserSaved ? (
-        <div>
-          <DropdownButton
-            className="pe-3"
-            title={user.name}
-            variant="primary"
-            onSelect={(eventKey) => handleOptionClick(eventKey)}
-          >
-            <Dropdown.Item as={Link} to="/fav">
-              Favourites
-            </Dropdown.Item>
-            <Dropdown.Item eventKey="LOGOUT">Logout</Dropdown.Item>
-          </DropdownButton>
-        </div>
-      ) : (
-        ""
-      )}
     </Navbar>
   );
 }

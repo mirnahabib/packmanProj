@@ -141,6 +141,7 @@ const gLogin = async (req, res) => {
     // Check if user is already registered
     let user = await User.findOne({ googleId: googleUser.sub });
     // If user is not registered, create new user
+    let registeringNewUser;
     if (!user) {
         registeringNewUser = true;
         user = new User({
