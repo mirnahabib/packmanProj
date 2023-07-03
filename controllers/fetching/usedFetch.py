@@ -26,18 +26,18 @@ def olx(query):
     url = "https://www.dubizzle.com.eg/en/ads/q-" + query
     driver.get(url)
 
-    products = driver.find_elements(By.CLASS_NAME , "_4b3459e2")
+    products = driver.find_elements(By.CLASS_NAME , "_7e3920c1")
 
     for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.CLASS_NAME , "_1bb4e042").text
+        title = product.find_element(By.CLASS_NAME , "a5112ca8").text
         try:
-            price = product.find_element(By.CLASS_NAME , "_3f4df56e").text
+            price = product.find_element(By.CLASS_NAME , "_95eae7db").text
             price = re.sub(r"[^0-9\.]+" , '' , price)
         except:
             price = 0    
         img = product.find_element(By.CLASS_NAME , "_76b7f29a").get_attribute("src") 
-        link = product.find_element(By.CLASS_NAME, "e5848c8d").find_element(By.TAG_NAME, "a").get_attribute("href")
+        link = product.find_element(By.TAG_NAME, "a").get_attribute("href")
         
         ProductsArr.append({
             "Count" : i,
@@ -88,6 +88,7 @@ def opensooq(query):
 
 
 def main(query):
+    
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(olx, query)
         future = executor.submit(opensooq, query)  
