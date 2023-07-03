@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Chart from "react-apexcharts";
 import { Logos } from "./logos";
 import { useEffect } from "react";
+import { Button } from "react-bootstrap";
+import MyUser from "../Contexts/MyUser";
 
 export default function Favcard(props) {
   const [ydata, setYData] = useState([]);
@@ -73,6 +75,21 @@ export default function Favcard(props) {
     }
   }, [props.price1]);
 
+  const { user } = useContext(MyUser);
+  const removeItem = async () => {
+    let link = props.product.link;
+    let userID = user.userId;
+
+    fetch("api/favourites/addOrRemove", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: userID, link: link }),
+    })
+      .then((response) => response.json())
+      .catch((error) => console.error(error));
+    window.location.reload();
+  };
+
   return (
     <div className="row p-3 my-3 border border-warning">
       <div className="col-lg-3 col-12">
@@ -99,6 +116,23 @@ export default function Favcard(props) {
           <p className="text-white">{props.product.title}</p>
         </a>
         <p className="text-white">{props.product.currentPrice} EGP</p>
+        <div className="col text-center pt-3">
+          <Button
+            className="Font product-title-font text-light"
+            variant="primary"
+            href={props.product.link}
+            target="_blank"
+          >
+            CHECK IT OUT
+          </Button>
+          <Button
+            className="Font product-title-font ms-5 text-light"
+            variant="danger"
+            onClick={removeItem}
+          >
+            REMOVE ITEM
+          </Button>
+        </div>
       </div>
       <div className="col-lg-3 col-12">
         <Chart

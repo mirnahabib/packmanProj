@@ -11,12 +11,9 @@ export default function Favourites() {
       try {
         let response = await fetch(`/api/favourites/`);
         const jsonData = await response.json();
-
         setFavList(jsonData.favlist);
-        // setPriceList(jsonData.favlist.pricesList);
-        // console.log(jsonData.pricesList);
         setPriceList(jsonData.pricesList);
-
+        // console.log(jsonData.pricesList);
         // console.log(jsonData.favlist[0].currentPrice)
       } catch (error) {
         console.error(error);
@@ -26,12 +23,16 @@ export default function Favourites() {
 
   return (
     <div>
-      <Container className="text-center Font" width="10px">
+      <Container className="text-center Font">
         <Row sm={1} md={1} lg={1}>
-          {favList.map((product) => {
-            const filtered = priceList.find((obj) => obj._id === product._id);
-            return <Favcard product={product} price1={filtered} />;
-          })}
+          {favList.length !== 0 ? (
+            favList.map((product) => {
+              const filtered = priceList.find((obj) => obj._id === product._id);
+              return <Favcard product={product} price1={filtered} />;
+            })
+          ) : (
+            <h3 className="mt-5 pt-5">Your Favorites will be displayed here</h3>
+          )}
         </Row>
       </Container>
     </div>
