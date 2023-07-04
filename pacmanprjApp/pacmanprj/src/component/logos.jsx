@@ -39,6 +39,9 @@ import makerselectronics from "./imgs/icons/makers.ele.png";
 import sigma from "./imgs/icons/sigma.png";
 import compuscience from "./imgs/icons/compuscience.png";
 import maximumhardware from "./imgs/icons/maximumhardware.png";
+import adidas from "./imgs/icons/adidas.png";
+import activ from "./imgs/icons/activ.png";
+import americaneagle from "./imgs/icons/americaneagle.png";
 
 const Logos = new Map([
   ["Amazon", Amazon],
@@ -69,19 +72,22 @@ const Logos = new Map([
   ["Open Sooq", opensooq],
   ["Bouri", bouri],
   ["iHerb", iherb],
-  ["MaximumHardware", maximumhardware],
+  ["Maximum Hardware", maximumhardware],
   ["Sigma", sigma],
-  ["CompuScience", compuscience],
+  ["Compu Science", compuscience],
   ["Makers Electronics", makerselectronics],
   ["Dream2000", dream2000],
-  ["badr group", badrgroup],
-  ["NowFoodsEgypt", nowfoodsegypt],
+  ["Badr Group", badrgroup],
+  ["Now Foods Egypt", nowfoodsegypt],
   ["B.Tech", btech],
-  ["biovea", biovea],
-  ["future Electronics", futureelectronics],
-  ["Ram", ram],
+  ["Biovea", biovea],
+  ["Future Electronics", futureelectronics],
+  ["RAM", ram],
   ["EgyptLaptop", egyptlaptop],
-  ["Baraka", baraka]
+  ["Baraka", baraka],
+  ["Adidas" , adidas],
+  ["Activ" , activ],
+  ["American Eagle" , americaneagle]
 ]);
 
 const Stores = [
@@ -107,7 +113,7 @@ const Stores = [
   { name: "Egygamer", picture: egygamer },
   { name: "Game World", picture: gameworld },
   { name: "Shamy", picture: shamy },
-  { name: "OLX", picture: olx },
+  { name: "Dubizzle", picture: olx },
   { name: "Open Sooq", picture: opensooq },
   { name: "Bouri", picture: bouri},
   { name: "iHerb", picture: iherb},
@@ -116,15 +122,16 @@ const Stores = [
   { name: "CompuScience", picture: compuscience},
   { name: "Makers Electronics", picture: makerselectronics},
   { name: "Dream2000", picture: dream2000},
-  { name: "badr group", picture: badrgroup},
+  { name: "Badr Group", picture: badrgroup},
   { name: "NowFoodsEgypt", picture: nowfoodsegypt},
   { name: "B.Tech", picture: btech},
-  { name: "biovea", picture: biovea},
-  { name: "future Electronics", picture: futureelectronics},
+  { name: "Biovea", picture: biovea},
+  { name: "Future Electronics", picture: futureelectronics},
   { name: "Ram", picture: ram},
   { name: "EgyptLaptop", picture: egyptlaptop},
-  { name: "Baraka", picture: baraka}
-
-
+  { name: "Baraka", picture: baraka},
+  { name: "Adidas", picture: adidas},
+  { name: "Activ", picture: activ},
+  { name: "American Eagle", picture: americaneagle}
 ];
 export { Logos, Stores };
