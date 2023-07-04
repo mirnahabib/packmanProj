@@ -34,7 +34,7 @@ router.route('/updatePassword').patch(authenticateUser, updateUserPassword);
 
 
 router.route('/notifications').get(authenticateUser, getNotifications);
-router.route('/notifications/seen').post(authenticateUser, notificationsSeen);
+router.route('/notifications/seen').get(authenticateUser, notificationsSeen);
 
 //router.route('/addUser').post(addUser);
 
