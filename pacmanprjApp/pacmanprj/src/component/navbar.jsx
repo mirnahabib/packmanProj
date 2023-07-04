@@ -10,6 +10,8 @@ import { useContext } from "react";
 import MyUser from "../Contexts/MyUser";
 import { Link, Navigate } from "react-router-dom";
 import packman from "./imgs/packman.png";
+import NotificationsBell from "./notifications";
+
 
 export default function Navingbar() {
   const { user, isLoggedIn, isUserSaved, logout } = useContext(MyUser); //want to access the global variables user,isLoggedIn in this component
@@ -52,6 +54,13 @@ export default function Navingbar() {
             <Nav.Link as={Link} to="/about" className="Font navbar-text">
               About
             </Nav.Link>
+
+            {/* <Nav.Link as={Link} to="/notifications" className="Font navbar-text">
+              Notifications
+            </Nav.Link> */}
+
+            
+
           </Nav>
         </Navbar.Collapse>
         <Navbar.Collapse className="justify-content-end">
@@ -68,12 +77,15 @@ export default function Navingbar() {
                 </Dropdown.Item>
                 <Dropdown.Item eventKey="LOGOUT">Logout</Dropdown.Item>
               </DropdownButton>
+              
             </div>
           ) : (
             ""
           )}
+          <NotificationsBell />
         </Navbar.Collapse>
       </Container>
+      
     </Navbar>
   );
 }
