@@ -39,6 +39,7 @@ const priceCheck = async() => {
       _id: { $in: itemIds },
       lastFetched: { $lt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) } // 2 days
     });
+    //console.log(items);
     //price check each item then update in the database
     items.forEach(async (item) => {
       let storeName= item.store; //store names in the database aren't similar to store list in priceCheck

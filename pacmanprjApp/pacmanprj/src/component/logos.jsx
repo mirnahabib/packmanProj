@@ -24,6 +24,22 @@ import shamy from "./imgs/icons/elshamy.png";
 import spinneys from "./imgs/icons/spinneys.png";
 import Amazon from "./imgs/icons/Amazon.png";
 import townteam from "./imgs/icons/townteam.png";
+import bouri from "./imgs/icons/bouri.png";
+import btech from "./imgs/icons/btech.png";
+import baraka from "./imgs/icons/baraka.png";
+import egyptlaptop from "./imgs/icons/egyptlaptop.png";
+import ram from "./imgs/icons/ram.png";
+import futureelectronics from "./imgs/icons/futureelectronics.png";
+import biovea from "./imgs/icons/biovea.png";
+import nowfoodsegypt from "./imgs/icons/nowfoodsegypt.png";
+import badrgroup from "./imgs/icons/badrgroup.png";
+import iherb from "./imgs/icons/iherb.png";
+import dream2000 from "./imgs/icons/dream2000.png";
+import makerselectronics from "./imgs/icons/makers.ele.png";
+import sigma from "./imgs/icons/sigma.png";
+import compuscience from "./imgs/icons/compuscience.png";
+import maximumhardware from "./imgs/icons/maximumhardware.png";
+
 const Logos = new Map([
   ["Amazon", Amazon],
   ["Jumia", Jumia],
@@ -51,6 +67,21 @@ const Logos = new Map([
   ["Game World", gameworld],
   ["OLX", olx],
   ["Open Sooq", opensooq],
+  ["Bouri", bouri],
+  ["iHerb", iherb],
+  ["MaximumHardware", maximumhardware],
+  ["Sigma", sigma],
+  ["CompuScience", compuscience],
+  ["Makers Electronics", makerselectronics],
+  ["Dream2000", dream2000],
+  ["badr group", badrgroup],
+  ["NowFoodsEgypt", nowfoodsegypt],
+  ["B.Tech", btech],
+  ["biovea", biovea],
+  ["future Electronics", futureelectronics],
+  ["Ram", ram],
+  ["EgyptLaptop", egyptlaptop],
+  ["Baraka", baraka]
 ]);
 
 const Stores = [
@@ -77,7 +108,22 @@ const Stores = [
   { name: "Game World", picture: gameworld },
   { name: "Shamy", picture: shamy },
   { name: "OLX", picture: olx },
-  { name: "Open Sooq", picture: opensooq }
+  { name: "Open Sooq", picture: opensooq },
+  { name: "Bouri", picture: bouri},
+  { name: "iHerb", picture: iherb},
+  { name: "MaximumHardware", picture: maximumhardware},
+  { name: "Sigma", picture: sigma},
+  { name: "CompuScience", picture: compuscience},
+  { name: "Makers Electronics", picture: makerselectronics},
+  { name: "Dream2000", picture: dream2000},
+  { name: "badr group", picture: badrgroup},
+  { name: "NowFoodsEgypt", picture: nowfoodsegypt},
+  { name: "B.Tech", picture: btech},
+  { name: "biovea", picture: biovea},
+  { name: "future Electronics", picture: futureelectronics},
+  { name: "Ram", picture: ram},
+  { name: "EgyptLaptop", picture: egyptlaptop},
+  { name: "Baraka", picture: baraka}
 
 
 ];

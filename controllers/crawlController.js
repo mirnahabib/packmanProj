@@ -4,6 +4,7 @@ const {  storeItems,
 const { StatusCodes, PRECONDITION_FAILED } = require('http-status-codes');
 const path = require('path');
 const {spawn} = require("child_process");
+const {algorithmSort} = require('../utils/sortAlgorithm');
 
 const categorizedWebsites = new Map([
     ["electronics" ,  "./fetching/electronicsFetch.py"],
@@ -51,11 +52,11 @@ const crawlbyCategory = async (req, res) => {
     const { search: search = 'playstation 5', cat: category = 'general' } = req.params;
     fetchWebsite(category, search)
     .then(async (result) => {
-        //console.log(result);
         jsonresult = JSON.parse(result);
         await storeItems(jsonresult, category);
-        jsonresult.sort(() => Math.random() - 0.5);
-        res.status(StatusCodes.OK).json({ jsonresult});
+        jsonresult = algorithmSort(jsonresult);
+        //jsonresult.sort(() => Math.random() - 0.5);
+        res.status(StatusCodes.OK).json({jsonresult});
     })
     .catch((error) =>{
         console.log('Crawlbycategory method error: ' + error);
