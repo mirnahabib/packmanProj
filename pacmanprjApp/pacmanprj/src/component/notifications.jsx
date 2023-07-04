@@ -1,27 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { BiBell } from 'react-icons/bi';
-
-
-
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { BiBell } from "react-icons/bi";
+import MyUser from "../Contexts/MyUser";
 
 const NotificationsBell = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef(null);
+  const [userNots, setUserNots] = useState([]);
+  const [unreadNots, setUnreadNots] = useState(0);
+  const { isLoggedIn} = useContext(MyUser);
 
   const handleNotificationsClick = () => {
     setShowNotifications(!showNotifications);
+
+    fetch("api/users/notifications/seen")
+      .then((response) => response.json())
+      .catch((error) => console.error(error));
   };
 
- useEffect ( ()=> {
-
-    fetch("api/users/notifications", {
-      method: "GET" 
-    })
+  useEffect(() => {
+    fetch("api/users/notifications")
       .then((response) => response.json())
-      .then((data)=> console.log(data))
+      .then((data) => {
+        setUserNots(data);
+      })
       .catch((error) => console.error(error));
- })
-
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -30,13 +33,19 @@ const NotificationsBell = () => {
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
 
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, [dropdownRef]);
 
+  
+
+  useEffect(() => {
+    const unseen = userNots.filter((not) => !not.seen).length;
+    setUnreadNots(unseen);
+  }, [userNots]);
   return (
     <div className="position-relative" ref={dropdownRef}>
       <button
@@ -45,9 +54,9 @@ const NotificationsBell = () => {
         onClick={handleNotificationsClick}
       >
         <BiBell size={24} />
-        {showNotifications && (
+        {unreadNots !== 0  && (
           <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            3
+            {unreadNots}
             <span className="visually-hidden">unread messages</span>
           </span>
         )}
@@ -55,20 +64,32 @@ const NotificationsBell = () => {
       {showNotifications && (
         <div className="position-absolute top-100 start-50 translate-middle-x">
           <div
-            className="bg-light p-3 border"
-            style={{ minWidth: '10rem', maxWidth: '20rem' }}
+            className="bg-dark text-light p-3 border"
+            style={{ minWidth: "10rem", maxWidth: "20rem" }}
           >
-            <h6 className="dropdown-header">Notifications</h6>
-            
-            <a className="dropdown-item" href="#">
-              Notification 1
-            </a>
-            <a className="dropdown-item" href="#">
-              Notification 2
-            </a>
-            <a className="dropdown-item" href="#">
-              Notification 3
-            </a>
+            <h6 className="dropdown-header border-bottom pb-3">
+              Notifications
+            </h6>
+            {userNots.map((not) =>
+              not.seen ? (
+                ""
+              ) : not.item ? (
+                <li
+                  title={not.text}
+                  href={not.item.link}
+                  className="product-price-font border-bottom"
+                >
+                  {not.text.slice(0, 30)}...
+                </li>
+              ) : (
+                <li
+                  title={not.text}
+                  className="product-price-font border-bottom"
+                >
+                  {not.text.slice(0, 30)}...
+                </li>
+              )
+            )}
           </div>
         </div>
       )}
