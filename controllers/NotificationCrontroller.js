@@ -17,13 +17,15 @@ const createNotification = async (user, text) => {
 
 // Get all notifications for a user
 const getNotifications = async (req, res) => {
-  const userId = req.body;
+  console.log("hi");
+  const userId = req.user.userId;
+  console.log(userId);
   try {
     const notifications = await Notification.find({ user:userId })  
       .populate('item', 'link')
       .sort({ date: -1 }) 
       .limit(20); // Retrieve only the most recent 20 notifications
-
+    console.log(notifications);
     res.status(StatusCodes.OK).json(notifications);
   } catch (error) {
     console.error('Error retrieving notifications:', error);

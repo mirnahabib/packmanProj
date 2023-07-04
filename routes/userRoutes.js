@@ -29,8 +29,8 @@ router.route('/showMe').get(authenticateUser, showCurrentUser);
 router.route('/updateProfile').patch(authenticateUser, updateUser);
 router.route('/updatePassword').patch(authenticateUser, updateUserPassword);
 
-router.route('/:id').get(authenticateUser, getSingleUserbyId);
-router.route('/findbyemail/:email').get(getSingleUserbyemail);
+//router.route('/:id').get(authenticateUser, getSingleUserbyId);
+//router.route('/findbyemail/:email').get(getSingleUserbyemail);
 
 
 router.route('/notifications').get(authenticateUser, getNotifications);
