@@ -23,7 +23,6 @@ const getNotifications = async (req, res) => {
       .populate('item', 'link')
       .sort({ date: -1 }) 
       .limit(20); // Retrieve only the most recent 20 notifications
-    console.log(notifications);
     res.status(StatusCodes.OK).json(notifications);
   } catch (error) {
     console.error('Error retrieving notifications:', error);
@@ -34,8 +33,8 @@ const getNotifications = async (req, res) => {
 
 const notificationsSeen = async (req, res) => {
     try {
-        const userId = req.body;
-        const filter = { user: userId };
+      const userId = req.user.userId;
+      const filter = { user: userId };
         const update = { read: true };
     
         await Notification.updateMany(filter, update);
