@@ -17,9 +17,7 @@ const createNotification = async (user, text) => {
 
 // Get all notifications for a user
 const getNotifications = async (req, res) => {
-  console.log("hi");
   const userId = req.user.userId;
-  console.log(userId);
   try {
     const notifications = await Notification.find({ user:userId })  
       .populate('item', 'link')
