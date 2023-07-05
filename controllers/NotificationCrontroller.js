@@ -34,12 +34,7 @@ const getNotifications = async (req, res) => {
 const notificationsSeen = async (req, res) => {
     try {
       const userId = String(req.user.userId);
-      console.log(userId);
-      const filter = { user: userId };
-      const update = { read: true };
-    
       const response = await Notification.updateMany( {user: userId}, {$set: {seen: true}}, {upsert: true});
-      console.log(response);
       res.status(StatusCodes.OK).json({msg: "notifications updated."});
       } catch (err) {
         console.log('Failed to mark notifications as seen: ', err);

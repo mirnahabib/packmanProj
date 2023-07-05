@@ -33,18 +33,18 @@ export default function Team() {
       github: "https://github.com/Ulsur",
     },
     {
-      Name: "",
+      Name: "Mirna Habib",
       Occupation: "Computer Engineer",
       photo: null,
-      WorkedOn: "",
-      github: "",
+      WorkedOn: "Frontend",
+      github: "https://github.com/mirnahabib",
     },
     {
-      Name: "",
+      Name: "Yasmine Fayed",
       Occupation: "Computer Engineer",
       photo: null,
-      WorkedOn: "",
-      github: "",
+      WorkedOn: "Frontend and Market Research",
+      github: "https://github.com/Yasminefayed",
     },
   ]);
 
