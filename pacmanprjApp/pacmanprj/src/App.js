@@ -1,13 +1,10 @@
 import React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Home from "./pages/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Search from "./component/Search";
 import "@fontsource/press-start-2p";
 import "./component/css/style.css";
-import Announcer from "./component/announcer";
 import Home from "./component/Home";
 import Team from "./component/about";
 import Navingbar from "./component/navbar";
@@ -16,13 +13,10 @@ import LoginForm from "./component/loginform";
 import axios from "axios";
 import MyUser from "./Contexts/MyUser";
 import Favourites from "./component/favourites";
+import { Helmet } from "react-helmet";
 
 function App() {
-  const { search } = window.location;
-  const query = new URLSearchParams(search).get("s");
-  const [searchQuery, setSearchQuery] = useState(query || "");
-  const {  updateLogState ,isLoggedIn} = useContext(MyUser);
-  
+  const { updateLogState, isLoggedIn } = useContext(MyUser);
 
   const googleClientCallbackResponse = async (response) => {
     try {
@@ -59,7 +53,8 @@ function App() {
 
   useEffect(() => {
     // console.log(isLoggedIn);
-    if (!isLoggedIn) { // Check if user is not logged in
+    if (!isLoggedIn) {
+      // Check if user is not logged in
       googleClientLogin();
     }
   }, [isLoggedIn]);
@@ -67,11 +62,15 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Packman</title>
+        </Helmet>
         <Navingbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<Team />} />
-          <Route path="/fav" element={<Favourites/> }/>
+          <Route path="/fav" element={<Favourites />} />
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="/login" element={<LoginForm />} />
         </Routes>

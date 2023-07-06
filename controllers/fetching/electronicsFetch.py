@@ -297,7 +297,7 @@ def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
         # future = executor.submit(select, query)
-        future = executor.submit(dream2000,query)
+        # future = executor.submit(dream2000,query)
         future = executor.submit(btech,query)
         # future = executor.submit(_2B, query) 
         future = executor.submit(dubaiphone, query) 

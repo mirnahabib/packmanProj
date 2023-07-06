@@ -5,7 +5,6 @@ import Form from "react-bootstrap/Form";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
-import IconSearch from "./imgs/search";
 import Productcard from "./productcard";
 import "./css/style.css";
 import { Row } from "react-bootstrap";

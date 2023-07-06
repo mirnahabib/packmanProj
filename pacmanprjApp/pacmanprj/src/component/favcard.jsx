@@ -6,7 +6,7 @@ import { Button } from "react-bootstrap";
 import MyUser from "../Contexts/MyUser";
 
 export default function Favcard(props) {
-  const [ydata, setYData] = useState([]);
+  const [ydata] = useState([]);
   const [graph, setGraph] = useState({
     options: {
       colors: ["#0D6EFD"],

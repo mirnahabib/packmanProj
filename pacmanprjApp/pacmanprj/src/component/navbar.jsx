@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Navbar,
   Nav,
@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap";
 import { useContext } from "react";
 import MyUser from "../Contexts/MyUser";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import packman from "./imgs/packman.png";
 import NotificationsBell from "./notifications";
 

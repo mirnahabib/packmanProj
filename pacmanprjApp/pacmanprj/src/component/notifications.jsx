@@ -11,7 +11,7 @@ const NotificationsBell = () => {
 
   const handleNotificationsClick = () => {
     setShowNotifications(!showNotifications);
-
+    setUnreadNots(0);
     fetch("api/users/notifications/seen")
       .then((response) => response.json())
       .catch((error) => console.error(error));
@@ -41,7 +41,7 @@ const NotificationsBell = () => {
   }, [dropdownRef]);
 
   
-
+  
   useEffect(() => {
     const unseen = userNots.filter((not) => !not.seen).length;
     setUnreadNots(unseen);
@@ -54,7 +54,7 @@ const NotificationsBell = () => {
         onClick={handleNotificationsClick}
       >
         <BiBell size={24} />
-        {unreadNots !== 0  && (
+        {(unreadNots !== 0 || showNotifications)  && (
           <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
             {unreadNots}
             <span className="visually-hidden">unread messages</span>
@@ -76,10 +76,9 @@ const NotificationsBell = () => {
               ) : not.item ? (
                 <li
                   title={not.text}
-                  href={not.item.link}
                   className="product-price-font border-bottom"
                 >
-                  {not.text.slice(0, 30)}...
+                  <a href={not.item.link} target="_blank" rel="noopener noreferrer">{not.text.slice(0, 30)}...</a>
                 </li>
               ) : (
                 <li

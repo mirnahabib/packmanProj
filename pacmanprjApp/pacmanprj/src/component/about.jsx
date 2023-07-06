@@ -2,9 +2,11 @@ import React from "react";
 import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
-import omar from "./imgs/omar.jpg";
-import telt from "./imgs/telt.jpg";
-import mostafa from "./imgs/mostafa.JPG";
+import omar from "./imgs/memebers/omar.jpg";
+import telt from "./imgs/memebers/telt.jpg";
+import mostafa from "./imgs/memebers/mostafa.JPG";
+import yasmine from "./imgs/memebers/yasmine.jpg";
+import mirna from "./imgs/memebers/mirna.jpg";
 import "./css/style.css";
 import IconGithub from "./imgs/icongithub";
 import { Stores } from "./logos";
@@ -14,7 +16,7 @@ export default function Team() {
     {
       Name: "Omar El-Damrany",
       Occupation: "Computer Engineer",
-      WorkedOn: "Backend web scraping",
+      WorkedOn: "Selenium web scraping",
       photo: omar,
       github: "https://github.com/omar-eldamrany",
     },
@@ -33,18 +35,18 @@ export default function Team() {
       github: "https://github.com/Ulsur",
     },
     {
-      Name: "Mirna Habib",
-      Occupation: "Computer Engineer",
-      photo: null,
-      WorkedOn: "Frontend",
-      github: "https://github.com/mirnahabib",
-    },
-    {
       Name: "Yasmine Fayed",
       Occupation: "Computer Engineer",
-      photo: null,
-      WorkedOn: "Frontend and Market Research",
+      photo: yasmine,
+      WorkedOn: "React JS frontend",
       github: "https://github.com/Yasminefayed",
+    },
+    {
+      Name: "Mirna Habib",
+      Occupation: "Computer Engineer",
+      photo: mirna,
+      WorkedOn: "React JS frontend",
+      github: "https://github.com/mirnahabib",
     },
   ]);
 
@@ -74,13 +76,13 @@ export default function Team() {
         {Team && (
           <div className="container pt-5">
             <div className="row">
-              {Team.map((item) => {
+              {Team.map((member) => {
                 return (
                   <Row className="pt-5 ">
                     <Col className="flicker-in-1  " sm={12} md={3} lg={3}>
                       <Image
                         className="team-border"
-                        src={item.photo}
+                        src={member.photo}
                         roundedCircle
                         fluid
                       />
@@ -94,21 +96,21 @@ export default function Team() {
                       <div className="container heartbeat">
                         <div className="row">
                           <div className="col-12">
-                            <h4>{item.Name}</h4>
+                            <h4>{member.Name}</h4>
                           </div>
                         </div>
                         <div className="row pt-3">
                           <div className="col-12 info">
                             <p>
-                              <small>{item.Occupation}</small>
+                              <small>{member.Occupation}</small>
                             </p>
                             <p>
-                              <small>{item.WorkedOn}</small>
+                              <small>{member.WorkedOn}</small>
                             </p>
                             <a
                               className="flicker-in-1"
                               target="_blank"
-                              href={item.github}
+                              href={member.github}
                               rel="noreferrer"
                             >
                               <IconGithub />
