@@ -49,7 +49,7 @@ return new Promise((resolve, reject) => {
 
 
 const crawlbyCategory = async (req, res) => {
-    const { search: search = 'playstation 5', cat: category = 'general' } = req.params;
+    const { search: search , cat: category } = req.params;
     fetchWebsite(category, search)
     .then(async (result) => {
         jsonresult = JSON.parse(result);

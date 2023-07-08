@@ -64,7 +64,10 @@ async function updatePriceIfChanged(item) {
             item: item._id,
             text: notifText
           });
-          await sendNotificationEmail({user:user.name, email:user.email, link:item.link});
+          await sendNotificationEmail({
+            name:user.name, 
+            email:user.email, 
+            link:item.link});
         });
       }
     }
