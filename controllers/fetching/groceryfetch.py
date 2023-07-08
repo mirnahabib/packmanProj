@@ -161,11 +161,11 @@ def carrefour(query):
     products = driver.find_elements(By.CLASS_NAME , "css-b9nx4o")
 
     for product in products[:20]: 
-        title = product.find_element(By.CLASS_NAME , "css-1nhiovu")
+        title = product.find_element(By.CLASS_NAME , "css-tuzc44")
         price = product.find_element(By.CLASS_NAME , "css-17fvam3").text
         price = re.sub(r"[^0-9\.]+" , '' , price)
         link = title.find_element(By.XPATH , "./a").get_attribute("href")
-        img = product.find_element(By.CLASS_NAME , "css-1itwyrf")
+        img = product.find_element(By.CLASS_NAME , "css-1npvvk7")
         pic = img.find_element(By.XPATH , "./a/img").get_attribute("src")
         
         ProductsArr.append({
@@ -182,6 +182,7 @@ def carrefour(query):
 
 def main(query):
     start = time.time()
+    
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(hyperone, query)  
         future = executor.submit(gourmet, query)  

@@ -63,7 +63,7 @@ const Logos = new Map([
   ["Brantu", brantu],
   ["Faces", faces],
   ["Ikea", ikea],
-  ["Hub Furniture", hubfurniture],
+  ["Hub furniture", hubfurniture],
   ["Games2Egypt", games2egypt],
   ["Shamy", shamy],
   ["Egygamer", egygamer],

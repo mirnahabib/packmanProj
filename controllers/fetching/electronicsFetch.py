@@ -29,6 +29,11 @@ def amazon(query):
     products = driver.find_elements(By.CLASS_NAME,"a-spacing-base")
 
     for product in products[:20]:
+        try:
+            isSponsered = product.find_element(By.CLASS_NAME , "puis-label-popover-default")  
+            continue  
+        except:
+            pass
         title = product.find_element(By.CLASS_NAME, "a-size-mini").text
         try:
             price = product.find_element(By.CLASS_NAME , "a-price-whole").text
@@ -297,7 +302,7 @@ def main(query):
     start = time.time()
     with ThreadPoolExecutor(max_workers=25) as executor:
         # future = executor.submit(select, query)
-        # future = executor.submit(dream2000,query)
+        future = executor.submit(dream2000,query)
         future = executor.submit(btech,query)
         # future = executor.submit(_2B, query) 
         future = executor.submit(dubaiphone, query) 

@@ -87,7 +87,7 @@ def biovea(query):
 def nowfoodsegypt(query):
     i=1
     options = Options()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_experimental_option("prefs", prefs)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
@@ -99,7 +99,7 @@ def nowfoodsegypt(query):
 
     for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.CLASS_NAME , "woocommerce-LoopProduct-link")
+        title = product.find_element(By.CLASS_NAME , "ast-loop-product__link")
         price = product.find_element(By.CLASS_NAME , "price")
         try:
             price = price.find_element(By.TAG_NAME , "ins").text  
@@ -109,23 +109,58 @@ def nowfoodsegypt(query):
         img = product.find_element(By.CLASS_NAME , "attachment-woocommerce_thumbnail").get_attribute("src")
         link = title.get_attribute("href")
         title=title.text
-        
+        try: 
+            inStock = product.find_element(By.CLASS_NAME, "ast-shop-product-out-of-stock")
+        except:    
+            ProductsArr.append({
+                "Count" : i,
+                "Shop"  : "Now Foods Egypt",
+                "Title" : title,
+                "Price" : float(price),
+                "Link"  : link,
+                "Img"   : img
+            } )
+        i += 1
+    driver.close() 
+
+def amazon(query):
+    i = 1    
+    options = Options()
+    #options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
+    driver = webdriver.Chrome(service=s , options=options)
+    
+    url = f"https://www.amazon.eg/s?k={query}&rh=n%3A21858036031&dc&language=en"
+    driver.get(url)
+    products = driver.find_elements(By.CLASS_NAME,"a-spacing-base")
+
+    for product in products[:20]:
+        title = product.find_element(By.CLASS_NAME, "a-size-mini").text
+        try:
+            price = product.find_element(By.CLASS_NAME , "a-price-whole").text
+            price = re.sub(r"[^0-9\.]+" , '' , price)
+        except:
+            continue
+        link = product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "a").get_attribute("href")
+        img =  product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "img").get_attribute("src")  
+
         ProductsArr.append({
             "Count" : i,
-            "Shop"  : "Now Foods Egypt",
+            "Shop"  : "Amazon",
             "Title" : title,
             "Price" : float(price),
             "Link"  : link,
             "Img"   : img
-        } )
+        })
         i += 1
-    driver.close() 
-
+    driver.close()
 
 def main(query):
 
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(iherb, query)
+        future = executor.submit(amazon, query)
         future = executor.submit(biovea, query)  # bottleneck 
         future = executor.submit(nowfoodsegypt, query)
 

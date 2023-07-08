@@ -168,11 +168,81 @@ def gameworld(query):
         i += 1
     driver.close()        
 
+def amazon(query):
+    i = 1    
+    options = Options()
+    #options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_experimental_option("prefs", prefs) #this line disables image loading to reduce network workload
+    driver = webdriver.Chrome(service=s , options=options)
+    
+    url = f"https://www.amazon.eg/s?k={query}&i=videogames&crid=3UQRCK07070GM&sprefix=fifa+23%2Cvideogames%2C165&ref=nb_sb_noss_1"
+    driver.get(url)
+    products = driver.find_elements(By.CLASS_NAME,"a-spacing-base")
 
+    for product in products[:20]:
+        try:
+            isSponsered = product.find_element(By.CLASS_NAME , "puis-label-popover-default")  
+            continue  
+        except:
+            pass
+        title = product.find_element(By.CLASS_NAME, "a-size-mini").text
+        try:
+            price = product.find_element(By.CLASS_NAME , "a-price-whole").text
+            price = re.sub(r"[^0-9\.]+" , '' , price)
+        except:
+            continue
+        link = product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "a").get_attribute("href")
+        img =  product.find_element(By.CLASS_NAME , "s-product-image-container").find_element(By.TAG_NAME, "img").get_attribute("src")  
+
+        ProductsArr.append({
+            "Count" : i,
+            "Shop"  : "Amazon",
+            "Title" : title,
+            "Price" : float(price),
+            "Link"  : link,
+            "Img"   : img
+        })
+        i += 1
+    driver.close()
+
+def jumia(query):
+    i = 1
+    options = Options()
+    options.add_experimental_option("prefs", prefs)
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    driver = webdriver.Chrome(service=s , options=options)
+
+    url = f"https://www.jumia.com.eg/video-games/?q={query}"
+    driver.get(url)
+    popup = driver.find_element(By.CLASS_NAME,"cw")
+    popup.find_element(By.XPATH,"./button").click()
+
+    products = driver.find_elements(By.CLASS_NAME,"c-prd")
+
+    for product in products[:20]:
+        title = product.find_element(By.CLASS_NAME,"name").text
+        price = product.find_element(By.CLASS_NAME,"prc").text
+        price = re.sub(r"[^0-9\.]+" , '' , price)
+        link = product.find_element(By.CLASS_NAME,"core").get_attribute("href")
+        img = product.find_element(By.XPATH,"./a/div[1]/img").get_attribute("data-src")
+    
+        ProductsArr.append({
+        "Count" : i,
+        "Shop"  : "Jumia",
+        "Title" : title,
+        "Price" : float(price),
+        "Link"  : link,
+        "Img"   : img
+        })
+        i += 1
+    driver.close()
 
 def main(query):
     with ThreadPoolExecutor(max_workers=25) as executor:
-    
+        future = executor.submit(amazon, query)
+        future = executor.submit(jumia, query)
         future = executor.submit(games2egypt, query)
         future = executor.submit(egygamer, query)  
         future = executor.submit(shamy, query) 

@@ -26,6 +26,11 @@ def amazon(query):
     products = driver.find_elements(By.CLASS_NAME,"a-spacing-base")
 
     for product in products[:20]:
+        try:
+            isSponsered = product.find_element(By.CLASS_NAME , "puis-label-popover-default")  
+            continue  
+        except:
+            pass
         title = product.find_element(By.CLASS_NAME, "a-size-mini").text
         try:
             price = product.find_element(By.CLASS_NAME , "a-price-whole").text
