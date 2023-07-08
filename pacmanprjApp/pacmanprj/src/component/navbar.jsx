@@ -60,10 +60,11 @@ export default function Navingbar() {
           </Nav>
         </Navbar.Collapse>
         <Navbar.Collapse className="justify-content-end">
+          {isLoggedIn && isUserSaved ? <NotificationsBell /> : ""}
           {isLoggedIn && isUserSaved ? (
             <div>
               <DropdownButton
-                className="pe-3"
+                className="pe-3 ps-4"
                 title={user.name}
                 variant="primary"
                 onSelect={(eventKey) => handleOptionClick(eventKey)}
@@ -77,7 +78,6 @@ export default function Navingbar() {
           ) : (
             ""
           )}
-          {isLoggedIn && isUserSaved ? <NotificationsBell /> : ""}
         </Navbar.Collapse>
       </Container>
     </Navbar>

@@ -62,10 +62,10 @@ const NotificationsBell = () => {
         )}
       </button>
       {showNotifications && (
-        <div className="position-absolute top-100 start-50 translate-middle-x">
+        <div className="position-absolute top-100 start-50 translate-middle-x pt-2">
           <div
             className="bg-dark text-light p-3 border"
-            style={{ minWidth: "10rem", maxWidth: "20rem" }}
+            style={{ minWidth: "20rem", maxWidth: "20rem" }}
           >
             <h6 className="dropdown-header border-bottom pb-3">
               Notifications
@@ -78,14 +78,14 @@ const NotificationsBell = () => {
                   title={not.text}
                   className="product-price-font border-bottom"
                 >
-                  <a href={not.item.link} target="_blank" rel="noopener noreferrer">{not.text.slice(0, 30)}...</a>
+                  <a href={not.item.link} target="_blank" rel="noopener noreferrer">{not.text.slice(0, 105)}...</a>
                 </li>
               ) : (
                 <li
                   title={not.text}
                   className="product-price-font border-bottom"
                 >
-                  {not.text.slice(0, 30)}...
+                  {not.text.slice(0, 105)}...
                 </li>
               )
             )}
