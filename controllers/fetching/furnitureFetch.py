@@ -57,7 +57,7 @@ def jumia(query):
     i = 1
     options = Options()
     options.add_experimental_option("prefs", prefs)
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(service=s , options=options)
 
@@ -168,16 +168,17 @@ def ikea(query):
     url = "https://www.ikea.com/eg/en/search/?q=" + query
     driver.get(url)
     driver.implicitly_wait(5)
-    products = driver.find_elements(By.CLASS_NAME,"pip-product-compact")
+    products = driver.find_elements(By.CLASS_NAME,"plp-fragment-wrapper")
     driver.implicitly_wait(0)
 
     for product in products[:20]:
         ActionChains(driver).scroll_to_element(product).perform()
-        title = product.find_element(By.CLASS_NAME, "pip-header-section__title--small").text
-        price = product.find_element(By.CLASS_NAME , "pip-price__integer").text            
+        title = product.find_element(By.CLASS_NAME, "plp-price-module__description").text
+
+        price = product.find_element(By.CLASS_NAME , "plp-price--currency-super-aligned").find_element(By.CLASS_NAME, "plp-price__sr-text").text           
         price = re.sub(r"[^0-9\.]+" , '' , price)  
-        link = product.find_element(By.CLASS_NAME , "pip-product-compact__wrapper-link").get_attribute("href")
-        img =  product.find_element(By.CLASS_NAME , "pip-image").get_attribute("src")  
+        link = product.find_element(By.CLASS_NAME , "plp-product__image-link").get_attribute("href")
+        img =  product.find_element(By.CLASS_NAME , "plp-product__image").get_attribute("src")  
 
         ProductsArr.append({
             "Count" : i,
@@ -194,6 +195,7 @@ def ikea(query):
 
 def main(query):
     start = time.time()
+    
     with ThreadPoolExecutor(max_workers=25) as executor:
         future = executor.submit(hubfurniture, query)  
         future = executor.submit(ikea, query)
